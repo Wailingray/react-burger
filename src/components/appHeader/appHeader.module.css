@@ -1,0 +1,45 @@
+.header {
+  margin: 0 auto;
+  max-width: 1280px;
+}
+
+.logo {
+  position: absolute;
+  top: 56px;
+  left: 50%;
+  margin-left: -145px; /*половина ширины картинки для центрирования*/
+}
+
+.navigation {
+  width: 100%;
+  margin: 40px 0 0 0;
+  padding: 0;
+  min-height: 88px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+.item {
+  list-style-type: none;
+  min-height: 56px;
+  min-width: 197px;
+  display: flex;
+}
+
+.item:last-of-type {
+  margin-left: auto;
+}
+
+.link {
+  text-decoration: none;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.linkTitle {
+  margin: 0 8px;
+}
