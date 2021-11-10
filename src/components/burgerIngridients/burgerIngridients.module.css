@@ -1,0 +1,25 @@
+.section {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 600px;
+  max-height: 912px;
+}
+
+.title {
+  color: white;
+  margin: 0;
+}
+
+.component {
+  color: white;
+  margin: 0;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+
+}

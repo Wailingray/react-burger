@@ -11,21 +11,21 @@ const AppHeader = () => {
       <nav>
         <ul className={styles.navigation}>
           <li className={styles.item}>
-            <a href="" className={styles.link}>
+            <a href="" className={`${styles.link} pt-4 pb-4 pl-5 pb-5`}>
               <BurgerIcon type="primary"/>
-              <p className={styles.linkTitle}>Конструктор</p>
+              <p className='text text_type_main-default pl-2'>Конструктор</p>
             </a>
           </li>
           <li className={styles.item}>
             <a href="" className={styles.link}>
               <ListIcon type="primary"/>
-              <p className={styles.linkTitle}>Лента заказов</p>
+              <p className='text text_type_main-default text_color_inactive pl-2'>Лента заказов</p>
             </a>
           </li>
           <li className={styles.item}>
             <a href="" className={styles.link}>
               <ProfileIcon type="primary"/>
-              <p className={styles.linkTitle}>Личный кабинет</p>
+              <p className='text text_type_main-default text_color_inactive pl-2'>Личный кабинет</p>
             </a>
           </li>
         </ul>
