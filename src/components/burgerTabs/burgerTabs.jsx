@@ -11,7 +11,7 @@ const BurgerTabs = () => {
       <Tab value="two" active={current === 'two'} onClick={setCurrent}>
         Соусы
       </Tab>
-      <Tab value="three" active={current === 'three'} onClick={setCurrent}>
+      <Tab style={{paddingRight: '0'}} value="three" active={current === 'three'} onClick={setCurrent}>
         Начинки
       </Tab>
     </div>

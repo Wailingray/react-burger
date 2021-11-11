@@ -7,5 +7,6 @@
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 39px;
+  justify-items: flex-end;
+  gap: 40px;
 }

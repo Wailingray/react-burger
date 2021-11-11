@@ -1,16 +1,38 @@
 .section {
   margin: 0;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  max-width: 600px;
   max-height: 912px;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.section::-webkit-scrollbar {
+  width: 8px;
+}
+
+.section::-webkit-scrollbar-track {
+  background-color: #131316;
+}
+
+.section::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
 }
 
 .title {
   color: white;
   margin: 0;
+}
+
+.layer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .component {
@@ -25,7 +47,6 @@
 
 .list {
   margin: 0;
-  padding: 0 16px;
   list-style-type: none;
   display: grid;
   grid-template-columns: 1fr 1fr;
