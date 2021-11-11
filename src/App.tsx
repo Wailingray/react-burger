@@ -10,8 +10,8 @@ function App() {
     <>
     <AppHeader />
     <main className='main'>
-      <BurgerIngridients />
-      <BurgerIngridients />
+      <BurgerIngridients {...data}/>
+      <BurgerIngridients {...data}/>
     </main>
 
     </>

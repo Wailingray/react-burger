@@ -6,13 +6,13 @@ const BurgerTabs = () => {
   return (
     <div style={{ display: 'flex' }}>
       <Tab value="one" active={current === 'one'} onClick={setCurrent}>
-        One
+        Булки
       </Tab>
       <Tab value="two" active={current === 'two'} onClick={setCurrent}>
-        Two
+        Соусы
       </Tab>
       <Tab value="three" active={current === 'three'} onClick={setCurrent}>
-        Three
+        Начинки
       </Tab>
     </div>
   )

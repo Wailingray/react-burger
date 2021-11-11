@@ -5,7 +5,7 @@
 .main {
   max-width: 1280px;
   margin: 0 auto;
-  display: flex;
-  justify-content: center;
-  gap: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 39px;
 }
