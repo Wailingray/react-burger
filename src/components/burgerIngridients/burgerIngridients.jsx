@@ -1,3 +1,4 @@
+import React from 'react';
 import styles from './burgerIngridients.module.css';
 import BurgerTabs from '../burgerTabs/burgerTabs';
 import Ingridient from '../ingridient/ingridient';
@@ -11,7 +12,7 @@ const BurgerIngridients = (props) => {
         <h2 className={`text text_type_main-medium ${styles.component} pt-10 pb-6`}>Булки</h2>
         <ul className={`${styles.list} pl-4 pr-2`}>
           <li className="item">
-            <Ingridient {...props[0]}></Ingridient>
+            <Ingridient count='1' {...props[0]}></Ingridient>
           </li>
           <li className="item">
             <Ingridient {...props[14]}></Ingridient>
@@ -28,7 +29,7 @@ const BurgerIngridients = (props) => {
             <Ingridient {...props[6]}></Ingridient>
           </li>
           <li className="item">
-            <Ingridient {...props[5]}></Ingridient>
+            <Ingridient count='1' {...props[5]}></Ingridient>
           </li>
           <li className="item">
             <Ingridient {...props[9]}></Ingridient>
