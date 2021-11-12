@@ -1,5 +1,5 @@
 import React from 'react';
-import data from './components/utils/utils';
+import {data,cart} from './components/utils/utils';
 import AppHeader from './components/appHeader/appHeader';
 import BurgerIngridients from './components/burgerIngridients/burgerIngridients';
 import './App.css';
@@ -12,7 +12,7 @@ function App() {
     <AppHeader />
     <main className='main'>
       <BurgerIngridients {...data}/>
-      <BurgerConstructor {...data}/>
+      <BurgerConstructor {...cart}/>
     </main>
 
     </>

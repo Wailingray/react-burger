@@ -15,20 +15,41 @@ const BurgerConstructor = (props) => {
 
   const array = makeAnArray();
 
-  const renderProduct = (({name, image, price, _id}) =>
-    <li key={_id} className="ingridient">
-      <ConstructorElement
-      type="top"
-      isLocked={true}
-      text={name}
-      price={price}
-      thumbnail={image}
-      />
-    </li>
+  const renderProduct = (({name, image, price, _id},index,array) =>
+    {if (index===0) {
+      return <li key={_id} className={styles.ingridient}>
+        <ConstructorElement
+        type="top"
+        isLocked={true}
+        text={`${name} (верх)` }
+        price={price}
+        thumbnail={image}
+        />
+      </li>
+      }
+    else if (index===array.length-1) {
+      return <li key={_id} className={styles.ingridient}>
+        <ConstructorElement
+        type="bottom"
+        isLocked={true}
+        text={`${name} (низ)` }
+        price={price}
+        thumbnail={image}
+        />
+      </li>
+    }
+    else {
+      return <li key={_id} className={styles.ingridient}>
+        <ConstructorElement
+        isLocked={false}
+        text={name}
+        price={price}
+        thumbnail={image}
+        />
+      </li>
+    }
+    }
   )
-
-
-
 
   return (
     <section className={styles.section}>

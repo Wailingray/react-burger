@@ -11,12 +11,28 @@
   overflow-x: hidden;
 }
 
+.section::-webkit-scrollbar {
+  width: 8px;
+}
+
+.section::-webkit-scrollbar-track {
+  background-color: #131316;
+}
+
+.section::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
+}
+
 .ingridientList {
   padding: 0;
-  margin: 0;
+  margin-bottom: 0;
   list-style-type: none;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap:16px;
+}
+
+.ingridient {
+  width: 100%
 }
