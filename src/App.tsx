@@ -4,6 +4,7 @@ import AppHeader from './components/appHeader/appHeader';
 import BurgerIngridients from './components/burgerIngridients/burgerIngridients';
 import './App.css';
 import { BurgerIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import BurgerConstructor from './components/burgerConstructor/burgerConstructor';
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
     <AppHeader />
     <main className='main'>
       <BurgerIngridients {...data}/>
-      <BurgerIngridients {...data}/>
+      <BurgerConstructor {...data}/>
     </main>
 
     </>
