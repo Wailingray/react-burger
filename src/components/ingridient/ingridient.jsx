@@ -2,6 +2,7 @@ import React from 'react';
 import styles from "./ingridient.module.css";
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import PropTypes from 'prop-types';
 
 const Ingridient = (props) => {
   if (props.count) {
@@ -40,5 +41,12 @@ const Ingridient = (props) => {
     </div>
   );
 };
+
+Ingridient.propTypes = {
+  image: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+}
+
 
 export default Ingridient;

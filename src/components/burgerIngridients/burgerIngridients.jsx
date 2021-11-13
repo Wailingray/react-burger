@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./burgerIngridients.module.css";
 import BurgerTabs from "../burgerTabs/burgerTabs";
 import Ingridient from "../ingridient/ingridient";
+import PropTypes from 'prop-types';
 
 const BurgerIngridients = (props) => {
   return (
@@ -87,5 +88,25 @@ const BurgerIngridients = (props) => {
     </section>
   );
 };
+
+const IngridientPropTypes = PropTypes.shape({
+  _id:PropTypes.string.isRequired,
+   name:PropTypes.string.isRequired,
+   type:PropTypes.string.isRequired,
+   proteins:PropTypes.number.isRequired,
+   fat:PropTypes.number.isRequired,
+   carbohydrates:PropTypes.number.isRequired,
+   calories:PropTypes.number.isRequired,
+   price:PropTypes.number.isRequired,
+   image:PropTypes.string.isRequired,
+   image_mobile:PropTypes.number.isRequired,
+   image_large:PropTypes.number.isRequired,
+   __v:PropTypes.number.isRequired
+});
+
+BurgerIngridients.propTypes = {
+  props: IngridientPropTypes,
+}
+
 
 export default BurgerIngridients;
