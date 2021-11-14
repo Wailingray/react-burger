@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import styles from "./burgerConstructor.module.css";
+import { IngridientPropTypes } from "../utils/utils";
 import { DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -84,23 +85,8 @@ const BurgerConstructor = (props) => {
 };
 
 
-const ConstructorPropTypes = PropTypes.shape({
-  _id:PropTypes.string.isRequired,
-   name:PropTypes.string.isRequired,
-   type:PropTypes.string.isRequired,
-   proteins:PropTypes.number.isRequired,
-   fat:PropTypes.number.isRequired,
-   carbohydrates:PropTypes.number.isRequired,
-   calories:PropTypes.number.isRequired,
-   price:PropTypes.number.isRequired,
-   image:PropTypes.string.isRequired,
-   image_mobile:PropTypes.number.isRequired,
-   image_large:PropTypes.number.isRequired,
-   __v:PropTypes.number.isRequired
-});
-
 BurgerConstructor.propTypes = {
-  props: ConstructorPropTypes,
+  props: IngridientPropTypes,
 }
 
 
