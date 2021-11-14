@@ -1,23 +1,21 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import styles from "./burgerConstructor.module.css";
-import { IngridientPropTypes } from "../utils/utils";
 import { DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
+import { makeAnArray } from "../utils/utils";
+
 
 const BurgerConstructor = (props) => {
-  const makeAnArray = () => {
-    const array = [];
-    const objectArray = Object.entries(props);
-    objectArray.forEach(([key, value]) => {
-      array.push(value);
-    });
-    return array;
-  };
+  console.log(props)
 
-  const array = makeAnArray();
+
+  const array = makeAnArray(props.cart);
+  console.log(array)
+
+  const sum = array.reduce((acc, el) => acc + el.price, 0);
 
   const renderFirstProduct = ({ name, image, price, _id }, index, array) => {
     if (index === 0) {
@@ -75,7 +73,7 @@ const BurgerConstructor = (props) => {
         {array.map(renderLastProduct)}
       </ul>
       <div className={`${styles.confirmationZone} mt-10`}>
-      <p className="text text_type_digits-medium">127890 <CurrencyIcon type="primary"/></p>
+      <p className="text text_type_digits-medium">{sum} <CurrencyIcon type="primary"/></p>
       <Button type="primary" size="large">
         Оформить заказ
       </Button>
@@ -86,9 +84,8 @@ const BurgerConstructor = (props) => {
 
 
 BurgerConstructor.propTypes = {
-  props: IngridientPropTypes,
+  cart: PropTypes.arrayOf(PropTypes.IngridientPropTypes),
 }
-
 
 
 export default BurgerConstructor;

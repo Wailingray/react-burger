@@ -10,8 +10,8 @@ function App() {
     <>
     <AppHeader />
     <main className={styles.main}>
-      <BurgerIngridients {...data}/>
-      <BurgerConstructor {...cart}/>
+      <BurgerIngridients data={data}/>
+      <BurgerConstructor cart={cart}/>
     </main>
 
     </>

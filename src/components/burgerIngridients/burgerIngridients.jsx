@@ -1,11 +1,33 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import styles from "./burgerIngridients.module.css";
 import BurgerTabs from "../burgerTabs/burgerTabs";
 import Ingridient from "../ingridient/ingridient";
-import PropTypes from 'prop-types';
-import { IngridientPropTypes } from "../utils/utils";
+import { makeAnArray } from "../utils/utils";
+import { sortInitialArray } from "../utils/utils";
 
 const BurgerIngridients = (props) => {
+
+  let array = makeAnArray(props.data);
+  sortInitialArray(array);
+
+  const bunsArray = array.filter((el) => el.type === "bun");
+  const mainArray = array.filter((el) => el.type === "main");
+  const sauceArray = array.filter((el) => el.type === "sauce");
+
+  const renderIngridient = (el) => {
+    return (
+      <li key={el._id} className="item">
+        <Ingridient
+          image={el.image}
+          name={el.name}
+          price={el.price}
+          counter={el.counter}
+        ></Ingridient>
+      </li>
+    );
+  };
+
   return (
     <section className={styles.section}>
       <h1 className={`text text_type_main-large ${styles.title} pt-10 pb-5`}>
@@ -20,12 +42,7 @@ const BurgerIngridients = (props) => {
             Булки
           </h2>
           <ul className={`${styles.list} pl-4 pr-2`}>
-            <li className="item">
-              <Ingridient count="1" {...props[0]}></Ingridient>
-            </li>
-            <li className="item">
-              <Ingridient {...props[14]}></Ingridient>
-            </li>
+            {bunsArray.map(renderIngridient)}
           </ul>
         </div>
         <div className={styles.layer}>
@@ -35,18 +52,7 @@ const BurgerIngridients = (props) => {
             Соусы
           </h2>
           <ul className={`${styles.list} pl-4 pr-2`}>
-            <li className="item">
-              <Ingridient {...props[3]}></Ingridient>
-            </li>
-            <li className="item">
-              <Ingridient {...props[6]}></Ingridient>
-            </li>
-            <li className="item">
-              <Ingridient count="1" {...props[5]}></Ingridient>
-            </li>
-            <li className="item">
-              <Ingridient {...props[9]}></Ingridient>
-            </li>
+            {sauceArray.map(renderIngridient)}
           </ul>
         </div>
         <div className={styles.layer}>
@@ -56,33 +62,7 @@ const BurgerIngridients = (props) => {
             Начинки
           </h2>
           <ul className={`${styles.list} pl-4 pr-2`}>
-            <li className="item">
-              <Ingridient {...props[1]}></Ingridient>
-            </li>
-            <li className="item">
-              <Ingridient {...props[2]}></Ingridient>
-            </li>
-            <li className="item">
-              <Ingridient {...props[4]}></Ingridient>
-            </li>
-            <li className="item">
-              <Ingridient {...props[12]}></Ingridient>
-            </li>
-            <li className="item">
-              <Ingridient {...props[8]}></Ingridient>
-            </li>
-            <li className="item">
-              <Ingridient {...props[10]}></Ingridient>
-            </li>
-            <li className="item">
-              <Ingridient {...props[11]}></Ingridient>
-            </li>
-            <li className="item">
-              <Ingridient {...props[7]}></Ingridient>
-            </li>
-            <li className="item">
-              <Ingridient {...props[13]}></Ingridient>
-            </li>
+            {mainArray.map(renderIngridient)}
           </ul>
         </div>
       </div>
@@ -90,10 +70,8 @@ const BurgerIngridients = (props) => {
   );
 };
 
-
 BurgerIngridients.propTypes = {
-  props: IngridientPropTypes,
+  data: PropTypes.arrayOf(PropTypes.IngridientPropTypes),
 }
-
 
 export default BurgerIngridients;
