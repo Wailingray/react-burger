@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useState, useEffect} from "react";
 import PropTypes from 'prop-types';
 import styles from "./burgerIngridients.module.css";
 import BurgerTabs from "../burgerTabs/burgerTabs";
@@ -8,12 +8,16 @@ import { sortInitialArray } from "../utils/utils";
 
 const BurgerIngridients = (props) => {
 
-  let array = makeAnArray(props.data);
-  sortInitialArray(array);
+  const [bunsArray, setBunsArray] = useState([])
+  const [mainArray, setMainArray] = useState([])
+  const [sauceArray, setSauceArray] = useState([])
 
-  const bunsArray = array.filter((el) => el.type === "bun");
-  const mainArray = array.filter((el) => el.type === "main");
-  const sauceArray = array.filter((el) => el.type === "sauce");
+  useEffect(() => {
+    setBunsArray(props.data.filter((el) => el.type === "bun"))
+    setMainArray(props.data.filter((el) => el.type === "main"))
+    setSauceArray(props.data.filter((el) => el.type === "sauce"))
+  }, [props.data])
+
 
   const renderIngridient = (el) => {
     return (
@@ -71,7 +75,7 @@ const BurgerIngridients = (props) => {
 };
 
 BurgerIngridients.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.IngridientPropTypes),
+  data: PropTypes.arrayOf(PropTypes.shape(PropTypes.IngridientPropTypes)).isRequired,
 }
 
 export default BurgerIngridients;

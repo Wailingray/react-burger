@@ -9,11 +9,8 @@ import { makeAnArray } from "../utils/utils";
 
 
 const BurgerConstructor = (props) => {
-  console.log(props)
-
 
   const array = makeAnArray(props.cart);
-  console.log(array)
 
   const sum = array.reduce((acc, el) => acc + el.price, 0);
 
@@ -84,7 +81,7 @@ const BurgerConstructor = (props) => {
 
 
 BurgerConstructor.propTypes = {
-  cart: PropTypes.arrayOf(PropTypes.IngridientPropTypes),
+  cart: PropTypes.arrayOf(PropTypes.shape(PropTypes.IngridientPropTypes)).isRequired,
 }
 
 
