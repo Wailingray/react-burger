@@ -384,5 +384,6 @@ const sortInitialArray = (array) => {
   array.sort((a, b) => (a.type > b.type ? 1 : -1));
 };
 
+const apiUrl = `https://norma.nomoreparties.space/api/ingredients `
 
-export {data, cart, IngridientPropTypes, makeAnArray, sortInitialArray};
+export {apiUrl, data, cart, IngridientPropTypes, makeAnArray, sortInitialArray};
