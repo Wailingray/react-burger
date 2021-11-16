@@ -1,0 +1,59 @@
+.section {
+  margin: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  max-width: 600px;
+  overflow-x: hidden;
+}
+
+.options {
+  max-height: 700px;
+  overflow-y: auto;
+}
+
+.options::-webkit-scrollbar {
+  width: 8px;
+}
+
+.options::-webkit-scrollbar-track {
+  background-color: #131316;
+}
+
+.options::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
+}
+
+.title {
+  color: white;
+  margin: 0;
+}
+
+.layer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.component {
+  color: white;
+  margin: 0;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.list {
+  margin: 0;
+  list-style-type: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  row-gap: 32px;
+  column-gap: 24px;
+}

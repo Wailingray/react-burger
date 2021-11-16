@@ -1,0 +1,12 @@
+.App {
+  text-align: center;
+}
+
+.main {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: flex-end;
+  gap: 40px;
+}
