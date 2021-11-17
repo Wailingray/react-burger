@@ -1,5 +1,6 @@
 import { React, setState, useEffect, useState } from "react";
 import { data, cart, apiUrl } from "../utils/utils";
+import Modal from "../modal/modal";
 import styles from "./app.module.css";
 import AppHeader from "../appHeader/appHeader";
 import BurgerIngridients from "../burgerIngridients/burgerIngridients";
@@ -10,7 +11,7 @@ function App() {
   const [loaded, setLoaded] = useState(false);
   const [items, setItems] = useState([]);
 
-  useEffect(() => {
+  /* useEffect(() => {
     fetch(apiUrl)
       .then((res) => res.json())
       .then(
@@ -27,22 +28,22 @@ function App() {
 
   if (error) {
     return (
-      <p className={`${styles.message} text text_type_main-large`} >
+      <p className={`${styles.message} text text_type_main-large`}>
         Ошибка: {error}
       </p>
     );
   } else if (!loaded) {
     return (
-      <p className={`${styles.message} text text_type_main-large`} >
+      <p className={`${styles.message} text text_type_main-large`}>
         Загрузка...
       </p>
     );
-  } else
+  } else */
     return (
       <>
         <AppHeader />
         <main className={styles.main}>
-          <BurgerIngridients data={items} />
+          {/* <BurgerIngridients data={items} /> */}
           <BurgerConstructor cart={cart} />
         </main>
       </>

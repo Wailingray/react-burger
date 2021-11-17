@@ -1,14 +1,20 @@
-import React from "react";
-import PropTypes from 'prop-types';
+import { React, useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import styles from "./burgerConstructor.module.css";
 import { DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
-import { makeAnArray } from "../utils/utils";
-
+import { makeAnArray, openModal } from "../utils/utils";
+import Modal from "../modal/modal";
+import ModalOverlay from "../modalOverlay/modalOverlay";
 
 const BurgerConstructor = (props) => {
+  const [isModalOpened, setIsModalOpened] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpened(true);
+  };
 
   const array = makeAnArray(props.cart);
 
@@ -63,26 +69,30 @@ const BurgerConstructor = (props) => {
   };
 
   return (
-    <section className={`${styles.section} pl-4 pr-2 pb-15`}>
-      <ul className={`${styles.ingridientList} mt-25 mb-10`}>
-        {array.map(renderFirstProduct)}
-        <ul className={styles.innerList}>{array.map(renderMidProducts)}</ul>
-        {array.map(renderLastProduct)}
-      </ul>
-      <div className={`${styles.confirmationZone} mt-10`}>
-      <p className="text text_type_digits-medium">{sum} <CurrencyIcon type="primary"/></p>
-      <Button type="primary" size="large">
-        Оформить заказ
-      </Button>
-      </div>
-    </section>
+    <>
+      <section className={`${styles.section} pl-4 pr-2 pb-15`}>
+        <ul className={`${styles.ingridientList} mt-25 mb-10`}>
+          {array.map(renderFirstProduct)}
+          <ul className={styles.innerList}>{array.map(renderMidProducts)}</ul>
+          {array.map(renderLastProduct)}
+        </ul>
+        <div className={`${styles.confirmationZone} mt-10`}>
+          <p className="text text_type_digits-medium">
+            {sum} <CurrencyIcon type="primary" />
+          </p>
+          <Button onClick={openModal} type="primary" size="large">
+            Оформить заказ
+          </Button>
+        </div>
+      </section>
+        <Modal isOpened={isModalOpened}>Content</Modal>
+    </>
   );
 };
 
-
 BurgerConstructor.propTypes = {
-  cart: PropTypes.arrayOf(PropTypes.shape(PropTypes.IngridientPropTypes)).isRequired,
-}
-
+  cart: PropTypes.arrayOf(PropTypes.shape(PropTypes.IngridientPropTypes))
+    .isRequired,
+};
 
 export default BurgerConstructor;
