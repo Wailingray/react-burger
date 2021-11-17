@@ -16,6 +16,10 @@ const BurgerConstructor = (props) => {
     setIsModalOpened(true);
   };
 
+  const closeModal = () => {
+    setIsModalOpened(false);
+  };
+
   const array = makeAnArray(props.cart);
 
   const sum = array.reduce((acc, el) => acc + el.price, 0);
@@ -85,7 +89,9 @@ const BurgerConstructor = (props) => {
           </Button>
         </div>
       </section>
-        <Modal isOpened={isModalOpened}>Content</Modal>
+      <Modal isOpened={isModalOpened} onClose={closeModal}>
+        Content
+      </Modal>
     </>
   );
 };

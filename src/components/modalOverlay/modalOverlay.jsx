@@ -5,7 +5,7 @@ import styles from './modalOverlay.module.css'
 const ModalOverlay = (props) => {
   return (
     createPortal(
-      <div className={styles.overlay}>
+      <div ref={props.modalRef} className={styles.overlay}>
         {props.children}
       </div>,
       document.getElementById('modal')

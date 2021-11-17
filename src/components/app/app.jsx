@@ -11,7 +11,7 @@ function App() {
   const [loaded, setLoaded] = useState(false);
   const [items, setItems] = useState([]);
 
-  /* useEffect(() => {
+  useEffect(() => {
     fetch(apiUrl)
       .then((res) => res.json())
       .then(
@@ -38,12 +38,12 @@ function App() {
         Загрузка...
       </p>
     );
-  } else */
+  } else
     return (
       <>
         <AppHeader />
         <main className={styles.main}>
-          {/* <BurgerIngridients data={items} /> */}
+          <BurgerIngridients data={items} />
           <BurgerConstructor cart={cart} />
         </main>
       </>
