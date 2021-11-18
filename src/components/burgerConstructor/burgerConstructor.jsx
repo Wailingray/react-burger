@@ -7,7 +7,7 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { makeAnArray, openModal } from "../utils/utils";
 import Modal from "../modal/modal";
-import ModalOverlay from "../modalOverlay/modalOverlay";
+import OrderDetails from "../orderDetails/orderDetails";
 
 const BurgerConstructor = (props) => {
   const [isModalOpened, setIsModalOpened] = useState(false);
@@ -90,7 +90,7 @@ const BurgerConstructor = (props) => {
         </div>
       </section>
       <Modal isOpened={isModalOpened} onClose={closeModal}>
-        Content
+        <OrderDetails></OrderDetails>
       </Modal>
     </>
   );

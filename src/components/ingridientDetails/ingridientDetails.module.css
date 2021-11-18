@@ -1,0 +1,23 @@
+.title {
+  margin-top: 52px;
+  margin-bottom: 12px;
+  align-self: flex-start;
+}
+
+.image {
+
+}
+
+.nutrition {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  display: flex;
+  gap:20px
+}
+
+.nutrient {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
