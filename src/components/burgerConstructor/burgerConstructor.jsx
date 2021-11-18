@@ -1,11 +1,10 @@
-import { React, useState, useEffect } from "react";
+import { React, useState } from "react";
 import PropTypes from "prop-types";
 import styles from "./burgerConstructor.module.css";
 import { DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
-import { makeAnArray, openModal } from "../utils/utils";
 import Modal from "../modal/modal";
 import OrderDetails from "../orderDetails/orderDetails";
 
@@ -20,7 +19,7 @@ const BurgerConstructor = (props) => {
     setIsModalOpened(false);
   };
 
-  const array = makeAnArray(props.cart);
+  const array = props.cart;
 
   const sum = array.reduce((acc, el) => acc + el.price, 0);
 

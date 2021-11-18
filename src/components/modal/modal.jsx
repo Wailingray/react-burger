@@ -1,4 +1,5 @@
 import { React, useEffect, useRef } from "react";
+import PropTypes from 'prop-types';
 import { useSpring, animated } from 'react-spring';
 import { createPortal } from "react-dom";
 import ModalOverlay from "../modalOverlay/modalOverlay";
@@ -32,7 +33,6 @@ const Modal = ({ isOpened, children, onClose }) => {
       document.removeEventListener('keydown', closeModalOnEsc);
       document.removeEventListener('click', closeModalOnClick);
     }
-
   }, [])
 
 
@@ -53,5 +53,11 @@ const Modal = ({ isOpened, children, onClose }) => {
       document.getElementById("modal")
     );
 };
+
+Modal.propTypes = {
+  isOpened: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
+}
 
 export default Modal;

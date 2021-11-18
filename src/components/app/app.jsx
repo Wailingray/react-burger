@@ -1,15 +1,18 @@
-import { React, setState, useEffect, useState } from "react";
-import { data, cart, apiUrl } from "../utils/utils";
-import Modal from "../modal/modal";
+import { React, useEffect, useState } from "react";
+import { apiUrl } from "../utils/utils";
 import styles from "./app.module.css";
 import AppHeader from "../appHeader/appHeader";
 import BurgerIngridients from "../burgerIngridients/burgerIngridients";
 import BurgerConstructor from "../burgerConstructor/burgerConstructor";
 
 function App() {
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [items, setItems] = useState([]);
+
+  //массив, который будет заполнятсья у пользователя
+  const userCart = items.map(el => el)
+  userCart[userCart.length-1] = userCart[0]
 
   useEffect(() => {
     fetch(apiUrl)
@@ -44,7 +47,7 @@ function App() {
         <AppHeader />
         <main className={styles.main}>
           <BurgerIngridients data={items} />
-          <BurgerConstructor cart={cart} />
+          <BurgerConstructor cart={userCart} />
         </main>
       </>
     );

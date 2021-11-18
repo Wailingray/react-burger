@@ -41,7 +41,7 @@ const BurgerIngridients = (props) => {
 
   const renderIngridient = (el) => {
     return (
-      <li key={el._id} id={el._id} className="item" onClick={showIngridient}>
+      <li key={el._id} id={el._id} className={styles.item} onClick={showIngridient}>
         <Ingridient
           image={el.image}
           name={el.name}
