@@ -3,16 +3,21 @@ import PropTypes from "prop-types";
 import styles from "./burgerIngridients.module.css";
 import BurgerTabs from "../burgerTabs/burgerTabs";
 import Ingridient from "../ingridient/ingridient";
-import ModalOverlay from "../modalOverlay/modalOverlay";
 import IngridientDetails from "../ingridientDetails/ingridientDetails";
 import Modal from "../modal/modal";
-import OrderDetails from "../orderDetails/orderDetails";
 
 const BurgerIngridients = (props) => {
+  const [fullArray, setFullArray] = useState([]);
   const [bunsArray, setBunsArray] = useState([]);
   const [mainArray, setMainArray] = useState([]);
   const [sauceArray, setSauceArray] = useState([]);
-  const [isModalOpened, setIsModalOpened] = useState(true);
+  const [currentIngridient, setCurrentIngridient] = useState(null);
+  const [isModalOpened, setIsModalOpened] = useState(false);
+
+
+  const pickIngridientById = (currentId) => {
+    return fullArray.find((el) => el._id === currentId);
+  };
 
   const openModal = () => {
     setIsModalOpened(true);
@@ -22,7 +27,13 @@ const BurgerIngridients = (props) => {
     setIsModalOpened(false);
   };
 
+  const showIngridient = (evt) => {
+    setCurrentIngridient(pickIngridientById(evt.currentTarget.id));
+    openModal();
+  };
+
   useEffect(() => {
+    setFullArray(props.data.map(el => el));
     setBunsArray(props.data.filter((el) => el.type === "bun"));
     setMainArray(props.data.filter((el) => el.type === "main"));
     setSauceArray(props.data.filter((el) => el.type === "sauce"));
@@ -30,7 +41,7 @@ const BurgerIngridients = (props) => {
 
   const renderIngridient = (el) => {
     return (
-      <li key={el._id} className="item">
+      <li key={el._id} id={el._id} className="item" onClick={showIngridient}>
         <Ingridient
           image={el.image}
           name={el.name}
@@ -81,9 +92,18 @@ const BurgerIngridients = (props) => {
           </div>
         </div>
       </section>
-      <Modal isOpened={isModalOpened} onClose={closeModal}>
-        <IngridientDetails {...bunsArray[0]}></IngridientDetails>
-      </Modal>
+      {isModalOpened && (
+        <Modal isOpened={isModalOpened} onClose={closeModal}>
+          <IngridientDetails
+            image_large={currentIngridient.image_large}
+            name={currentIngridient.name}
+            calories={currentIngridient.calories}
+            proteins={currentIngridient.proteins}
+            fat={currentIngridient.fat}
+            carbohydrates={currentIngridient.carbohydrates}
+          ></IngridientDetails>
+        </Modal>
+      )}
     </>
   );
 };
