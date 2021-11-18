@@ -11,22 +11,20 @@ function App() {
   const [items, setItems] = useState([]);
 
   //массив, который будет заполнятсья у пользователя
-  const userCart = items.map(el => el)
-  userCart[userCart.length-1] = userCart[0]
+  const userCart = items.map((el) => el);
+  userCart[userCart.length - 1] = userCart[0];
 
   useEffect(() => {
     fetch(apiUrl)
       .then((res) => res.json())
-      .then(
-        (result) => {
-          setLoaded(true);
-          setItems(result.data);
-        },
-        (err) => {
-          setLoaded(true);
-          setError(err);
-        }
-      );
+      .then((result) => {
+        setLoaded(true);
+        setItems(result.data);
+      })
+      .catch((err) => {
+        setLoaded(true);
+        setError(err);
+      });
   }, []);
 
   if (error) {

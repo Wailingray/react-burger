@@ -15,7 +15,7 @@ const ModalOverlay = (props) => {
 }
 
 ModalOverlay.propTypes = {
-  modalRef: PropTypes.element.isRequired,
+  modalRef: PropTypes.object.isRequired,
   children: PropTypes.node.isRequired,
 }
 
