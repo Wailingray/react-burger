@@ -20,6 +20,7 @@ function App() {
     }
     else {
       if (el.type !== 'bun') return el
+      else return false
     }
   })
 

@@ -1,5 +1,4 @@
 import { React, useEffect } from "react";
-import { createPortal } from "react-dom";
 import styles from './modal-overlay.module.css'
 import PropTypes from 'prop-types';
 
@@ -7,7 +6,7 @@ const ModalOverlay = (props) => {
 
 
 
-  useEffect(() => {
+  useEffect((props) => {
     const closeModalOnEsc = (e) => {
       if (e.key === 'Escape') props.onClose()
     }
@@ -32,8 +31,8 @@ const ModalOverlay = (props) => {
 }
 
 ModalOverlay.propTypes = {
-  modalRef: PropTypes.object.isRequired,
-  onCLose: PropTypes.func.isRequired,
+  overlayRef: PropTypes.object.isRequired,
+  onClose: PropTypes.func.isRequired,
 }
 
 export default ModalOverlay

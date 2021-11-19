@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import styles from "./burger-ingredients.module.css";
 import BurgerTabs from "../burgerTabs/burgerTabs";
@@ -31,7 +31,7 @@ const BurgerIngredients = (props) => {
     openModal();
   };
 
-  useEffect(() => {
+  useMemo(() => {
     setBunsArray(props.data.filter((el) => el.type === "bun"));
     setMainArray(props.data.filter((el) => el.type === "main"));
     setSauceArray(props.data.filter((el) => el.type === "sauce"));
