@@ -7,7 +7,6 @@ import IngridientDetails from "../ingridientDetails/ingridientDetails";
 import Modal from "../modal/modal";
 
 const BurgerIngridients = (props) => {
-  const [fullArray, setFullArray] = useState([]);
   const [bunsArray, setBunsArray] = useState([]);
   const [mainArray, setMainArray] = useState([]);
   const [sauceArray, setSauceArray] = useState([]);
@@ -16,7 +15,7 @@ const BurgerIngridients = (props) => {
 
 
   const pickIngridientById = (currentId) => {
-    return fullArray.find((el) => el._id === currentId);
+    return props.data.find((el) => el._id === currentId);
   };
 
   const openModal = () => {
@@ -33,7 +32,6 @@ const BurgerIngridients = (props) => {
   };
 
   useEffect(() => {
-    setFullArray(props.data.map(el => el));
     setBunsArray(props.data.filter((el) => el.type === "bun"));
     setMainArray(props.data.filter((el) => el.type === "main"));
     setSauceArray(props.data.filter((el) => el.type === "sauce"));

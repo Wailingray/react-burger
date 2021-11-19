@@ -13,7 +13,17 @@ function App() {
   //массив, который будет заполнятсья у пользователя
   const userCart = items.map((el) => el);
   userCart[userCart.length - 1] = userCart[0];
+  //убираем булки из середины
+  const filteredCart = userCart.filter((el, idx, arr) => {
+    if (idx ===0 || idx === arr.length-1) {
+      return el
+    }
+    else {
+      if (el.type !== 'bun') return el
+    }
+  })
 
+  console.log(filteredCart)
   useEffect(() => {
     fetch(apiUrl)
       .then((res) => res.json())
@@ -45,7 +55,7 @@ function App() {
         <AppHeader />
         <main className={styles.main}>
           <BurgerIngridients data={items} />
-          <BurgerConstructor cart={userCart} />
+          <BurgerConstructor cart={filteredCart} />
         </main>
       </>
     );

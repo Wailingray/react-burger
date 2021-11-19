@@ -15,24 +15,9 @@ const IngridientPropTypes = PropTypes.shape({
   __v: PropTypes.number.isRequired,
 });
 
-const makeAnArray = (props) => {
-  const array = [];
-  const objectArray = Object.entries(props);
-  objectArray.forEach(([key, value]) => {
-    array.push(value);
-  });
-  return array;
-};
-
-const sortInitialArray = (array) => {
-  array.sort((a, b) => (a.type > b.type ? 1 : -1));
-};
-
 const apiUrl = `https://norma.nomoreparties.space/api/ingredients`;
 
 export {
   apiUrl,
   IngridientPropTypes,
-  makeAnArray,
-  sortInitialArray,
 };
