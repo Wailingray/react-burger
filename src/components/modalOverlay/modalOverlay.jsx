@@ -5,15 +5,17 @@ import PropTypes from 'prop-types';
 
 const ModalOverlay = (props) => {
 
-  const closeModalOnEsc = (e) => {
-    if (e.key === 'Escape') props.onClose()
-  }
 
-  const closeModalOnClick = (e) => {
-    if (e.target === props.overlayRef.current) props.onClose()
-  }
 
   useEffect(() => {
+    const closeModalOnEsc = (e) => {
+      if (e.key === 'Escape') props.onClose()
+    }
+
+    const closeModalOnClick = (e) => {
+      if (e.target === props.overlayRef.current) props.onClose()
+    }
+
     document.addEventListener('keydown', closeModalOnEsc);
     document.addEventListener('click', closeModalOnClick);
 
@@ -21,7 +23,7 @@ const ModalOverlay = (props) => {
       document.removeEventListener('keydown', closeModalOnEsc);
       document.removeEventListener('click', closeModalOnClick);
     }
-  }, [])
+  }, [props.onClose])
 
   return (
       <div ref={props.overlayRef} onClose={props.onClose} className={styles.overlay}>
