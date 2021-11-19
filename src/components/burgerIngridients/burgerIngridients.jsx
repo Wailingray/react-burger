@@ -1,20 +1,20 @@
 import { React, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import styles from "./burgerIngridients.module.css";
+import styles from "./burger-ingredients.module.css";
 import BurgerTabs from "../burgerTabs/burgerTabs";
-import Ingridient from "../ingridient/ingridient";
-import IngridientDetails from "../ingridientDetails/ingridientDetails";
+import Ingredient from "../ingredient/ingredient";
+import IngredientDetails from "../ingredientDetails/ingredientDetails";
 import Modal from "../modal/modal";
 
-const BurgerIngridients = (props) => {
+const BurgerIngredients = (props) => {
   const [bunsArray, setBunsArray] = useState([]);
   const [mainArray, setMainArray] = useState([]);
   const [sauceArray, setSauceArray] = useState([]);
-  const [currentIngridient, setCurrentIngridient] = useState(null);
+  const [currentIngredient, setCurrentIngredient] = useState(null);
   const [isModalOpened, setIsModalOpened] = useState(false);
 
 
-  const pickIngridientById = (currentId) => {
+  const pickIngredientById = (currentId) => {
     return props.data.find((el) => el._id === currentId);
   };
 
@@ -26,8 +26,8 @@ const BurgerIngridients = (props) => {
     setIsModalOpened(false);
   };
 
-  const showIngridient = (evt) => {
-    setCurrentIngridient(pickIngridientById(evt.currentTarget.id));
+  const showIngredient = (evt) => {
+    setCurrentIngredient(pickIngredientById(evt.currentTarget.id));
     openModal();
   };
 
@@ -37,15 +37,15 @@ const BurgerIngridients = (props) => {
     setSauceArray(props.data.filter((el) => el.type === "sauce"));
   }, [props.data]);
 
-  const renderIngridient = (el) => {
+  const renderIngredient = (el) => {
     return (
-      <li key={el._id} id={el._id} className={styles.item} onClick={showIngridient}>
-        <Ingridient
+      <li key={el._id} id={el._id} className={styles.item} onClick={showIngredient}>
+        <Ingredient
           image={el.image}
           name={el.name}
           price={el.price}
           counter={el.counter}
-        ></Ingridient>
+        ></Ingredient>
       </li>
     );
   };
@@ -65,7 +65,7 @@ const BurgerIngridients = (props) => {
               Булки
             </h2>
             <ul className={`${styles.list} pl-4 pr-2`}>
-              {bunsArray.map(renderIngridient)}
+              {bunsArray.map(renderIngredient)}
             </ul>
           </div>
           <div className={styles.layer}>
@@ -75,7 +75,7 @@ const BurgerIngridients = (props) => {
               Соусы
             </h2>
             <ul className={`${styles.list} pl-4 pr-2`}>
-              {sauceArray.map(renderIngridient)}
+              {sauceArray.map(renderIngredient)}
             </ul>
           </div>
           <div className={styles.layer}>
@@ -85,30 +85,30 @@ const BurgerIngridients = (props) => {
               Начинки
             </h2>
             <ul className={`${styles.list} pl-4 pr-2`}>
-              {mainArray.map(renderIngridient)}
+              {mainArray.map(renderIngredient)}
             </ul>
           </div>
         </div>
       </section>
       {isModalOpened && (
         <Modal isOpened={isModalOpened} onClose={closeModal}>
-          <IngridientDetails
-            image_large={currentIngridient.image_large}
-            name={currentIngridient.name}
-            calories={currentIngridient.calories}
-            proteins={currentIngridient.proteins}
-            fat={currentIngridient.fat}
-            carbohydrates={currentIngridient.carbohydrates}
-          ></IngridientDetails>
+          <IngredientDetails
+            image_large={currentIngredient.image_large}
+            name={currentIngredient.name}
+            calories={currentIngredient.calories}
+            proteins={currentIngredient.proteins}
+            fat={currentIngredient.fat}
+            carbohydrates={currentIngredient.carbohydrates}
+          ></IngredientDetails>
         </Modal>
       )}
     </>
   );
 };
 
-BurgerIngridients.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape(PropTypes.IngridientPropTypes))
+BurgerIngredients.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.shape(PropTypes.IngredientPropTypes))
     .isRequired,
 };
 
-export default BurgerIngridients;
+export default BurgerIngredients;

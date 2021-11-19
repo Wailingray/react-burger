@@ -1,6 +1,6 @@
 import { React, useState } from "react";
 import PropTypes from "prop-types";
-import styles from "./burgerConstructor.module.css";
+import styles from "./burger-constructor.module.css";
 import { DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -26,7 +26,7 @@ const BurgerConstructor = (props) => {
   const renderFirstProduct = ({ name, image, price, _id }, index, array) => {
     if (index === 0) {
       return (
-        <li key={index} className={`${styles.ingridient} pr-2`}>
+        <li key={index} className={`${styles.ingredient} pr-2`}>
           <ConstructorElement
             type="top"
             isLocked={true}
@@ -42,7 +42,7 @@ const BurgerConstructor = (props) => {
   const renderLastProduct = ({ name, image, price, _id }, index, array) => {
     if (index === array.length - 1) {
       return (
-        <li key={index} className={`${styles.ingridient} pr-2`}>
+        <li key={index} className={`${styles.ingredient} pr-2`}>
           <ConstructorElement
             type="bottom"
             isLocked={true}
@@ -58,7 +58,7 @@ const BurgerConstructor = (props) => {
   const renderMidProducts = ({ name, image, price, _id }, index, array) => {
     if (index !== 0 && index !== array.length - 1) {
       return (
-        <li key={index} className={styles.ingridient}>
+        <li key={index} className={styles.ingredient}>
           <DragIcon type="primary" />
           <ConstructorElement
             isLocked={false}
@@ -74,7 +74,7 @@ const BurgerConstructor = (props) => {
   return (
     <>
       <section className={`${styles.section} pl-4 pr-2 pb-15`}>
-        <ul className={`${styles.ingridientList} mt-25 mb-10`}>
+        <ul className={`${styles.ingredientList} mt-25 mb-10`}>
           {array.map(renderFirstProduct)}
           <ul className={styles.innerList}>{array.map(renderMidProducts)}</ul>
           {array.map(renderLastProduct)}
@@ -96,7 +96,7 @@ const BurgerConstructor = (props) => {
 };
 
 BurgerConstructor.propTypes = {
-  cart: PropTypes.arrayOf(PropTypes.shape(PropTypes.IngridientPropTypes))
+  cart: PropTypes.arrayOf(PropTypes.shape(PropTypes.IngredientPropTypes))
     .isRequired,
 };
 

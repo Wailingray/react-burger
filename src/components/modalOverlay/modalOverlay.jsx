@@ -1,6 +1,6 @@
 import { React, useEffect } from "react";
 import { createPortal } from "react-dom";
-import styles from './modalOverlay.module.css'
+import styles from './modal-overlay.module.css'
 import PropTypes from 'prop-types';
 
 const ModalOverlay = (props) => {

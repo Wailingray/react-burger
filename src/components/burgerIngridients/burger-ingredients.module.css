@@ -12,6 +12,7 @@
 .options {
   max-height: 700px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .options::-webkit-scrollbar {

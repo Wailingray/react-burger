@@ -1,8 +1,8 @@
 import React from "react";
-import styles from "./ingridientDetails.module.css";
+import styles from "./ingredient-details.module.css";
 import PropTypes from 'prop-types';
 
-const IngridientDetails = (props) => {
+const IngredientDetails = (props) => {
   return (
     <>
     <span className={`${styles.title} text text_type_main-large ml-10`}>
@@ -32,7 +32,7 @@ const IngridientDetails = (props) => {
   )
 }
 
-IngridientDetails.propTypes = {
+IngredientDetails.propTypes = {
   image_large: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   calories: PropTypes.number.isRequired,
@@ -42,4 +42,4 @@ IngridientDetails.propTypes = {
 }
 
 
-export default IngridientDetails
+export default IngredientDetails

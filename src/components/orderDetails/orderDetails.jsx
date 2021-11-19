@@ -1,6 +1,6 @@
 import React from "react";
 import doneImage from "../../images/done.svg";
-import styles from "./orderDetails.module.css"
+import styles from "./order-details.module.css"
 
 const OrderDetails = () => {
   return(

@@ -23,7 +23,6 @@ function App() {
     }
   })
 
-  console.log(filteredCart)
   useEffect(() => {
     fetch(apiUrl)
       .then((res) => res.json())
