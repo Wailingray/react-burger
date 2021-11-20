@@ -4,15 +4,13 @@ import styles from "./burger-ingredients.module.css";
 import BurgerTabs from "../burgerTabs/burgerTabs";
 import Ingredient from "../ingredient/ingredient";
 import IngredientDetails from "../ingredientDetails/ingredientDetails";
+import { IngredientPropTypes } from "../utils/utils";
 import Modal from "../modal/modal";
 
 const BurgerIngredients = (props) => {
-  const [bunsArray, setBunsArray] = useState([]);
-  const [mainArray, setMainArray] = useState([]);
-  const [sauceArray, setSauceArray] = useState([]);
+
   const [currentIngredient, setCurrentIngredient] = useState(null);
   const [isModalOpened, setIsModalOpened] = useState(false);
-
 
   const pickIngredientById = (currentId) => {
     return props.data.find((el) => el._id === currentId);
@@ -31,11 +29,9 @@ const BurgerIngredients = (props) => {
     openModal();
   };
 
-  useMemo(() => {
-    setBunsArray(props.data.filter((el) => el.type === "bun"));
-    setMainArray(props.data.filter((el) => el.type === "main"));
-    setSauceArray(props.data.filter((el) => el.type === "sauce"));
-  }, [props.data]);
+  const bunsArray = useMemo(() => props.data.filter(el => el.type === "bun"), [props.data]);
+  const mainArray = useMemo(() => props.data.filter(el => el.type === "main"), [props.data]);
+  const sauceArray = useMemo(() => props.data.filter(el => el.type === "sauce"), [props.data]);
 
   const renderIngredient = (el) => {
     return (
@@ -91,7 +87,7 @@ const BurgerIngredients = (props) => {
         </div>
       </section>
       {isModalOpened && (
-        <Modal isOpened={isModalOpened} onClose={closeModal}>
+        <Modal onClose={closeModal}>
           <IngredientDetails
             image_large={currentIngredient.image_large}
             name={currentIngredient.name}
@@ -107,8 +103,7 @@ const BurgerIngredients = (props) => {
 };
 
 BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape(PropTypes.IngredientPropTypes))
-    .isRequired,
+  data: PropTypes.arrayOf(IngredientPropTypes).isRequired,
 };
 
 export default BurgerIngredients;

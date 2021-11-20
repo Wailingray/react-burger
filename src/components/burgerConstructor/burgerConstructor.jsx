@@ -7,6 +7,7 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
 import OrderDetails from "../orderDetails/orderDetails";
+import { IngredientPropTypes } from "../utils/utils";
 
 const BurgerConstructor = (props) => {
   const [isModalOpened, setIsModalOpened] = useState(false);
@@ -88,16 +89,17 @@ const BurgerConstructor = (props) => {
           </Button>
         </div>
       </section>
-      <Modal isOpened={isModalOpened} onClose={closeModal}>
-        <OrderDetails></OrderDetails>
-      </Modal>
+      {isModalOpened && (
+        <Modal onClose={closeModal}>
+            <OrderDetails/>
+        </Modal>
+      )}
     </>
   );
 };
 
 BurgerConstructor.propTypes = {
-  cart: PropTypes.arrayOf(PropTypes.shape(PropTypes.IngredientPropTypes))
-    .isRequired,
+  cart: PropTypes.arrayOf(IngredientPropTypes).isRequired,
 };
 
 export default BurgerConstructor;

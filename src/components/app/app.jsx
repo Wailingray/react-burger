@@ -1,5 +1,6 @@
 import { React, useEffect, useState } from "react";
-import { apiUrl } from "../utils/utils";
+
+import { getData } from "../api/api";
 import styles from "./app.module.css";
 import AppHeader from "../appHeader/appHeader";
 import BurgerIngridients from "../burgerIngridients/burgerIngridients";
@@ -24,12 +25,12 @@ function App() {
     }
   })
 
+
   useEffect(() => {
-    fetch(apiUrl)
-      .then((res) => res.json())
-      .then((result) => {
+    getData()
+      .then((res) => {
         setLoaded(true);
-        setItems(result.data);
+        setItems(res.data);
       })
       .catch((err) => {
         setLoaded(true);

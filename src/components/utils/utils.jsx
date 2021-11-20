@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-const IngredientPropTypes = PropTypes.shape({
+export const IngredientPropTypes = PropTypes.shape({
   _id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
@@ -14,10 +14,3 @@ const IngredientPropTypes = PropTypes.shape({
   image_large: PropTypes.string.isRequired,
   __v: PropTypes.number.isRequired,
 });
-
-const apiUrl = `https://norma.nomoreparties.space/api/ingredients`;
-
-export {
-  apiUrl,
-  IngredientPropTypes,
-};
