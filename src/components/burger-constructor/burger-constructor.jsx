@@ -6,7 +6,7 @@ import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-comp
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
-import OrderDetails from "../orderDetails/orderDetails";
+import OrderDetails from "../order-details/order-details";
 import { IngredientPropTypes } from "../utils/utils";
 
 const BurgerConstructor = (props) => {

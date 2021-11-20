@@ -1,9 +1,9 @@
 import { React, useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import styles from "./burger-ingredients.module.css";
-import BurgerTabs from "../burgerTabs/burgerTabs";
+import BurgerTabs from "../burger-tabs/burger-tabs";
 import Ingredient from "../ingredient/ingredient";
-import IngredientDetails from "../ingredientDetails/ingredientDetails";
+import IngredientDetails from "../ingredient-details/ingredient-details";
 import { IngredientPropTypes } from "../utils/utils";
 import Modal from "../modal/modal";
 

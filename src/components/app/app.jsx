@@ -2,9 +2,9 @@ import { React, useEffect, useState } from "react";
 
 import { getData } from "../api/api";
 import styles from "./app.module.css";
-import AppHeader from "../appHeader/appHeader";
-import BurgerIngridients from "../burgerIngridients/burgerIngridients";
-import BurgerConstructor from "../burgerConstructor/burgerConstructor";
+import AppHeader from "../app-header/app-header";
+import BurgerIngridients from "../burger-ingredients/burger-ingredients";
+import BurgerConstructor from "../burger-constructor/burger-constructor";
 
 function App() {
   const [error, setError] = useState(false);
