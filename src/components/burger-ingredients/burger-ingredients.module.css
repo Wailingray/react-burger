@@ -6,12 +6,12 @@
   justify-content: flex-start;
   align-items: flex-start;
   max-width: 600px;
-  overflow-x: hidden;
 }
 
 .options {
   max-height: 700px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .options::-webkit-scrollbar {
@@ -41,6 +41,10 @@
 .component {
   color: white;
   margin: 0;
+}
+
+.item {
+  cursor: pointer;
 }
 
 .tabs {

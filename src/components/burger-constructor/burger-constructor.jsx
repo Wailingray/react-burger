@@ -1,23 +1,33 @@
-import React from "react";
-import PropTypes from 'prop-types';
-import styles from "./burgerConstructor.module.css";
+import { React, useState } from "react";
+import PropTypes from "prop-types";
+import styles from "./burger-constructor.module.css";
 import { DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
-import { makeAnArray } from "../utils/utils";
-
+import Modal from "../modal/modal";
+import OrderDetails from "../order-details/order-details";
+import { IngredientPropTypes } from "../utils/utils";
 
 const BurgerConstructor = (props) => {
+  const [isModalOpened, setIsModalOpened] = useState(false);
 
-  const array = makeAnArray(props.cart);
+  const openModal = () => {
+    setIsModalOpened(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpened(false);
+  };
+
+  const array = props.cart;
 
   const sum = array.reduce((acc, el) => acc + el.price, 0);
 
   const renderFirstProduct = ({ name, image, price, _id }, index, array) => {
     if (index === 0) {
       return (
-        <li key={index} className={`${styles.ingridient} pr-2`}>
+        <li key={index} className={`${styles.ingredient} pr-2`}>
           <ConstructorElement
             type="top"
             isLocked={true}
@@ -33,7 +43,7 @@ const BurgerConstructor = (props) => {
   const renderLastProduct = ({ name, image, price, _id }, index, array) => {
     if (index === array.length - 1) {
       return (
-        <li key={index} className={`${styles.ingridient} pr-2`}>
+        <li key={index} className={`${styles.ingredient} pr-2`}>
           <ConstructorElement
             type="bottom"
             isLocked={true}
@@ -49,7 +59,7 @@ const BurgerConstructor = (props) => {
   const renderMidProducts = ({ name, image, price, _id }, index, array) => {
     if (index !== 0 && index !== array.length - 1) {
       return (
-        <li key={index} className={styles.ingridient}>
+        <li key={index} className={styles.ingredient}>
           <DragIcon type="primary" />
           <ConstructorElement
             isLocked={false}
@@ -63,26 +73,33 @@ const BurgerConstructor = (props) => {
   };
 
   return (
-    <section className={`${styles.section} pl-4 pr-2 pb-15`}>
-      <ul className={`${styles.ingridientList} mt-25 mb-10`}>
-        {array.map(renderFirstProduct)}
-        <ul className={styles.innerList}>{array.map(renderMidProducts)}</ul>
-        {array.map(renderLastProduct)}
-      </ul>
-      <div className={`${styles.confirmationZone} mt-10`}>
-      <p className="text text_type_digits-medium">{sum} <CurrencyIcon type="primary"/></p>
-      <Button type="primary" size="large">
-        Оформить заказ
-      </Button>
-      </div>
-    </section>
+    <>
+      <section className={`${styles.section} pl-4 pr-2 pb-15`}>
+        <ul className={`${styles.ingredientList} mt-25 mb-10`}>
+          {array.map(renderFirstProduct)}
+          <ul className={styles.innerList}>{array.map(renderMidProducts)}</ul>
+          {array.map(renderLastProduct)}
+        </ul>
+        <div className={`${styles.confirmationZone} mt-10`}>
+          <p className="text text_type_digits-medium">
+            {sum} <CurrencyIcon type="primary" />
+          </p>
+          <Button onClick={openModal} type="primary" size="large">
+            Оформить заказ
+          </Button>
+        </div>
+      </section>
+      {isModalOpened && (
+        <Modal onClose={closeModal}>
+            <OrderDetails/>
+        </Modal>
+      )}
+    </>
   );
 };
 
-
 BurgerConstructor.propTypes = {
-  cart: PropTypes.arrayOf(PropTypes.shape(PropTypes.IngridientPropTypes)).isRequired,
-}
-
+  cart: PropTypes.arrayOf(IngredientPropTypes).isRequired,
+};
 
 export default BurgerConstructor;

@@ -1,11 +1,10 @@
 import React from 'react';
-import styles from "./ingridient.module.css";
-import { IngridientPropTypes } from '../utils/utils';
+import styles from "./ingredient.module.css";
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from 'prop-types';
 
-const Ingridient = (props) => {
+const Ingredient = (props) => {
     return (
       <div className={styles.card}>
         <img
@@ -25,7 +24,7 @@ const Ingridient = (props) => {
     );
   }
 
-Ingridient.propTypes = {
+Ingredient.propTypes = {
   image: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
@@ -33,4 +32,4 @@ Ingridient.propTypes = {
 }
 
 
-export default Ingridient;
+export default Ingredient;
