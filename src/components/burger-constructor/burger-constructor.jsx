@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useContext } from "react";
 import PropTypes from "prop-types";
 import styles from "./burger-constructor.module.css";
 import { DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -8,8 +8,9 @@ import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { IngredientPropTypes } from "../utils/utils";
+import ConstructorContext from "../../context/constructor-context";
 
-const BurgerConstructor = (props) => {
+const BurgerConstructor = () => {
   const [isModalOpened, setIsModalOpened] = useState(false);
 
   const openModal = () => {
@@ -20,7 +21,7 @@ const BurgerConstructor = (props) => {
     setIsModalOpened(false);
   };
 
-  const array = props.cart;
+  const array = useContext(ConstructorContext);
 
   const sum = array.reduce((acc, el) => acc + el.price, 0);
 
@@ -91,7 +92,7 @@ const BurgerConstructor = (props) => {
       </section>
       {isModalOpened && (
         <Modal onClose={closeModal}>
-            <OrderDetails/>
+          <OrderDetails/>
         </Modal>
       )}
     </>

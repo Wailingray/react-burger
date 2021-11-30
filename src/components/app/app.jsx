@@ -5,6 +5,7 @@ import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
 import BurgerIngridients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
+import ConstructorContext from "../../context/constructor-context";
 
 function App() {
   const [error, setError] = useState(false);
@@ -56,7 +57,9 @@ function App() {
         <AppHeader />
         <main className={styles.main}>
           <BurgerIngridients data={items} />
-          <BurgerConstructor cart={filteredCart} />
+          <ConstructorContext.Provider value={filteredCart}>
+            <BurgerConstructor />
+          </ConstructorContext.Provider>
         </main>
       </>
     );
