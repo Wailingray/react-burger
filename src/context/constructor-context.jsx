@@ -1,5 +1,4 @@
 import React from "react";
 
-const ConstructorContext = React.createContext();
+export const ConstructorContext = React.createContext(null);
 
-export default ConstructorContext;

@@ -5,27 +5,12 @@ import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
 import BurgerIngridients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
-import ConstructorContext from "../../context/constructor-context";
+import { ConstructorContext } from "../../context/constructor-context";
 
 function App() {
   const [error, setError] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [items, setItems] = useState([]);
-
-  //массив, который будет заполнятсья у пользователя
-  const userCart = items.map((el) => el);
-  userCart[userCart.length - 1] = userCart[0];
-  //убираем булки из середины
-  const filteredCart = userCart.filter((el, idx, arr) => {
-    if (idx ===0 || idx === arr.length-1) {
-      return el
-    }
-    else {
-      if (el.type !== 'bun') return el
-      else return false
-    }
-  })
-
 
   useEffect(() => {
     getData()
@@ -57,7 +42,7 @@ function App() {
         <AppHeader />
         <main className={styles.main}>
           <BurgerIngridients data={items} />
-          <ConstructorContext.Provider value={filteredCart}>
+          <ConstructorContext.Provider value={items}>
             <BurgerConstructor />
           </ConstructorContext.Provider>
         </main>
