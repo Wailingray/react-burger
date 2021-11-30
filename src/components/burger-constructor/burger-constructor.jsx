@@ -1,4 +1,4 @@
-import { React, useState, useContext } from "react";
+import { React, useState, useContext, useReducer, useEffect } from "react";
 import PropTypes, { arrayOf } from "prop-types";
 import styles from "./burger-constructor.module.css";
 import { DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -9,9 +9,11 @@ import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { IngredientPropTypes } from "../utils/utils";
 import { ConstructorContext } from "../../context/constructor-context";
+import { submitOrder } from "../api/api";
 
 const BurgerConstructor = () => {
   const [isModalOpened, setIsModalOpened] = useState(false);
+  const [cart, setCart] = useState([]);
 
   const openModal = () => {
     setIsModalOpened(true);
@@ -21,14 +23,23 @@ const BurgerConstructor = () => {
     setIsModalOpened(false);
   };
 
+
   const array = useContext(ConstructorContext);
-  console.log(array)
-
- const bun = array.find((el) => el.type === "bun");
-
+  const bun = array.find((el) => el.type === "bun");
   const noBunsArray = array.filter((el) => el.type !== "bun");
-
   const sum = array.reduce((acc, el) => acc + el.price, 0);
+
+  useEffect(() => {
+    bun && setCart([].concat(bun._id).concat(noBunsArray.map((el) => el._id)));
+  }, [array])
+
+  const sendOrder = () => {
+    submitOrder(cart)
+    .then((orderObj) => {
+      console.log(orderObj);
+    })
+  };
+
 
   const renderProducts = ({ name, image, price, _id }, index) => {
     return (
@@ -48,33 +59,37 @@ const BurgerConstructor = () => {
     <>
       <section className={`${styles.section} pl-4 pr-2 pb-15`}>
         <ul className={`${styles.ingredientList} mt-25 mb-10`}>
-          <li key={bun._id + 1} className={`${styles.ingredient} pr-2`}>
-            <ConstructorElement
-              type="top"
-              isLocked={true}
-              text={`${bun.name} (верх)`}
-              price={bun.price}
-              thumbnail={bun.image}
-            />
-          </li>
+          {bun && (
+            <li key={bun._id} className={`${styles.ingredient} pr-2`}>
+              <ConstructorElement
+                type="top"
+                isLocked={true}
+                text={`${bun.name} (верх)`}
+                price={bun.price}
+                thumbnail={bun.image}
+              />
+            </li>
+          )}
           <ul className={styles.innerList}>
             {noBunsArray.map(renderProducts)}
           </ul>
-          <li key={bun._id} className={`${styles.ingredient} pr-2`}>
-            <ConstructorElement
-              type="bottom"
-              isLocked={true}
-              text={`${bun.name} (низ)`}
-              price={bun.price}
-              thumbnail={bun.image}
-            />
-          </li>
+          {bun && (
+            <li key={bun._id + 1} className={`${styles.ingredient} pr-2`}>
+              <ConstructorElement
+                type="bottom"
+                isLocked={true}
+                text={`${bun.name} (низ)`}
+                price={bun.price}
+                thumbnail={bun.image}
+              />
+            </li>
+          )}
         </ul>
         <div className={`${styles.confirmationZone} mt-10`}>
           <p className="text text_type_digits-medium">
             {sum} <CurrencyIcon type="primary" />
           </p>
-          <Button onClick={openModal} type="primary" size="large">
+          <Button onClick={sendOrder} type="primary" size="large">
             Оформить заказ
           </Button>
         </div>
@@ -89,7 +104,7 @@ const BurgerConstructor = () => {
 };
 
 /* BurgerConstructor.propTypes = {
-  cart: PropTypes.arrayOf(IngredientPropTypes).isRequired,
+  array: PropTypes.arrayOf(IngredientPropTypes).isRequired,
 }; */
 
 export default BurgerConstructor;
