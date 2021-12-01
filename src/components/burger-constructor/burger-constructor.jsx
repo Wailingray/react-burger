@@ -13,7 +13,10 @@ import { submitOrder } from "../api/api";
 
 const BurgerConstructor = () => {
   const [isModalOpened, setIsModalOpened] = useState(false);
+  const [reply, setReply] = useState(null);
+  const [error, setError] = useState(false);
   const [cart, setCart] = useState([]);
+  const [sum, setSum] = useState(null)
 
   const openModal = () => {
     setIsModalOpened(true);
@@ -23,23 +26,28 @@ const BurgerConstructor = () => {
     setIsModalOpened(false);
   };
 
-
   const array = useContext(ConstructorContext);
   const bun = array.find((el) => el.type === "bun");
   const noBunsArray = array.filter((el) => el.type !== "bun");
-  const sum = array.reduce((acc, el) => acc + el.price, 0);
 
   useEffect(() => {
+    bun && setSum(noBunsArray.reduce((acc, el) => acc + el.price, 0) + bun.price*2)
     bun && setCart([].concat(bun._id).concat(noBunsArray.map((el) => el._id)));
-  }, [array])
+  }, [array, bun]);
 
   const sendOrder = () => {
     submitOrder(cart)
-    .then((orderObj) => {
-      console.log(orderObj);
-    })
+      .then((replyObj) => {
+        setReply(replyObj);
+        console.log(replyObj.name)
+      })
+      .catch((err) => {
+        setError(err);
+      })
+      .finally(() => {
+        openModal()
+      })
   };
-
 
   const renderProducts = ({ name, image, price, _id }, index) => {
     return (
@@ -96,15 +104,12 @@ const BurgerConstructor = () => {
       </section>
       {isModalOpened && (
         <Modal onClose={closeModal}>
-          <OrderDetails />
+          <OrderDetails orderNum={reply.order.number} error={error}/>
         </Modal>
       )}
     </>
   );
 };
 
-/* BurgerConstructor.propTypes = {
-  array: PropTypes.arrayOf(IngredientPropTypes).isRequired,
-}; */
 
 export default BurgerConstructor;
