@@ -5,7 +5,7 @@ import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
 import BurgerIngridients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
-import { ConstructorContext } from "../../context/constructor-context";
+import { BurgerContext } from "../../context/burger-context";
 
 function App() {
   const [error, setError] = useState(false);
@@ -38,15 +38,13 @@ function App() {
     );
   } else
     return (
-      <>
+      <BurgerContext.Provider value={items}>
         <AppHeader />
         <main className={styles.main}>
           <BurgerIngridients data={items} />
-          <ConstructorContext.Provider value={items}>
-            <BurgerConstructor />
-          </ConstructorContext.Provider>
+          <BurgerConstructor />
         </main>
-      </>
+      </BurgerContext.Provider>
     );
 }
 

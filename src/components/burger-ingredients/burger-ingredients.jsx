@@ -1,19 +1,20 @@
-import { React, useState, useMemo } from "react";
-import PropTypes from "prop-types";
+import { React, useState, useMemo, useContext } from "react";
 import styles from "./burger-ingredients.module.css";
 import BurgerTabs from "../burger-tabs/burger-tabs";
 import Ingredient from "../ingredient/ingredient";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-import { IngredientPropTypes } from "../../utils/utils";
+import { BurgerContext } from "../../context/burger-context";
 import Modal from "../modal/modal";
 
-const BurgerIngredients = (props) => {
+const BurgerIngredients = () => {
 
   const [currentIngredient, setCurrentIngredient] = useState(null);
   const [isModalOpened, setIsModalOpened] = useState(false);
 
+  const data = useContext(BurgerContext)
+
   const pickIngredientById = (currentId) => {
-    return props.data.find((el) => el._id === currentId);
+    return data.find((el) => el._id === currentId);
   };
 
   const openModal = () => {
@@ -29,9 +30,9 @@ const BurgerIngredients = (props) => {
     openModal();
   };
 
-  const bunsArray = useMemo(() => props.data.filter(el => el.type === "bun"), [props.data]);
-  const mainArray = useMemo(() => props.data.filter(el => el.type === "main"), [props.data]);
-  const sauceArray = useMemo(() => props.data.filter(el => el.type === "sauce"), [props.data]);
+  const bunsArray = useMemo(() => data.filter(el => el.type === "bun"), [data]);
+  const mainArray = useMemo(() => data.filter(el => el.type === "main"), [data]);
+  const sauceArray = useMemo(() => data.filter(el => el.type === "sauce"), [data]);
 
   const renderIngredient = (el) => {
     return (
@@ -100,10 +101,6 @@ const BurgerIngredients = (props) => {
       )}
     </>
   );
-};
-
-BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(IngredientPropTypes).isRequired,
 };
 
 export default BurgerIngredients;
