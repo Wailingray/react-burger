@@ -7,14 +7,14 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
-import { IngredientPropTypes } from "../utils/utils";
+import { IngredientPropTypes } from "../../utils/utils";
 import { ConstructorContext } from "../../context/constructor-context";
 import { submitOrder } from "../api/api";
 
 const BurgerConstructor = () => {
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [reply, setReply] = useState(null);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(null);
   const [cart, setCart] = useState([]);
   const [sum, setSum] = useState(null)
 

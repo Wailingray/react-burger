@@ -4,7 +4,7 @@ import styles from "./burger-ingredients.module.css";
 import BurgerTabs from "../burger-tabs/burger-tabs";
 import Ingredient from "../ingredient/ingredient";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-import { IngredientPropTypes } from "../utils/utils";
+import { IngredientPropTypes } from "../../utils/utils";
 import Modal from "../modal/modal";
 
 const BurgerIngredients = (props) => {
