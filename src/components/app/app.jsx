@@ -41,7 +41,7 @@ function App() {
       <BurgerContext.Provider value={items}>
         <AppHeader />
         <main className={styles.main}>
-          <BurgerIngridients data={items} />
+          <BurgerIngridients />
           <BurgerConstructor />
         </main>
       </BurgerContext.Provider>
