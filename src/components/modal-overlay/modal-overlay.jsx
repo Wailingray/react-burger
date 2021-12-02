@@ -1,30 +1,17 @@
-import { React, useEffect } from "react";
-import styles from './modal-overlay.module.css'
-import PropTypes from 'prop-types';
+import { React } from "react";
+import PropTypes from "prop-types";
+import styles from "./modal-overlay.module.css";
 
-const ModalOverlay = ({onClose}) => {
+const ModalOverlay = ({ onClose }) => {
+  const closeModalOnClick = () => {
+    onClose();
+  };
 
-  useEffect(() => {
-
-    const closeModalOnClick = () => {
-      onClose()
-    }
-
-    document.addEventListener('click', closeModalOnClick);
-
-    return () => {
-      document.removeEventListener('click', closeModalOnClick);
-    }
-  }, [onClose])
-
-  return (
-      <div onClose={onClose} className={styles.overlay}>
-      </div>
-  )
-}
+  return <div onClick={closeModalOnClick} className={styles.overlay}></div>;
+};
 
 ModalOverlay.propTypes = {
   onClose: PropTypes.func.isRequired,
-}
+};
 
-export default ModalOverlay
+export default ModalOverlay;
