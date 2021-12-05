@@ -18,10 +18,10 @@ const BurgerIngredients = () => {
     dispatch(getItems())
   }, [dispatch])
 
-  const { items } = useSelector(state => state.ingredients);
+  const { ingredientsItems } = useSelector(state => state.ingredients);
 
   const pickIngredientById = (currentId) => {
-    return items.find((el) => el._id === currentId);
+    return ingredientsItems.find((el) => el._id === currentId);
   };
 
   const openModal = () => {
@@ -37,9 +37,10 @@ const BurgerIngredients = () => {
     openModal();
   };
 
-  const bunsArray = useMemo(() => items.filter(el => el.type === "bun"), [items]);
-  const mainArray = useMemo(() => items.filter(el => el.type === "main"), [items]);
-  const sauceArray = useMemo(() => items.filter(el => el.type === "sauce"), [items]);
+  const bunsArray = useMemo(() => ingredientsItems.filter(el => el.type === "bun"), [ingredientsItems]);
+  const mainArray = useMemo(() => ingredientsItems.filter(el => el.type === "main"), [ingredientsItems]);
+  const sauceArray = useMemo(() => ingredientsItems.filter(el => el.type === "sauce"), [ingredientsItems]);
+
 
   const renderIngredient = (el) => {
     return (
