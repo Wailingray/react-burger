@@ -1,9 +1,10 @@
-import { React, useState, useMemo, useContext } from "react";
+import { React, useState, useMemo, useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import styles from "./burger-ingredients.module.css";
 import BurgerTabs from "../burger-tabs/burger-tabs";
 import Ingredient from "../ingredient/ingredient";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-import { BurgerContext } from "../../context/burger-context";
+import { getItems } from "../../services/actions/ingredients";
 import Modal from "../modal/modal";
 
 const BurgerIngredients = () => {
@@ -11,10 +12,16 @@ const BurgerIngredients = () => {
   const [currentIngredient, setCurrentIngredient] = useState(null);
   const [isModalOpened, setIsModalOpened] = useState(false);
 
-  const data = useContext(BurgerContext)
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getItems())
+  }, [dispatch])
+
+  const { items } = useSelector(state => state.ingredients);
 
   const pickIngredientById = (currentId) => {
-    return data.find((el) => el._id === currentId);
+    return items.find((el) => el._id === currentId);
   };
 
   const openModal = () => {
@@ -30,9 +37,9 @@ const BurgerIngredients = () => {
     openModal();
   };
 
-  const bunsArray = useMemo(() => data.filter(el => el.type === "bun"), [data]);
-  const mainArray = useMemo(() => data.filter(el => el.type === "main"), [data]);
-  const sauceArray = useMemo(() => data.filter(el => el.type === "sauce"), [data]);
+  const bunsArray = useMemo(() => items.filter(el => el.type === "bun"), [items]);
+  const mainArray = useMemo(() => items.filter(el => el.type === "main"), [items]);
+  const sauceArray = useMemo(() => items.filter(el => el.type === "sauce"), [items]);
 
   const renderIngredient = (el) => {
     return (
