@@ -18,10 +18,10 @@ const BurgerIngredients = () => {
     dispatch(getItems())
   }, [dispatch])
 
-  const { ingredientsItems } = useSelector(state => state.ingredients);
+  const { ingredientItems, ingredientItemsRequest, ingredientsItemFailed } = useSelector(state => state.ingredients);
 
   const pickIngredientById = (currentId) => {
-    return ingredientsItems.find((el) => el._id === currentId);
+    return ingredientItems.find((el) => el._id === currentId);
   };
 
   const openModal = () => {
@@ -37,9 +37,9 @@ const BurgerIngredients = () => {
     openModal();
   };
 
-  const bunsArray = useMemo(() => ingredientsItems.filter(el => el.type === "bun"), [ingredientsItems]);
+  /* const bunsArray = useMemo(() => ingredientsItems.filter(el => el.type === "bun"), [ingredientsItems]);
   const mainArray = useMemo(() => ingredientsItems.filter(el => el.type === "main"), [ingredientsItems]);
-  const sauceArray = useMemo(() => ingredientsItems.filter(el => el.type === "sauce"), [ingredientsItems]);
+  const sauceArray = useMemo(() => ingredientsItems.filter(el => el.type === "sauce"), [ingredientsItems]); */
 
 
   const renderIngredient = (el) => {
@@ -55,13 +55,13 @@ const BurgerIngredients = () => {
     );
   };
 
-  return (
-    <>
-      <section className={styles.section}>
-        <h1 className={`text text_type_main-large ${styles.title} pt-10 pb-5`}>
-          Соберите бургер
-        </h1>
-        <BurgerTabs />
+  const content = useMemo(
+    () => {
+      return ingredientItemsRequest ? (
+        <p className={`${styles.message} text text_type_main-large`}>
+          Загрузка...
+        </p>
+      ) : (
         <div className={styles.options}>
           <div className={styles.layer}>
             <h2
@@ -70,7 +70,7 @@ const BurgerIngredients = () => {
               Булки
             </h2>
             <ul className={`${styles.list} pl-4 pr-2`}>
-              {bunsArray.map(renderIngredient)}
+              {ingredientItems.filter(el => el.type === "bun").map(renderIngredient)}
             </ul>
           </div>
           <div className={styles.layer}>
@@ -80,7 +80,7 @@ const BurgerIngredients = () => {
               Соусы
             </h2>
             <ul className={`${styles.list} pl-4 pr-2`}>
-              {sauceArray.map(renderIngredient)}
+              {ingredientItems.filter(el => el.type === "sauce").map(renderIngredient)}
             </ul>
           </div>
           <div className={styles.layer}>
@@ -90,10 +90,23 @@ const BurgerIngredients = () => {
               Начинки
             </h2>
             <ul className={`${styles.list} pl-4 pr-2`}>
-              {mainArray.map(renderIngredient)}
+              {ingredientItems.filter(el => el.type === "main").map(renderIngredient)}
             </ul>
           </div>
         </div>
+      );
+    },
+    [ingredientItemsRequest, ingredientItems]
+  );
+
+  return (
+    <>
+      <section className={styles.section}>
+        <h1 className={`text text_type_main-large ${styles.title} pt-10 pb-5`}>
+          Соберите бургер
+        </h1>
+        <BurgerTabs />
+        {content}
       </section>
       {isModalOpened && (
         <Modal onClose={closeModal}>

@@ -7,6 +7,10 @@ const initialState = {
 
   constructorItems: [],
 
+  currentIngredient: {},
+
+  order: {},
+
   currentTab: 'items'
 };
 
