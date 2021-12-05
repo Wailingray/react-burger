@@ -1,5 +1,6 @@
 import { React, useState, useMemo, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
+import { SEND_TO_MODAL } from "../../services/actions/ingredients";
 import styles from "./burger-ingredients.module.css";
 import BurgerTabs from "../burger-tabs/burger-tabs";
 import Ingredient from "../ingredient/ingredient";
@@ -9,7 +10,6 @@ import Modal from "../modal/modal";
 
 const BurgerIngredients = () => {
 
-  const [currentIngredient, setCurrentIngredient] = useState(null);
   const [isModalOpened, setIsModalOpened] = useState(false);
 
   const dispatch = useDispatch();
@@ -20,9 +20,12 @@ const BurgerIngredients = () => {
 
   const { ingredientItems, ingredientItemsRequest, ingredientsItemFailed } = useSelector(state => state.ingredients);
 
-  const pickIngredientById = (currentId) => {
-    return ingredientItems.find((el) => el._id === currentId);
-  };
+  const setCurrentIngredient = (id) => {
+    dispatch({
+      type: SEND_TO_MODAL,
+      id
+    })
+  }
 
   const openModal = () => {
     setIsModalOpened(true);
@@ -33,13 +36,9 @@ const BurgerIngredients = () => {
   };
 
   const showIngredient = (evt) => {
-    setCurrentIngredient(pickIngredientById(evt.currentTarget.id));
+    setCurrentIngredient(evt.currentTarget.id);
     openModal();
   };
-
-  /* const bunsArray = useMemo(() => ingredientsItems.filter(el => el.type === "bun"), [ingredientsItems]);
-  const mainArray = useMemo(() => ingredientsItems.filter(el => el.type === "main"), [ingredientsItems]);
-  const sauceArray = useMemo(() => ingredientsItems.filter(el => el.type === "sauce"), [ingredientsItems]); */
 
 
   const renderIngredient = (el) => {
@@ -110,14 +109,7 @@ const BurgerIngredients = () => {
       </section>
       {isModalOpened && (
         <Modal onClose={closeModal}>
-          <IngredientDetails
-            image_large={currentIngredient.image_large}
-            name={currentIngredient.name}
-            calories={currentIngredient.calories}
-            proteins={currentIngredient.proteins}
-            fat={currentIngredient.fat}
-            carbohydrates={currentIngredient.carbohydrates}
-          ></IngredientDetails>
+          <IngredientDetails />
         </Modal>
       )}
     </>

@@ -1,4 +1,4 @@
-import { GET_ITEMS_REQUEST, GET_ITEMS_SUCCESS, GET_ITEMS_FAILED } from "../actions/ingredients";
+import { GET_ITEMS_REQUEST, GET_ITEMS_SUCCESS, GET_ITEMS_FAILED, SEND_TO_MODAL } from "../actions/ingredients";
 
 const initialState = {
   ingredientItems: [],
@@ -24,6 +24,13 @@ export const ingredientsReducer = (state = initialState, action) => {
     }
     case GET_ITEMS_FAILED: {
       return { ...state, ingredientItemsFailed: true, ingredientItemsRequest: false };
+    }
+    case SEND_TO_MODAL: {
+      return {
+        ...state,
+        currentIngredient: [...state.ingredientItems].find(item =>
+          item._id === action.id)
+      }
     }
     default: {
       return state;
