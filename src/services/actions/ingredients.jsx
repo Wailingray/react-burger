@@ -5,6 +5,7 @@ export const GET_ITEMS_SUCCESS = 'GET_ITEMS_SUCCESS';
 export const GET_ITEMS_FAILED = 'GET_ITEMS_FAILED';
 
 export const SEND_TO_MODAL = 'SEND_TO_MODAL';
+export const RESET_CURRENT_INGREDIENT = 'RESET_CURRENT_INGREDIENT'
 
 export function getItems() {
   return function(dispatch) {

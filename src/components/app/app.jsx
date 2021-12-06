@@ -10,7 +10,7 @@ function App() {
       <AppHeader />
       <main className={styles.main}>
         <BurgerIngredients />
-        {/* <BurgerConstructor /> */}
+        <BurgerConstructor />
       </main>
     </>
   );

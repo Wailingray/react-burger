@@ -1,4 +1,5 @@
 import { React, useState, useContext, useEffect, useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import styles from "./burger-constructor.module.css";
 import { DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -6,25 +7,29 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
-import { BurgerContext } from "../../context/burger-context";
-import { submitOrder } from "../api/api";
+import { hardCode } from "../../utils/utils";
+import { dispatchOrder } from "../../services/actions/order";
 
 const BurgerConstructor = () => {
+
+  const dispatch = useDispatch()
+
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [reply, setReply] = useState(null);
   const [error, setError] = useState(null);
   const [cart, setCart] = useState([]);
   const [sum, setSum] = useState(null);
 
-  const openModal = () => {
-    setIsModalOpened(true);
+  const submitOrder = (cart) => {
+    dispatch(dispatchOrder(cart))
   };
 
   const closeModal = () => {
     setIsModalOpened(false);
   };
 
-  const array = useContext(BurgerContext);
+  const {constructorItems} = useSelector((state) => state.cart);
+  const array = constructorItems
   const bun = useMemo(() => array.find((el) => el.type === "bun"));
   const noBunsArray = useMemo(() => array.filter((el) => el.type !== "bun"));
 
@@ -35,20 +40,6 @@ const BurgerConstructor = () => {
       );
     bun && setCart([].concat(bun._id).concat(noBunsArray.map((el) => el._id)));
   }, [array, bun]);
-
-  const sendOrder = () => {
-    submitOrder(cart)
-      .then((replyObj) => {
-        setReply(replyObj);
-        console.log(replyObj.name);
-      })
-      .catch((err) => {
-        setError(err);
-      })
-      .finally(() => {
-        openModal();
-      });
-  };
 
   const renderProducts = ({ name, image, price, _id }, index) => {
     return (
@@ -98,14 +89,14 @@ const BurgerConstructor = () => {
           <p className="text text_type_digits-medium">
             {sum} <CurrencyIcon type="primary" />
           </p>
-          <Button onClick={sendOrder} type="primary" size="large">
+          <Button onClick={submitOrder} type="primary" size="large">
             Оформить заказ
           </Button>
         </div>
       </section>
       {isModalOpened && (
         <Modal onClose={closeModal}>
-          <OrderDetails orderNum={reply.order.number} error={error} />
+          <OrderDetails />
         </Modal>
       )}
     </>

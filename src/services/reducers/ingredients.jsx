@@ -1,17 +1,19 @@
-import { GET_ITEMS_REQUEST, GET_ITEMS_SUCCESS, GET_ITEMS_FAILED, SEND_TO_MODAL } from "../actions/ingredients";
+import {
+  GET_ITEMS_REQUEST,
+  GET_ITEMS_SUCCESS,
+  GET_ITEMS_FAILED,
+  SEND_TO_MODAL,
+  RESET_CURRENT_INGREDIENT
+} from "../actions/ingredients";
 
 const initialState = {
   ingredientItems: [],
   ingredientItemsRequest: false,
   ingredientItemsFailed: false,
 
-  constructorItems: [],
-
   currentIngredient: {},
 
-  order: {},
-
-  currentTab: 'items'
+  currentTab: "items",
 };
 
 export const ingredientsReducer = (state = initialState, action) => {
@@ -20,20 +22,36 @@ export const ingredientsReducer = (state = initialState, action) => {
       return { ...state, ingredientItemsRequest: true };
     }
     case GET_ITEMS_SUCCESS: {
-      return { ...state, ingredientItemsFailed: false, ingredientItems: action.items, ingredientItemsRequest: false };
+      return {
+        ...state,
+        ingredientItemsFailed: false,
+        ingredientItems: action.items,
+        ingredientItemsRequest: false,
+      };
     }
     case GET_ITEMS_FAILED: {
-      return { ...state, ingredientItemsFailed: true, ingredientItemsRequest: false };
+      return {
+        ...state,
+        ingredientItemsFailed: true,
+        ingredientItemsRequest: false,
+      };
     }
     case SEND_TO_MODAL: {
       return {
         ...state,
-        currentIngredient: [...state.ingredientItems].find(item =>
-          item._id === action.id)
-      }
+        currentIngredient: [...state.ingredientItems].find(
+          (item) => item._id === action.id
+        ),
+      };
+    }
+    case RESET_CURRENT_INGREDIENT: {
+      return {
+        ...state,
+        currentIngredient: {},
+      };
     }
     default: {
       return state;
     }
   }
-}
+};

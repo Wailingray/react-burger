@@ -1,11 +1,16 @@
 import { React, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import { createPortal } from "react-dom";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 import styles from "./modal.module.css";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
+
 const Modal = ({ children, onClose }) => {
+
+  const dispatch = useDispatch()
+
   useEffect(() => {
     const closeModalOnEsc = (e) => {
       if (e.key === "Escape") onClose();

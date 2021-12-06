@@ -1,6 +1,9 @@
 import { React, useState, useMemo, useEffect } from "react";
-import { useSelector, useDispatch } from 'react-redux';
-import { SEND_TO_MODAL } from "../../services/actions/ingredients";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  SEND_TO_MODAL,
+  RESET_CURRENT_INGREDIENT,
+} from "../../services/actions/ingredients";
 import styles from "./burger-ingredients.module.css";
 import BurgerTabs from "../burger-tabs/burger-tabs";
 import Ingredient from "../ingredient/ingredient";
@@ -9,23 +12,29 @@ import { getItems } from "../../services/actions/ingredients";
 import Modal from "../modal/modal";
 
 const BurgerIngredients = () => {
-
   const [isModalOpened, setIsModalOpened] = useState(false);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getItems())
-  }, [dispatch])
+    dispatch(getItems());
+  }, [dispatch]);
 
-  const { ingredientItems, ingredientItemsRequest, ingredientsItemFailed } = useSelector(state => state.ingredients);
+  const { ingredientItems, ingredientItemsRequest, ingredientsItemFailed } =
+    useSelector((state) => state.ingredients);
 
   const setCurrentIngredient = (id) => {
     dispatch({
       type: SEND_TO_MODAL,
-      id
-    })
-  }
+      id,
+    });
+  };
+
+  const resetCurrentIngredient = () => {
+    dispatch({
+      type: RESET_CURRENT_INGREDIENT,
+    });
+  };
 
   const openModal = () => {
     setIsModalOpened(true);
@@ -33,6 +42,7 @@ const BurgerIngredients = () => {
 
   const closeModal = () => {
     setIsModalOpened(false);
+    resetCurrentIngredient();
   };
 
   const showIngredient = (evt) => {
@@ -40,10 +50,14 @@ const BurgerIngredients = () => {
     openModal();
   };
 
-
   const renderIngredient = (el) => {
     return (
-      <li key={el._id} id={el._id} className={styles.item} onClick={showIngredient}>
+      <li
+        key={el._id}
+        id={el._id}
+        className={styles.item}
+        onClick={showIngredient}
+      >
         <Ingredient
           image={el.image}
           name={el.name}
@@ -54,49 +68,52 @@ const BurgerIngredients = () => {
     );
   };
 
-  const content = useMemo(
-    () => {
-      return ingredientItemsRequest ? (
-        <p className={`${styles.message} text text_type_main-large`}>
-          Загрузка...
-        </p>
-      ) : (
-        <div className={styles.options}>
-          <div className={styles.layer}>
-            <h2
-              className={`text text_type_main-medium ${styles.component} pt-10 pb-6`}
-            >
-              Булки
-            </h2>
-            <ul className={`${styles.list} pl-4 pr-2`}>
-              {ingredientItems.filter(el => el.type === "bun").map(renderIngredient)}
-            </ul>
-          </div>
-          <div className={styles.layer}>
-            <h2
-              className={`text text_type_main-medium ${styles.component} pt-10 pb-6`}
-            >
-              Соусы
-            </h2>
-            <ul className={`${styles.list} pl-4 pr-2`}>
-              {ingredientItems.filter(el => el.type === "sauce").map(renderIngredient)}
-            </ul>
-          </div>
-          <div className={styles.layer}>
-            <h2
-              className={`text text_type_main-medium ${styles.component} pt-10 pb-6`}
-            >
-              Начинки
-            </h2>
-            <ul className={`${styles.list} pl-4 pr-2`}>
-              {ingredientItems.filter(el => el.type === "main").map(renderIngredient)}
-            </ul>
-          </div>
+  const content = useMemo(() => {
+    return ingredientItemsRequest ? (
+      <p className={`${styles.message} text text_type_main-large`}>
+        Загрузка...
+      </p>
+    ) : (
+      <div className={styles.options}>
+        <div className={styles.layer}>
+          <h2
+            className={`text text_type_main-medium ${styles.component} pt-10 pb-6`}
+          >
+            Булки
+          </h2>
+          <ul className={`${styles.list} pl-4 pr-2`}>
+            {ingredientItems
+              .filter((el) => el.type === "bun")
+              .map(renderIngredient)}
+          </ul>
         </div>
-      );
-    },
-    [ingredientItemsRequest, ingredientItems]
-  );
+        <div className={styles.layer}>
+          <h2
+            className={`text text_type_main-medium ${styles.component} pt-10 pb-6`}
+          >
+            Соусы
+          </h2>
+          <ul className={`${styles.list} pl-4 pr-2`}>
+            {ingredientItems
+              .filter((el) => el.type === "sauce")
+              .map(renderIngredient)}
+          </ul>
+        </div>
+        <div className={styles.layer}>
+          <h2
+            className={`text text_type_main-medium ${styles.component} pt-10 pb-6`}
+          >
+            Начинки
+          </h2>
+          <ul className={`${styles.list} pl-4 pr-2`}>
+            {ingredientItems
+              .filter((el) => el.type === "main")
+              .map(renderIngredient)}
+          </ul>
+        </div>
+      </div>
+    );
+  }, [ingredientItemsRequest, ingredientItems]);
 
   return (
     <>
