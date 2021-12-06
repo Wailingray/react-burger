@@ -89,7 +89,7 @@ const BurgerConstructor = () => {
           <p className="text text_type_digits-medium">
             {sum} <CurrencyIcon type="primary" />
           </p>
-          <Button onClick={submitOrder} type="primary" size="large">
+          <Button onClick={submitOrder(cart)} type="primary" size="large">
             Оформить заказ
           </Button>
         </div>
