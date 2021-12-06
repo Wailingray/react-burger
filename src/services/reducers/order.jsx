@@ -6,28 +6,30 @@ import {
 
 const initialState = {
   order: {},
-  SubmitOrderRequest: false,
-  SubmitOrderFailed: false,
+  submitOrderRequest: false,
+  submitOrderFailed: false,
+  submitOrderSuccess: false
 }
 
 export const orderReducer = (state = initialState, action) => {
   switch (action.type) {
     case SUBMIT_ORDER_REQUEST: {
-      return { ...state, SubmitOrderRequest: true };
+      return { ...state, submitOrderRequest: true };
     }
     case SUBMIT_ORDER_SUCCESS: {
       return {
         ...state,
-        SubmitOrderFailed: false,
-        order: action.order,
-        SubmitOrderRequest: false,
+        submitOrderFailed: false,
+        order: action,
+        submitOrderRequest: false,
+        submitOrderSuccess: true
       };
     }
     case SUBMIT_ORDER_FAILED: {
       return {
         ...state,
-        SubmitOrderFailed: true,
-        SubmitOrderRequest: false,
+        submitOrderFailed: true,
+        submitOrderRequest: false,
       };
     }
     default: {

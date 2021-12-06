@@ -26,23 +26,27 @@ const BurgerConstructor = () => {
   const [sum, setSum] = useState(null);
 
   const submitOrder = useCallback(() => {
+    setIsModalOpened(true)
     dispatch(dispatchOrder(cart));
-    openModal()
   }, [dispatch, dispatchOrder]);
 
-  const openModal = () => {
-    setIsModalOpened(true);
-  };
-
-  const closeModal = () => {
+   const closeModal = () => {
     setIsModalOpened(false);
+
   };
 
   const { constructorItems } = useSelector((state) => state.cart);
+  const { submitOrderRequest, submitOrderSuccess } = useSelector(
+    (state) => state.order
+  );
+
   const array = constructorItems;
   const bun = useMemo(() => array.find((el) => el.type === "bun"));
   const noBunsArray = useMemo(() => array.filter((el) => el.type !== "bun"));
-  const cart = [].concat(bun._id).concat(noBunsArray.map((el) => el._id))
+  const cart = [].concat(bun._id).concat(noBunsArray.map((el) => el._id));
+
+
+
 
   /* useEffect(() => {
     bun &&
@@ -65,6 +69,35 @@ const BurgerConstructor = () => {
       </li>
     );
   };
+
+const modal = useMemo(() => {
+    return submitOrderSuccess ? (
+      <Modal onClose={closeModal}>
+        <OrderDetails />
+      </Modal>
+    ) : ('');
+  }, [submitOrderSuccess, closeModal]);
+
+  const button = useMemo(() => {
+    return submitOrderRequest ? (
+      <Button
+        onClick={submitOrder}
+        disabled="disabled"
+        type="primary"
+        size="large"
+      >
+        Подождите...
+      </Button>
+    ) : (
+      <Button
+        onClick={submitOrder}
+        type="primary"
+        size="large"
+      >
+        Оформить заказ
+      </Button>
+    );
+  }, [submitOrderRequest, submitOrder]);
 
   return (
     <>
@@ -100,15 +133,11 @@ const BurgerConstructor = () => {
           <p className="text text_type_digits-medium">
             {sum} <CurrencyIcon type="primary" />
           </p>
-          <Button onClick={submitOrder} type="primary" size="large">
-            Оформить заказ
-          </Button>
+          {button}
         </div>
       </section>
       {isModalOpened && (
-        <Modal onClose={closeModal}>
-          <OrderDetails />
-        </Modal>
+        modal
       )}
     </>
   );
