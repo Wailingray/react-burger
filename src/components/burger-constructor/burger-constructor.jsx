@@ -1,4 +1,11 @@
-import { React, useState, useContext, useEffect, useMemo } from "react";
+import {
+  React,
+  useState,
+  useContext,
+  useEffect,
+  useMemo,
+  useCallback,
+} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styles from "./burger-constructor.module.css";
 import { DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -11,35 +18,39 @@ import { hardCode } from "../../utils/utils";
 import { dispatchOrder } from "../../services/actions/order";
 
 const BurgerConstructor = () => {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [reply, setReply] = useState(null);
   const [error, setError] = useState(null);
-  const [cart, setCart] = useState([]);
   const [sum, setSum] = useState(null);
 
-  const submitOrder = (cart) => {
-    dispatch(dispatchOrder(cart))
+  const submitOrder = useCallback(() => {
+    dispatch(dispatchOrder(cart));
+    openModal()
+  }, [dispatch, dispatchOrder]);
+
+  const openModal = () => {
+    setIsModalOpened(true);
   };
 
   const closeModal = () => {
     setIsModalOpened(false);
   };
 
-  const {constructorItems} = useSelector((state) => state.cart);
-  const array = constructorItems
+  const { constructorItems } = useSelector((state) => state.cart);
+  const array = constructorItems;
   const bun = useMemo(() => array.find((el) => el.type === "bun"));
   const noBunsArray = useMemo(() => array.filter((el) => el.type !== "bun"));
+  const cart = [].concat(bun._id).concat(noBunsArray.map((el) => el._id))
 
-  useEffect(() => {
+  /* useEffect(() => {
     bun &&
       setSum(
         noBunsArray.reduce((acc, el) => acc + el.price, 0) + bun.price * 2
       );
     bun && setCart([].concat(bun._id).concat(noBunsArray.map((el) => el._id)));
-  }, [array, bun]);
+  }, [array, bun]); */
 
   const renderProducts = ({ name, image, price, _id }, index) => {
     return (
@@ -89,7 +100,7 @@ const BurgerConstructor = () => {
           <p className="text text_type_digits-medium">
             {sum} <CurrencyIcon type="primary" />
           </p>
-          <Button onClick={submitOrder(cart)} type="primary" size="large">
+          <Button onClick={submitOrder} type="primary" size="large">
             Оформить заказ
           </Button>
         </div>
