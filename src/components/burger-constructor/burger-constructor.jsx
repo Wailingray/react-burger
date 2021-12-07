@@ -36,7 +36,7 @@ const BurgerConstructor = () => {
   };
 
   const { constructorItems } = useSelector((state) => state.cart);
-  const { submitOrderRequest, submitOrderSuccess } = useSelector(
+  const { order, submitOrderRequest, submitOrderSuccess, submitOrderFailed } = useSelector(
     (state) => state.order
   );
 
@@ -71,7 +71,7 @@ const BurgerConstructor = () => {
   };
 
 const modal = useMemo(() => {
-    return submitOrderSuccess ? (
+    return submitOrderSuccess || submitOrderFailed ? (
       <Modal onClose={closeModal}>
         <OrderDetails />
       </Modal>

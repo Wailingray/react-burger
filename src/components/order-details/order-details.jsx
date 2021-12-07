@@ -6,10 +6,7 @@ import styles from "./order-details.module.css"
 
 const OrderDetails = () => {
 
-  const { order, submitOrderSuccess } = useSelector(state => state.order);
-
-
-  console.log(order.order.order.number)
+  const { order, submitOrderSuccess, submitOrderFailed } = useSelector(state => state.order);
 
   if (submitOrderSuccess) return (
   <>
@@ -26,7 +23,7 @@ const OrderDetails = () => {
     </p>
   </>
   )
-  else return (
+  if (submitOrderFailed) return (
     <>
     <span className={`${styles.digits} text text_type_digits-large mt-30`}>
       ----
