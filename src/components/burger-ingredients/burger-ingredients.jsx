@@ -1,11 +1,11 @@
 import { React, useState, useMemo, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Tab } from "@ya.praktikum/react-developer-burger-ui-components"
 import {
   SEND_TO_MODAL,
   RESET_CURRENT_INGREDIENT,
 } from "../../services/actions/ingredients";
 import styles from "./burger-ingredients.module.css";
-import BurgerTabs from "../burger-tabs/burger-tabs";
 import Ingredient from "../ingredient/ingredient";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import { getItems } from "../../services/actions/ingredients";
@@ -74,6 +74,32 @@ const BurgerIngredients = () => {
     );
   };
 
+  const BurgerTabs = () => {
+    const [current, setCurrent] = useState('one')
+    return (
+      <div style={{ display: 'flex' }}>
+        <Tab value="one" active={current === 'one'} onClick={(value) => {
+          setCurrent(value);
+          bunRef.current.scrollIntoView();
+        }} >
+          Булки
+        </Tab>
+        <Tab value="two" active={current === 'two'} onClick={(value) => {
+          setCurrent(value);
+          sauceRef.current.scrollIntoView();
+        }}>
+          Соусы
+        </Tab>
+        <Tab value="three" active={current === 'three'} onClick={(value) => {
+          setCurrent(value);
+          mainRef.current.scrollIntoView();
+        }}>
+          Начинки
+        </Tab>
+      </div>
+    )
+  }
+
   const content = useMemo(() => {
     return ingredientItemsRequest ? (
       <p className={`${styles.message} text text_type_main-large`}>
@@ -127,7 +153,7 @@ const BurgerIngredients = () => {
         <h1 className={`text text_type_main-large ${styles.title} pt-10 pb-5`}>
           Соберите бургер
         </h1>
-        <BurgerTabs bunRef sauceRef mainRef />
+        <BurgerTabs />
         {content}
       </section>
       {isModalOpened && (
