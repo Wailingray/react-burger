@@ -1,4 +1,4 @@
-import { React, useState, useMemo, useEffect } from "react";
+import { React, useState, useMemo, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   SEND_TO_MODAL,
@@ -13,6 +13,12 @@ import Modal from "../modal/modal";
 
 const BurgerIngredients = () => {
   const [isModalOpened, setIsModalOpened] = useState(false);
+
+
+  const bunRef = useRef(null);
+  const sauceRef = useRef(null);
+  const mainRef = useRef(null);
+
 
   const dispatch = useDispatch();
 
@@ -76,7 +82,7 @@ const BurgerIngredients = () => {
     ) : (
       <div className={styles.options}>
         <div className={styles.layer}>
-          <h2
+          <h2 ref={bunRef}
             className={`text text_type_main-medium ${styles.component} pt-10 pb-6`}
           >
             Булки
@@ -88,7 +94,7 @@ const BurgerIngredients = () => {
           </ul>
         </div>
         <div className={styles.layer}>
-          <h2
+          <h2 ref={sauceRef}
             className={`text text_type_main-medium ${styles.component} pt-10 pb-6`}
           >
             Соусы
@@ -100,7 +106,7 @@ const BurgerIngredients = () => {
           </ul>
         </div>
         <div className={styles.layer}>
-          <h2
+          <h2 ref={mainRef}
             className={`text text_type_main-medium ${styles.component} pt-10 pb-6`}
           >
             Начинки
@@ -121,7 +127,7 @@ const BurgerIngredients = () => {
         <h1 className={`text text_type_main-large ${styles.title} pt-10 pb-5`}>
           Соберите бургер
         </h1>
-        <BurgerTabs />
+        <BurgerTabs bunRef sauceRef mainRef />
         {content}
       </section>
       {isModalOpened && (
