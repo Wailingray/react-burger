@@ -15,7 +15,7 @@ import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { hardCode } from "../../utils/utils";
-import { dispatchOrder } from "../../services/actions/order";
+import { dispatchOrder, ORDER_RESET } from "../../services/actions/order";
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
@@ -32,7 +32,9 @@ const BurgerConstructor = () => {
 
    const closeModal = () => {
     setIsModalOpened(false);
-
+    dispatch({
+      type: ORDER_RESET
+    })
   };
 
   const { constructorItems } = useSelector((state) => state.cart);

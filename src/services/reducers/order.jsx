@@ -2,6 +2,7 @@ import {
   SUBMIT_ORDER_REQUEST,
   SUBMIT_ORDER_FAILED,
   SUBMIT_ORDER_SUCCESS,
+  ORDER_RESET
 } from "../actions/order";
 
 const initialState = {
@@ -30,6 +31,12 @@ export const orderReducer = (state = initialState, action) => {
         ...state,
         submitOrderFailed: true,
         submitOrderRequest: false,
+      };
+    }
+    case ORDER_RESET: {
+      return {
+        ...state,
+        submitOrderSuccess: false,
       };
     }
     default: {
