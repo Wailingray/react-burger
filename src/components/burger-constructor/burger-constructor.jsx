@@ -70,13 +70,6 @@ const BurgerConstructor = () => {
     })
   }
 
-  const deleteItem = (id) => {
-    dispatch({
-      type: REMOVE_FROM_CONSTRUCTOR,
-      id
-    })
-  }
-
   const renderProducts = ({ name, image, price, _id }, index) => {
     return (
       <li key={index} className={styles.ingredient}>
@@ -87,7 +80,12 @@ const BurgerConstructor = () => {
           text={name}
           price={price}
           thumbnail={image}
-          handleClose={deleteItem()}
+          handleClose={() => {
+            dispatch({
+              type: REMOVE_FROM_CONSTRUCTOR,
+              id: _id
+            })
+          }}
         />
       </li>
     );
