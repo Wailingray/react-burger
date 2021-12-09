@@ -60,3 +60,7 @@
   align-items: center;
   gap: 40px;
 }
+
+.onHover {
+  box-shadow: inset 0px 0px 29px 17px #3C39EC;
+}

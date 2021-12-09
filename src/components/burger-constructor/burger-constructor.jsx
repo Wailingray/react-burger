@@ -15,7 +15,9 @@ import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { hardCode } from "../../utils/utils";
+import { useDrop } from "react-dnd";
 import { dispatchOrder, ORDER_RESET } from "../../services/actions/order";
+import { ADD_TO_CONSTRUCTOR, REMOVE_FROM_CONSTRUCTOR } from "../../services/actions/ingredients";
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
@@ -26,21 +28,34 @@ const BurgerConstructor = () => {
   const [sum, setSum] = useState(null);
 
   const submitOrder = useCallback(() => {
-    setIsModalOpened(true)
+    setIsModalOpened(true);
     dispatch(dispatchOrder(cart));
   }, [dispatch, dispatchOrder]);
 
-   const closeModal = () => {
+  const closeModal = () => {
     setIsModalOpened(false);
     dispatch({
-      type: ORDER_RESET
-    })
+      type: ORDER_RESET,
+    });
   };
 
-  const { constructorItems } = useSelector((state) => state.cart);
-  const { order, submitOrderRequest, submitOrderSuccess, submitOrderFailed } = useSelector(
-    (state) => state.order
-  );
+  const { constructorItems } = useSelector((state) => state.ingredients);
+  const { order, submitOrderRequest, submitOrderSuccess, submitOrderFailed } =
+    useSelector((state) => state.order);
+
+  const [{ isHover }, dropTarget] = useDrop({
+    accept: "item",
+    collect: (monitor) => ({
+      isHover: monitor.isOver(),
+    }),
+    drop(item) {
+      console.log(item)
+      addItem(item.id)
+    }
+  });
+
+  const sectionClassName = `${styles.section} pl-4 pr-2 pb-15
+  ${isHover ? styles.onHover : ""}`;
 
   const array = constructorItems;
   const bun = useMemo(() => array.find((el) => el.type === "bun"));
@@ -48,36 +63,44 @@ const BurgerConstructor = () => {
   const cart = [].concat(bun._id).concat(noBunsArray.map((el) => el._id));
 
 
+  const addItem = (id) => {
+    dispatch({
+      type: ADD_TO_CONSTRUCTOR,
+      id: id
+    })
+  }
 
-
-  /* useEffect(() => {
-    bun &&
-      setSum(
-        noBunsArray.reduce((acc, el) => acc + el.price, 0) + bun.price * 2
-      );
-    bun && setCart([].concat(bun._id).concat(noBunsArray.map((el) => el._id)));
-  }, [array, bun]); */
+  const deleteItem = (id) => {
+    dispatch({
+      type: REMOVE_FROM_CONSTRUCTOR,
+      id
+    })
+  }
 
   const renderProducts = ({ name, image, price, _id }, index) => {
     return (
       <li key={index} className={styles.ingredient}>
         <DragIcon type="primary" />
         <ConstructorElement
+          id={_id}
           isLocked={false}
           text={name}
           price={price}
           thumbnail={image}
+          handleClose={deleteItem()}
         />
       </li>
     );
   };
 
-const modal = useMemo(() => {
+  const modal = useMemo(() => {
     return submitOrderSuccess || submitOrderFailed ? (
       <Modal onClose={closeModal}>
         <OrderDetails />
       </Modal>
-    ) : ('');
+    ) : (
+      ""
+    );
   }, [submitOrderSuccess, closeModal]);
 
   const button = useMemo(() => {
@@ -91,11 +114,7 @@ const modal = useMemo(() => {
         Подождите...
       </Button>
     ) : (
-      <Button
-        onClick={submitOrder}
-        type="primary"
-        size="large"
-      >
+      <Button onClick={submitOrder} type="primary" size="large">
         Оформить заказ
       </Button>
     );
@@ -103,7 +122,10 @@ const modal = useMemo(() => {
 
   return (
     <>
-      <section className={`${styles.section} pl-4 pr-2 pb-15`}>
+      <section
+        ref={dropTarget}
+        className={sectionClassName}
+      >
         <ul className={`${styles.ingredientList} mt-25 mb-10`}>
           {bun && (
             <li key={bun._id} className={`${styles.ingredient} pr-2`}>
@@ -138,9 +160,7 @@ const modal = useMemo(() => {
           {button}
         </div>
       </section>
-      {isModalOpened && (
-        modal
-      )}
+      {isModalOpened && modal}
     </>
   );
 };

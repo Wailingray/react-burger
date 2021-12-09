@@ -1,4 +1,4 @@
-import { hardCode } from "../../utils/utils";
+/* import { hardCode } from "../../utils/utils";
 
 import {
   ADD_TO_CONSTRUCTOR,
@@ -28,3 +28,4 @@ export const constructorReducer = (state = initialState, action) => {
     }
   }
 };
+ */

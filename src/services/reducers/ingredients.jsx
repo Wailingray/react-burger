@@ -3,13 +3,19 @@ import {
   GET_ITEMS_SUCCESS,
   GET_ITEMS_FAILED,
   SEND_TO_MODAL,
-  RESET_CURRENT_INGREDIENT
+  RESET_CURRENT_INGREDIENT,
+  ADD_TO_CONSTRUCTOR,
+  REMOVE_FROM_CONSTRUCTOR
 } from "../actions/ingredients";
+
+import { hardCode } from "../../utils/utils";
 
 const initialState = {
   ingredientItems: [],
   ingredientItemsRequest: false,
   ingredientItemsFailed: false,
+
+  constructorItems: hardCode,
 
   currentIngredient: {},
 
@@ -50,8 +56,25 @@ export const ingredientsReducer = (state = initialState, action) => {
         currentIngredient: {},
       };
     }
+    case ADD_TO_CONSTRUCTOR: {
+      return {
+        ...state,
+        constructorItems: [...state.constructorItems, [...state.ingredientItems].find(
+          (item) => item._id === action.id
+        )],
+      };
+    }
+    case REMOVE_FROM_CONSTRUCTOR: {
+      return {
+        ...state,
+        constructorItems: [...state.constructorItems].filter(
+          (item) => item._id !== action.id
+        ),
+      };
+    }
     default: {
       return state;
     }
+
   }
 };

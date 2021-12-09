@@ -3,10 +3,22 @@ import styles from "./ingredient.module.css";
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from 'prop-types';
+import { useDrag } from 'react-dnd';
 
 const Ingredient = (props) => {
+
+  const [{ opacity }, ingRef] = useDrag({
+    type: 'item',
+    item: {
+      id: props.id,
+    },
+    collect: monitor => ({
+      opacity: monitor.isDragging() ? 0.3 : 1
+    })
+  })
+
     return (
-      <div className={styles.card}>
+      <div ref={ingRef} className={styles.card} style={{opacity}}>
         <img
           className={`${styles.image} ml-4 mr-4`}
           src={props.image}
