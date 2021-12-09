@@ -80,19 +80,19 @@ const BurgerIngredients = () => {
       <div style={{ display: 'flex' }}>
         <Tab value="one" active={current === 'one'} onClick={(value) => {
           setCurrent(value);
-          bunRef.current.scrollIntoView();
+          bunRef.current.scrollIntoView(({behavior: "smooth"}));
         }} >
           Булки
         </Tab>
         <Tab value="two" active={current === 'two'} onClick={(value) => {
           setCurrent(value);
-          sauceRef.current.scrollIntoView();
+          sauceRef.current.scrollIntoView(({behavior: "smooth"}));
         }}>
           Соусы
         </Tab>
         <Tab value="three" active={current === 'three'} onClick={(value) => {
           setCurrent(value);
-          mainRef.current.scrollIntoView();
+          mainRef.current.scrollIntoView(({behavior: "smooth"}));
         }}>
           Начинки
         </Tab>
