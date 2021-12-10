@@ -70,19 +70,16 @@ export const ingredientsReducer = (state = initialState, action) => {
       };
     }
     case REPLACE_BUN: {
-      console.log(state.constructorItems)
+      console.log(state.constructorItems);
       return {
         ...state,
         constructorItems: [
-          [...state.constructorItems].length
-            ? [...state.constructorItems].map((item) =>
-                item.type === "bun"
-                  ? state.constructorItems[0] = [...state.ingredientItems].find(
-                      (item) => item._id === action.id
-                    )
-                  : item
-              )
-            : state.constructorItems.unshift(state.ingredientItems.find((item) => item._id === action.id)),
+          state.constructorItems.length && state.constructorItems[0].type === "bun"
+            ? (state.constructorItems[0] = [...state.ingredientItems].find(
+                (item) => item._id === action.id
+              ))
+            : [...state.ingredientItems].find((item) => item._id === action.id),
+            ...state.constructorItems,
         ],
         ingredientItems: [...state.ingredientItems].map((item) =>
           item.ingType === "bun" ? { ...item, __v: --item.__v } : item
