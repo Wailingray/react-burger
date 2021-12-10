@@ -69,7 +69,7 @@ const BurgerIngredients = () => {
           image={el.image}
           name={el.name}
           price={el.price}
-          counter={el.counter}
+          counter={el.__v}
         ></Ingredient>
       </li>
     );

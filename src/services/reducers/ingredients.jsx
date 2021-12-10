@@ -62,6 +62,9 @@ export const ingredientsReducer = (state = initialState, action) => {
         constructorItems: [...state.constructorItems, [...state.ingredientItems].find(
           (item) => item._id === action.id
         )],
+        ingredientItems: [...state.ingredientItems].map(item =>
+          item._id === action.id ? { ...item, __v: ++item.__v } : item
+        )
       };
     }
     case REMOVE_FROM_CONSTRUCTOR: {
@@ -70,6 +73,9 @@ export const ingredientsReducer = (state = initialState, action) => {
         constructorItems: [...state.constructorItems].filter(
           (item) => item._id !== action.id
         ),
+        ingredientItems: [...state.ingredientItems].map(item =>
+          item._id === action.id ? { ...item, __v: --item.__v } : item
+        )
       };
     }
     default: {
