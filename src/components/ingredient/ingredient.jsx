@@ -24,7 +24,7 @@ const Ingredient = (props) => {
           src={props.image}
           alt={props.name}
         />
-         {props.counter &&  <Counter count={props.counter} size="default"/>}
+         { props.counter > 0 && <Counter count={props.counter} size="default"/>}
         <div className={`${styles.price} mt-1 mb-1`}>
           <p className={`text text_type_digits-default ${styles.value}`}>
             {props.price}

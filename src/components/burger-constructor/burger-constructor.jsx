@@ -28,6 +28,7 @@ const BurgerConstructor = () => {
   const [sum, setSum] = useState(null);
 
   const submitOrder = useCallback(() => {
+    const cart = [].concat(bun._id).concat(noBunsArray.map((el) => el._id));
     setIsModalOpened(true);
     dispatch(dispatchOrder(cart));
   }, [dispatch, dispatchOrder]);
@@ -60,7 +61,6 @@ const BurgerConstructor = () => {
   const array = constructorItems;
   const bun = useMemo(() => array.find((el) => el.type === "bun"));
   const noBunsArray = useMemo(() => array.filter((el) => el.type !== "bun"));
-  const cart = [].concat(bun._id).concat(noBunsArray.map((el) => el._id));
 
 
   const addItem = (id) => {
@@ -71,6 +71,7 @@ const BurgerConstructor = () => {
   }
 
   const renderProducts = ({ name, image, price, _id }, index) => {
+    console.log(index)
     return (
       <li key={index} className={styles.ingredient}>
         <DragIcon type="primary" />
@@ -83,7 +84,8 @@ const BurgerConstructor = () => {
           handleClose={() => {
             dispatch({
               type: REMOVE_FROM_CONSTRUCTOR,
-              id: _id
+              id: _id,
+              index: index + bun ? 1 : 0
             })
           }}
         />
@@ -137,7 +139,7 @@ const BurgerConstructor = () => {
             </li>
           )}
           <ul className={styles.innerList}>
-            {noBunsArray.map(renderProducts)}
+            {noBunsArray && noBunsArray.map(renderProducts)}
           </ul>
           {bun && (
             <li key={bun._id + 1} className={`${styles.ingredient} pr-2`}>
@@ -155,7 +157,10 @@ const BurgerConstructor = () => {
           <p className="text text_type_digits-medium">
             {sum} <CurrencyIcon type="primary" />
           </p>
-          {button}
+          { array.length ? button:
+            <Button disabled="disabled" type="primary" size="large">
+              Ничего не выбрано!
+            </Button>}
         </div>
       </section>
       {isModalOpened && modal}

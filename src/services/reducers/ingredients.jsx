@@ -15,7 +15,7 @@ const initialState = {
   ingredientItemsRequest: false,
   ingredientItemsFailed: false,
 
-  constructorItems: hardCode,
+  constructorItems: [],
 
   currentIngredient: {},
 
@@ -71,7 +71,7 @@ export const ingredientsReducer = (state = initialState, action) => {
       return {
         ...state,
         constructorItems: [...state.constructorItems].filter(
-          (item) => item._id !== action.id
+          (item, index) => index !== action.index
         ),
         ingredientItems: [...state.ingredientItems].map(item =>
           item._id === action.id ? { ...item, __v: --item.__v } : item
