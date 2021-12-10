@@ -17,7 +17,11 @@ import OrderDetails from "../order-details/order-details";
 import { hardCode } from "../../utils/utils";
 import { useDrop } from "react-dnd";
 import { dispatchOrder, ORDER_RESET } from "../../services/actions/order";
-import { ADD_TO_CONSTRUCTOR, REMOVE_FROM_CONSTRUCTOR } from "../../services/actions/ingredients";
+import {
+  ADD_TO_CONSTRUCTOR,
+  REMOVE_FROM_CONSTRUCTOR,
+  REPLACE_BUN
+} from "../../services/actions/ingredients";
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
@@ -50,9 +54,9 @@ const BurgerConstructor = () => {
       isHover: monitor.isOver(),
     }),
     drop(item) {
-      console.log(item)
-      addItem(item.id)
-    }
+      console.log(item);
+      addItem(item);
+    },
   });
 
   const sectionClassName = `${styles.section} pl-4 pr-2 pb-15
@@ -62,16 +66,22 @@ const BurgerConstructor = () => {
   const bun = useMemo(() => array.find((el) => el.type === "bun"));
   const noBunsArray = useMemo(() => array.filter((el) => el.type !== "bun"));
 
-
-  const addItem = (id) => {
-    dispatch({
-      type: ADD_TO_CONSTRUCTOR,
-      id: id
-    })
-  }
+  const addItem = (item) => {
+    console.log(item)
+    item.ingType === "bun"
+      ? dispatch({
+          type: REPLACE_BUN,
+          id: item.id,
+          ingType: item.type
+        })
+      : dispatch({
+          type: ADD_TO_CONSTRUCTOR,
+          id: item.id,
+        });
+  };
 
   const renderProducts = ({ name, image, price, _id }, index) => {
-    console.log(index)
+    console.log(index);
     return (
       <li key={index} className={styles.ingredient}>
         <DragIcon type="primary" />
@@ -85,8 +95,8 @@ const BurgerConstructor = () => {
             dispatch({
               type: REMOVE_FROM_CONSTRUCTOR,
               id: _id,
-              index: index + bun ? 1 : 0
-            })
+              index: index + bun ? 1 : 0,
+            });
           }}
         />
       </li>
@@ -122,10 +132,7 @@ const BurgerConstructor = () => {
 
   return (
     <>
-      <section
-        ref={dropTarget}
-        className={sectionClassName}
-      >
+      <section ref={dropTarget} className={sectionClassName}>
         <ul className={`${styles.ingredientList} mt-25 mb-10`}>
           {bun && (
             <li key={bun._id} className={`${styles.ingredient} pr-2`}>
@@ -157,10 +164,13 @@ const BurgerConstructor = () => {
           <p className="text text_type_digits-medium">
             {sum} <CurrencyIcon type="primary" />
           </p>
-          { array.length ? button:
+          {array.length ? (
+            button
+          ) : (
             <Button disabled="disabled" type="primary" size="large">
               Ничего не выбрано!
-            </Button>}
+            </Button>
+          )}
         </div>
       </section>
       {isModalOpened && modal}

@@ -11,6 +11,7 @@ const Ingredient = (props) => {
     type: 'item',
     item: {
       id: props.id,
+      ingType: props.ingType
     },
     collect: monitor => ({
       opacity: monitor.isDragging() ? 0.3 : 1

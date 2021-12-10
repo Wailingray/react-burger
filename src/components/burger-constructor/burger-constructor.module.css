@@ -5,6 +5,7 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-end;
+  min-width: 568px;
   max-width: 600px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -17,7 +18,7 @@
   list-style-type: none;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap:16px;
   max-height: 464px;
   overflow-y: auto;
@@ -39,6 +40,7 @@
 .ingredientList {
   padding: 0;
   margin-bottom: 0;
+  min-height: 656px;
   list-style-type: none;
   display: flex;
   flex-direction: column;

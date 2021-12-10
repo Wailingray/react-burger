@@ -65,6 +65,7 @@ const BurgerIngredients = () => {
         onClick={showIngredient}
       >
         <Ingredient
+          ingType={el.type}
           id={el._id}
           image={el.image}
           name={el.name}

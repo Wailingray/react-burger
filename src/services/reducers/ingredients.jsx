@@ -5,7 +5,8 @@ import {
   SEND_TO_MODAL,
   RESET_CURRENT_INGREDIENT,
   ADD_TO_CONSTRUCTOR,
-  REMOVE_FROM_CONSTRUCTOR
+  REMOVE_FROM_CONSTRUCTOR,
+  REPLACE_BUN,
 } from "../actions/ingredients";
 
 import { hardCode } from "../../utils/utils";
@@ -59,12 +60,36 @@ export const ingredientsReducer = (state = initialState, action) => {
     case ADD_TO_CONSTRUCTOR: {
       return {
         ...state,
-        constructorItems: [...state.constructorItems, [...state.ingredientItems].find(
-          (item) => item._id === action.id
-        )],
-        ingredientItems: [...state.ingredientItems].map(item =>
+        constructorItems: [
+          ...state.constructorItems,
+          [...state.ingredientItems].find((item) => item._id === action.id),
+        ],
+        ingredientItems: [...state.ingredientItems].map((item) =>
           item._id === action.id ? { ...item, __v: ++item.__v } : item
-        )
+        ),
+      };
+    }
+    case REPLACE_BUN: {
+      console.log(state.constructorItems)
+      return {
+        ...state,
+        constructorItems: [
+          [...state.constructorItems].length
+            ? [...state.constructorItems].map((item) =>
+                item.type === "bun"
+                  ? state.constructorItems[0] = [...state.ingredientItems].find(
+                      (item) => item._id === action.id
+                    )
+                  : item
+              )
+            : state.constructorItems.unshift(state.ingredientItems.find((item) => item._id === action.id)),
+        ],
+        ingredientItems: [...state.ingredientItems].map((item) =>
+          item.ingType === "bun" ? { ...item, __v: --item.__v } : item
+        ),
+        ...state.ingredientItems.map((item) =>
+          item._id === action.id ? { ...item, __v: ++item.__v } : item
+        ),
       };
     }
     case REMOVE_FROM_CONSTRUCTOR: {
@@ -73,14 +98,13 @@ export const ingredientsReducer = (state = initialState, action) => {
         constructorItems: [...state.constructorItems].filter(
           (item, index) => index !== action.index
         ),
-        ingredientItems: [...state.ingredientItems].map(item =>
+        ingredientItems: [...state.ingredientItems].map((item) =>
           item._id === action.id ? { ...item, __v: --item.__v } : item
-        )
+        ),
       };
     }
     default: {
       return state;
     }
-
   }
 };
