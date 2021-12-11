@@ -4,6 +4,7 @@ import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-comp
 import { REMOVE_FROM_CONSTRUCTOR, MOVE_ITEM } from "../../services/actions/ingredients";
 import { useSelector, useDispatch } from "react-redux";
 import { useDrop, useDrag } from "react-dnd";
+import styles from './constructor-ingredient.module.css'
 
 export const ConstructorIngredient = ({ name, image, price, _id, index}) => {
 
@@ -53,26 +54,25 @@ export const ConstructorIngredient = ({ name, image, price, _id, index}) => {
 
 
   return (
-        <div style={{ opacity }} ref={dragDropRef}>
-          <DragIcon type="primary" />
-          <ConstructorElement
-            style={{width : '100%'}}
-            id={_id}
-            isLocked={false}
-            text={name}
-            price={price}
-            thumbnail={image}
-            handleClose={() => {
-              dispatch({
-                type: REMOVE_FROM_CONSTRUCTOR,
-                id: _id,
-                index: index + (isBun ? 1 : 0)
-              });
-            }}
-          />
-        </div>
-
-
-
+    <>
+      <div className={`${styles.ingredient} ${opacity}`}>
+        <DragIcon type="primary" ref={dragDropRef} />
+        <ConstructorElement
+          style={{width : '100%'}}
+          id={_id}
+          isLocked={false}
+          text={name}
+          price={price}
+          thumbnail={image}
+          handleClose={() => {
+            dispatch({
+              type: REMOVE_FROM_CONSTRUCTOR,
+              id: _id,
+              index: index + (isBun ? 1 : 0)
+            });
+          }}
+        />
+      </div>
+    </>
   );
 };

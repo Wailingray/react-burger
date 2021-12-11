@@ -17,7 +17,7 @@ const initialState = {
   ingredientItemsRequest: false,
   ingredientItemsFailed: false,
 
-  constructorItems: [...hardCode],
+  constructorItems: [],
 
   currentIngredient: {},
 
