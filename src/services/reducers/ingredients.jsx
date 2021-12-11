@@ -7,7 +7,7 @@ import {
   ADD_TO_CONSTRUCTOR,
   REMOVE_FROM_CONSTRUCTOR,
   REPLACE_BUN,
-  MOVE_ITEM
+  MOVE_ITEM,
 } from "../actions/ingredients";
 
 import { hardCode } from "../../utils/utils";
@@ -76,8 +76,18 @@ export const ingredientsReducer = (state = initialState, action) => {
         constructorItems:
           state.constructorItems.length &&
           state.constructorItems[0].type === "bun"
-            ? [[...state.ingredientItems].find((item) => item._id === action.id), ...[...state.constructorItems].slice(1)]
-            : [[...state.ingredientItems].find((item) => item._id === action.id), ...state.constructorItems],
+            ? [
+                [...state.ingredientItems].find(
+                  (item) => item._id === action.id
+                ),
+                ...[...state.constructorItems].slice(1),
+              ]
+            : [
+                [...state.ingredientItems].find(
+                  (item) => item._id === action.id
+                ),
+                ...state.constructorItems,
+              ],
 
         ingredientItems: [...state.ingredientItems].map((item) => {
           if (item.type === "bun") {
@@ -86,6 +96,22 @@ export const ingredientsReducer = (state = initialState, action) => {
           } else {
             return item;
           }
+        }),
+      };
+    }
+    case MOVE_ITEM: {
+      return {
+        ...state,
+        constructorItems: [...state.constructorItems].map((item, idx) => {
+          if (idx === action.dragIndex) {
+            return [...state.constructorItems].find(
+              (item, idx) => idx === action.hoverIndex
+            );
+          } else if (idx === action.hoverIndex) {
+            return [...state.constructorItems].find(
+              (item, idx) => idx === action.dragIndex
+            );
+          } else return item;
         }),
       };
     }

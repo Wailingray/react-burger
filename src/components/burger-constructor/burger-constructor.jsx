@@ -60,16 +60,6 @@ const BurgerConstructor = () => {
     },
   });
 
-   const moveCardHandler = (dragIndex, hoverIndex) => {
-    const dragItem = constructorItems[dragIndex + bun ? 1 : 0];
-
-    if (dragItem) {
-      dispatch({
-        type: MOVE_ITEM,
-        dragItem: dragItem,
-      });
-    }
-  };
 
   const sectionClassName = `${styles.section} pl-4 pr-2 pb-15
   ${isHover ? styles.onHover : ""}`;
@@ -100,7 +90,6 @@ const BurgerConstructor = () => {
           price={price}
           _id={_id}
           index={index}
-          moveCardHandler={moveCardHandler}
         />
       </li>
     );
