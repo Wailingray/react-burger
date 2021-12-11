@@ -55,8 +55,8 @@ export const ConstructorIngredient = ({ name, image, price, _id, index}) => {
 
   return (
     <>
-      <div className={`${styles.ingredient} ${opacity}`}>
-        <DragIcon type="primary" ref={dragDropRef} />
+      <div className={styles.ingredient} style={{ opacity }} ref={dragDropRef}>
+        <DragIcon type="primary" style={{zIndex: 20 }} />
         <ConstructorElement
           style={{width : '100%'}}
           id={_id}
