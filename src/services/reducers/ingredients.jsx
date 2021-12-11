@@ -16,7 +16,7 @@ const initialState = {
   ingredientItemsRequest: false,
   ingredientItemsFailed: false,
 
-  constructorItems: [],
+  constructorItems: [...hardCode],
 
   currentIngredient: {},
 
@@ -70,7 +70,6 @@ export const ingredientsReducer = (state = initialState, action) => {
       };
     }
     case REPLACE_BUN: {
-      state.constructorItems.length && console.log(state.constructorItems);
       return {
         ...state,
         constructorItems:

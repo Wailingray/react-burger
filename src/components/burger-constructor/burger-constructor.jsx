@@ -20,8 +20,9 @@ import { dispatchOrder, ORDER_RESET } from "../../services/actions/order";
 import {
   ADD_TO_CONSTRUCTOR,
   REMOVE_FROM_CONSTRUCTOR,
-  REPLACE_BUN
+  REPLACE_BUN,
 } from "../../services/actions/ingredients";
+import { ConstructorIngredient } from "../constructor-ingredient/constructor-ingredient";
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
@@ -54,11 +55,21 @@ const BurgerConstructor = () => {
       isHover: monitor.isOver(),
     }),
     drop(item) {
-
       addItem(item);
     },
   });
 
+ /*  const moveCardHandler = (dragIndex, hoverIndex) => {
+    const dragItem = constructorItems[dragIndex + bun ? 1 : 0];
+
+    if (dragItem) {
+      dispatch({
+        type: MOVE_ITEM,
+        dragItem: dragItem,
+      });
+    }
+  };
+ */
   const sectionClassName = `${styles.section} pl-4 pr-2 pb-15
   ${isHover ? styles.onHover : ""}`;
 
@@ -67,12 +78,11 @@ const BurgerConstructor = () => {
   const noBunsArray = useMemo(() => array.filter((el) => el.type !== "bun"));
 
   const addItem = (item) => {
-
     item.ingType === "bun"
       ? dispatch({
           type: REPLACE_BUN,
           id: item.id,
-          ingType: item.type
+          ingType: item.type,
         })
       : dispatch({
           type: ADD_TO_CONSTRUCTOR,
@@ -81,23 +91,14 @@ const BurgerConstructor = () => {
   };
 
   const renderProducts = ({ name, image, price, _id }, index) => {
-
     return (
       <li key={index} className={styles.ingredient}>
-        <DragIcon type="primary" />
-        <ConstructorElement
-          id={_id}
-          isLocked={false}
-          text={name}
+        <ConstructorIngredient
+          name={name}
+          image={image}
           price={price}
-          thumbnail={image}
-          handleClose={() => {
-            dispatch({
-              type: REMOVE_FROM_CONSTRUCTOR,
-              id: _id,
-              index: index + bun ? 1 : 0,
-            });
-          }}
+          _id={_id}
+          index={index}
         />
       </li>
     );
