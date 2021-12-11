@@ -70,23 +70,23 @@ export const ingredientsReducer = (state = initialState, action) => {
       };
     }
     case REPLACE_BUN: {
-      console.log(state.constructorItems);
+      state.constructorItems.length && console.log(state.constructorItems);
       return {
         ...state,
-        constructorItems: [
-          state.constructorItems.length && state.constructorItems[0].type === "bun"
-            ? (state.constructorItems[0] = [...state.ingredientItems].find(
-                (item) => item._id === action.id
-              ))
-            : [...state.ingredientItems].find((item) => item._id === action.id),
-            ...state.constructorItems,
-        ],
-        ingredientItems: [...state.ingredientItems].map((item) =>
-          item.ingType === "bun" ? { ...item, __v: --item.__v } : item
-        ),
-        ...state.ingredientItems.map((item) =>
-          item._id === action.id ? { ...item, __v: ++item.__v } : item
-        ),
+        constructorItems:
+          state.constructorItems.length &&
+          state.constructorItems[0].type === "bun"
+            ? [[...state.ingredientItems].find((item) => item._id === action.id), ...[...state.constructorItems].slice(1)]
+            : [[...state.ingredientItems].find((item) => item._id === action.id), ...state.constructorItems],
+
+        ingredientItems: [...state.ingredientItems].map((item) => {
+          if (item.type === "bun") {
+            if (item._id === action.id) return { ...item, __v: 1 };
+            else return { ...item, __v: 0 };
+          } else {
+            return item;
+          }
+        }),
       };
     }
     case REMOVE_FROM_CONSTRUCTOR: {

@@ -54,7 +54,7 @@ const BurgerConstructor = () => {
       isHover: monitor.isOver(),
     }),
     drop(item) {
-      console.log(item);
+
       addItem(item);
     },
   });
@@ -67,7 +67,7 @@ const BurgerConstructor = () => {
   const noBunsArray = useMemo(() => array.filter((el) => el.type !== "bun"));
 
   const addItem = (item) => {
-    console.log(item)
+
     item.ingType === "bun"
       ? dispatch({
           type: REPLACE_BUN,
@@ -81,7 +81,7 @@ const BurgerConstructor = () => {
   };
 
   const renderProducts = ({ name, image, price, _id }, index) => {
-    console.log(index);
+
     return (
       <li key={index} className={styles.ingredient}>
         <DragIcon type="primary" />
