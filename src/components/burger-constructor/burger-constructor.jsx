@@ -21,6 +21,7 @@ import {
   ADD_TO_CONSTRUCTOR,
   REMOVE_FROM_CONSTRUCTOR,
   REPLACE_BUN,
+  MOVE_ITEM
 } from "../../services/actions/ingredients";
 import { ConstructorIngredient } from "../constructor-ingredient/constructor-ingredient";
 
@@ -59,7 +60,7 @@ const BurgerConstructor = () => {
     },
   });
 
- /*  const moveCardHandler = (dragIndex, hoverIndex) => {
+   const moveCardHandler = (dragIndex, hoverIndex) => {
     const dragItem = constructorItems[dragIndex + bun ? 1 : 0];
 
     if (dragItem) {
@@ -69,7 +70,7 @@ const BurgerConstructor = () => {
       });
     }
   };
- */
+
   const sectionClassName = `${styles.section} pl-4 pr-2 pb-15
   ${isHover ? styles.onHover : ""}`;
 
@@ -99,6 +100,7 @@ const BurgerConstructor = () => {
           price={price}
           _id={_id}
           index={index}
+          moveCardHandler={moveCardHandler}
         />
       </li>
     );

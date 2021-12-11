@@ -7,6 +7,7 @@ import {
   ADD_TO_CONSTRUCTOR,
   REMOVE_FROM_CONSTRUCTOR,
   REPLACE_BUN,
+  MOVE_ITEM
 } from "../actions/ingredients";
 
 import { hardCode } from "../../utils/utils";
