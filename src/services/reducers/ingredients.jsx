@@ -8,6 +8,7 @@ import {
   REMOVE_FROM_CONSTRUCTOR,
   REPLACE_BUN,
   MOVE_ITEM,
+  RECALCULATE_PRICE,
 } from "../actions/ingredients";
 
 import { hardCode } from "../../utils/utils";
@@ -17,7 +18,9 @@ const initialState = {
   ingredientItemsRequest: false,
   ingredientItemsFailed: false,
 
-  constructorItems: [],
+  constructorItems: [/* ...hardCode */],
+
+  totalPrice: 0,
 
   currentIngredient: {},
 
@@ -67,6 +70,15 @@ export const ingredientsReducer = (state = initialState, action) => {
         ],
         ingredientItems: [...state.ingredientItems].map((item) =>
           item._id === action.id ? { ...item, __v: ++item.__v } : item
+        ),
+      };
+    }
+    case RECALCULATE_PRICE: {
+      return {
+        ...state,
+        totalPrice: state.constructorItems.reduce(
+          (partial_sum, el) => partial_sum + el.price,
+          0
         ),
       };
     }

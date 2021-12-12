@@ -21,23 +21,26 @@ import {
   ADD_TO_CONSTRUCTOR,
   REMOVE_FROM_CONSTRUCTOR,
   REPLACE_BUN,
-  MOVE_ITEM
+  MOVE_ITEM,
+  RECALCULATE_PRICE,
 } from "../../services/actions/ingredients";
 import { ConstructorIngredient } from "../constructor-ingredient/constructor-ingredient";
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
 
+  const { constructorItems, totalPrice } = useSelector(
+    (state) => state.ingredients
+  );
+  const { order, submitOrderRequest, submitOrderSuccess, submitOrderFailed } =
+    useSelector((state) => state.order);
+
   const [isModalOpened, setIsModalOpened] = useState(false);
-  const [reply, setReply] = useState(null);
-  const [error, setError] = useState(null);
-  const [sum, setSum] = useState(null);
 
   const submitOrder = useCallback(() => {
-    const cart = [].concat(bun._id).concat(noBunsArray.map((el) => el._id));
     setIsModalOpened(true);
-    dispatch(dispatchOrder(cart));
-  }, [dispatch, dispatchOrder]);
+    dispatch(dispatchOrder(constructorItems.map((item) => item._id)));
+  }, [dispatch, dispatchOrder, constructorItems]);
 
   const closeModal = () => {
     setIsModalOpened(false);
@@ -45,10 +48,6 @@ const BurgerConstructor = () => {
       type: ORDER_RESET,
     });
   };
-
-  const { constructorItems } = useSelector((state) => state.ingredients);
-  const { order, submitOrderRequest, submitOrderSuccess, submitOrderFailed } =
-    useSelector((state) => state.order);
 
   const [{ isHover }, dropTarget] = useDrop({
     accept: "item",
@@ -60,13 +59,13 @@ const BurgerConstructor = () => {
     },
   });
 
-
   const sectionClassName = `${styles.section} pl-4 pr-2 pb-15
   ${isHover ? styles.onHover : ""}`;
 
-  const array = constructorItems;
-  const bun = useMemo(() => array.find((el) => el.type === "bun"));
-  const noBunsArray = useMemo(() => array.filter((el) => el.type !== "bun"));
+  const bun = useMemo(() => constructorItems.find((el) => el.type === "bun"));
+  const noBunsArray = useMemo(() =>
+    constructorItems.filter((el) => el.type !== "bun")
+  );
 
   const addItem = (item) => {
     item.ingType === "bun"
@@ -79,6 +78,9 @@ const BurgerConstructor = () => {
           type: ADD_TO_CONSTRUCTOR,
           id: item.id,
         });
+    dispatch({
+      type: RECALCULATE_PRICE,
+    });
   };
 
   const renderProducts = ({ name, image, price, _id }, index) => {
@@ -141,7 +143,7 @@ const BurgerConstructor = () => {
             {noBunsArray && noBunsArray.map(renderProducts)}
           </ul>
           {bun && (
-            <li key={bun._id + 1} className={`${styles.ingredient} pr-2`}>
+            <li key={bun._id + 'низ'} className={`${styles.ingredient} pr-2`}>
               <ConstructorElement
                 type="bottom"
                 isLocked={true}
@@ -154,13 +156,13 @@ const BurgerConstructor = () => {
         </ul>
         <div className={`${styles.confirmationZone} mt-10`}>
           <p className="text text_type_digits-medium">
-            {sum} <CurrencyIcon type="primary" />
+            {totalPrice} <CurrencyIcon type="primary" />
           </p>
-          {array.length ? (
+          {constructorItems.length > 1 && bun ? (
             button
           ) : (
             <Button disabled="disabled" type="primary" size="large">
-              Ничего не выбрано!
+              Соберите бургер!
             </Button>
           )}
         </div>

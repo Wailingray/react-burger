@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
-import { REMOVE_FROM_CONSTRUCTOR, MOVE_ITEM } from "../../services/actions/ingredients";
+import { REMOVE_FROM_CONSTRUCTOR, MOVE_ITEM, RECALCULATE_PRICE } from "../../services/actions/ingredients";
 import { useSelector, useDispatch } from "react-redux";
 import { useDrop, useDrag } from "react-dnd";
 import styles from './constructor-ingredient.module.css'
@@ -50,13 +50,10 @@ export const ConstructorIngredient = ({ name, image, price, _id, index}) => {
     const ref = useRef(null)
     const dragDropRef = dragRef(dropRef(ref))
 
-    const opacity = isDragging ? 0 : 1
-
-
   return (
     <>
-      <div className={styles.ingredient} style={{ opacity }} ref={dragDropRef}>
-        <DragIcon type="primary" style={{zIndex: 20 }} />
+      <div className={styles.ingredient} ref={dragDropRef}>
+        <DragIcon type="primary" />
         <ConstructorElement
           style={{width : '100%'}}
           id={_id}
@@ -69,6 +66,9 @@ export const ConstructorIngredient = ({ name, image, price, _id, index}) => {
               type: REMOVE_FROM_CONSTRUCTOR,
               id: _id,
               index: index + (isBun ? 1 : 0)
+            });
+            dispatch({
+              type: RECALCULATE_PRICE,
             });
           }}
         />
