@@ -10,10 +10,10 @@ import Ingredient from "../ingredient/ingredient";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import { getItems } from "../../services/actions/ingredients";
 import Modal from "../modal/modal";
+import { useInView } from 'react-intersection-observer'
 
 const BurgerIngredients = () => {
   const [isModalOpened, setIsModalOpened] = useState(false);
-
 
   const bunRef = useRef(null);
   const sauceRef = useRef(null);
@@ -78,6 +78,7 @@ const BurgerIngredients = () => {
 
   const BurgerTabs = () => {
     const [current, setCurrent] = useState('one')
+
     return (
       <div style={{ display: 'flex' }}>
         <Tab value="one" active={current === 'one'} onClick={(value) => {
@@ -86,7 +87,7 @@ const BurgerIngredients = () => {
         }} >
           Булки
         </Tab>
-        <Tab value="two" active={current === 'two'} onClick={(value) => {
+          <Tab value="two" active={current === 'two'} onClick={(value) => {
           setCurrent(value);
           sauceRef.current.scrollIntoView(({behavior: "smooth"}));
         }}>

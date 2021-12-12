@@ -41,6 +41,7 @@ Ingredient.propTypes = {
   image: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
+  id :PropTypes.string.isRequired,
   counter: PropTypes.number
 }
 
