@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import doneImage from "../../images/done.svg";
-import PropTypes from "prop-types";
 import styles from "./order-details.module.css"
 
 const OrderDetails = () => {

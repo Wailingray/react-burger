@@ -25,9 +25,8 @@ export const ConstructorIngredient = ({ name, image, price, _id, index}) => {
           const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
           const hoverActualY = monitor.getClientOffset().y - hoverBoundingRect.top
 
-          // if dragging down, continue only when hover is smaller than middle Y
+
           if (dragIndex < hoverIndex && hoverActualY < hoverMiddleY) return
-          // if dragging up, continue only when hover is bigger than middle Y
           if (dragIndex > hoverIndex && hoverActualY > hoverMiddleY) return
 
           dispatch({
