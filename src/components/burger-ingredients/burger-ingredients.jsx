@@ -83,8 +83,6 @@ const BurgerIngredients = () => {
         coordinates.bottom - mainBlockTopCoordinate / 2 > mainBlockTopCoordinate
       );
     };
-
-    const bunHeaderCoordinates = getCoordinates(bunRef);
     const sauceHeaderCoordinates = getCoordinates(sauceRef);
     const mainHeaderCoordinates = getCoordinates(mainRef);
 
@@ -109,67 +107,75 @@ const BurgerIngredients = () => {
           image={el.image}
           name={el.name}
           price={el.price}
-          counter={el.__v}
         ></Ingredient>
       </li>
     );
   };
 
   const content = useMemo(() => {
-    if (ingredientItemsRequest) return (
-      <p className={`${styles.message} text text_type_main-large`}>
-        Загрузка...
-      </p>
-    )
-    else if (ingredientItemsFailed) return (
-      <p className={`${styles.message} mt-20 text text_type_main-large`}>
+    if (ingredientItemsRequest)
+      return (
+        <p className={`${styles.message} text text_type_main-large`}>
+          Загрузка...
+        </p>
+      );
+    else if (ingredientItemsFailed)
+      return (
+        <p className={`${styles.message} mt-20 text text_type_main-large`}>
           Произошла ошибка! Код ошибки: {ingredientItemsError}
         </p>
-      )
-    else return (
-      <div className={styles.options} onScroll={handleScroll}>
-        <div className={styles.layer}>
-          <h2
-            ref={bunRef}
-            className={`text text_type_main-medium ${styles.component} pt-10 pb-6`}
-          >
-            Булки
-          </h2>
-          <ul className={`${styles.list} pl-4 pr-2`}>
-            {ingredientItems
-              .filter((el) => el.type === "bun")
-              .map(renderIngredient)}
-          </ul>
+      );
+    else
+      return (
+        <div className={styles.options} onScroll={handleScroll}>
+          <div className={styles.layer}>
+            <h2
+              ref={bunRef}
+              className={`text text_type_main-medium ${styles.component} pt-10 pb-6`}
+            >
+              Булки
+            </h2>
+            <ul className={`${styles.list} pl-4 pr-2`}>
+              {ingredientItems
+                .filter((el) => el.type === "bun")
+                .map(renderIngredient)}
+            </ul>
+          </div>
+          <div className={styles.layer}>
+            <h2
+              ref={sauceRef}
+              className={`text text_type_main-medium ${styles.component} pt-10 pb-6`}
+            >
+              Соусы
+            </h2>
+            <ul className={`${styles.list} pl-4 pr-2`}>
+              {ingredientItems
+                .filter((el) => el.type === "sauce")
+                .map(renderIngredient)}
+            </ul>
+          </div>
+          <div className={styles.layer}>
+            <h2
+              ref={mainRef}
+              className={`text text_type_main-medium ${styles.component} pt-10 pb-6`}
+            >
+              Начинки
+            </h2>
+            <ul className={`${styles.list} pl-4 pr-2`}>
+              {ingredientItems
+                .filter((el) => el.type === "main")
+                .map(renderIngredient)}
+            </ul>
+          </div>
         </div>
-        <div className={styles.layer}>
-          <h2
-            ref={sauceRef}
-            className={`text text_type_main-medium ${styles.component} pt-10 pb-6`}
-          >
-            Соусы
-          </h2>
-          <ul className={`${styles.list} pl-4 pr-2`}>
-            {ingredientItems
-              .filter((el) => el.type === "sauce")
-              .map(renderIngredient)}
-          </ul>
-        </div>
-        <div className={styles.layer}>
-          <h2
-            ref={mainRef}
-            className={`text text_type_main-medium ${styles.component} pt-10 pb-6`}
-          >
-            Начинки
-          </h2>
-          <ul className={`${styles.list} pl-4 pr-2`}>
-            {ingredientItems
-              .filter((el) => el.type === "main")
-              .map(renderIngredient)}
-          </ul>
-        </div>
-      </div>
-    );
-  }, [ingredientItemsRequest, ingredientItems, ingredientItemsError, ingredientItemsFailed]);
+      );
+  }, [
+    ingredientItemsRequest,
+    ingredientItems,
+    ingredientItemsError,
+    ingredientItemsFailed,
+    handleScroll,
+  ]);
 
   return (
     <>

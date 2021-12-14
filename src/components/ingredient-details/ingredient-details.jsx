@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./ingredient-details.module.css";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const IngredientDetails = () => {
 

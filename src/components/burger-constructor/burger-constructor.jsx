@@ -1,27 +1,16 @@
-import {
-  React,
-  useState,
-  useContext,
-  useEffect,
-  useMemo,
-  useCallback,
-} from "react";
+import { React, useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styles from "./burger-constructor.module.css";
-import { DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
-import { hardCode } from "../../utils/utils";
 import { useDrop } from "react-dnd";
 import { dispatchOrder, ORDER_RESET } from "../../services/actions/order";
 import {
   ADD_TO_CONSTRUCTOR,
-  REMOVE_FROM_CONSTRUCTOR,
   REPLACE_BUN,
-  MOVE_ITEM,
   RECALCULATE_PRICE,
 } from "../../services/actions/ingredients";
 import { ConstructorIngredient } from "../constructor-ingredient/constructor-ingredient";
@@ -29,10 +18,16 @@ import { ConstructorIngredient } from "../constructor-ingredient/constructor-ing
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch({
+      type: RECALCULATE_PRICE,
+    });
+  }, [dispatch]);
+
   const { constructorItems, totalPrice } = useSelector(
     (state) => state.ingredients
   );
-  const { order, submitOrderRequest, submitOrderSuccess, submitOrderFailed } =
+  const { submitOrderRequest, submitOrderSuccess, submitOrderFailed } =
     useSelector((state) => state.order);
 
   const [isModalOpened, setIsModalOpened] = useState(false);
@@ -40,7 +35,7 @@ const BurgerConstructor = () => {
   const submitOrder = useCallback(() => {
     setIsModalOpened(true);
     dispatch(dispatchOrder(constructorItems.map((item) => item._id)));
-  }, [dispatch, dispatchOrder, constructorItems]);
+  }, [dispatch, constructorItems]);
 
   const closeModal = () => {
     setIsModalOpened(false);
@@ -62,9 +57,13 @@ const BurgerConstructor = () => {
   const sectionClassName = `${styles.section} pl-4 pr-2 pb-15
   ${isHover ? styles.onHover : ""}`;
 
-  const bun = useMemo(() => constructorItems.find((el) => el.type === "bun"));
-  const noBunsArray = useMemo(() =>
-    constructorItems.filter((el) => el.type !== "bun")
+  const bun = useMemo(
+    () => constructorItems.find((el) => el.type === "bun"),
+    [constructorItems]
+  );
+  const noBunsArray = useMemo(
+    () => constructorItems.filter((el) => el.type !== "bun"),
+    [constructorItems]
   );
 
   const addItem = (item) => {
@@ -97,33 +96,6 @@ const BurgerConstructor = () => {
     );
   };
 
-  const modal = useMemo(() => {
-    return submitOrderSuccess || submitOrderFailed ? (
-      <Modal onClose={closeModal}>
-        <OrderDetails />
-      </Modal>
-    ) : (
-      ""
-    );
-  }, [submitOrderSuccess, closeModal]);
-
-  const button = useMemo(() => {
-    return submitOrderRequest ? (
-      <Button
-        onClick={submitOrder}
-        disabled="disabled"
-        type="primary"
-        size="large"
-      >
-        Подождите...
-      </Button>
-    ) : (
-      <Button onClick={submitOrder} type="primary" size="large">
-        Оформить заказ
-      </Button>
-    );
-  }, [submitOrderRequest, submitOrder]);
-
   return (
     <>
       <section ref={dropTarget} className={sectionClassName}>
@@ -143,7 +115,7 @@ const BurgerConstructor = () => {
             {noBunsArray && noBunsArray.map(renderProducts)}
           </ul>
           {bun && (
-            <li key={bun._id + 'низ'} className={`${styles.ingredient} pr-2`}>
+            <li key={bun._id + "низ"} className={`${styles.ingredient} pr-2`}>
               <ConstructorElement
                 type="bottom"
                 isLocked={true}
@@ -159,7 +131,20 @@ const BurgerConstructor = () => {
             {totalPrice} <CurrencyIcon type="primary" />
           </p>
           {constructorItems.length > 1 && bun ? (
-            button
+            submitOrderRequest ? (
+              <Button
+                onClick={submitOrder}
+                disabled="disabled"
+                type="primary"
+                size="large"
+              >
+                Подождите...
+              </Button>
+            ) : (
+              <Button onClick={submitOrder} type="primary" size="large">
+                Оформить заказ
+              </Button>
+            )
           ) : (
             <Button disabled="disabled" type="primary" size="large">
               Соберите бургер!
@@ -167,7 +152,11 @@ const BurgerConstructor = () => {
           )}
         </div>
       </section>
-      {isModalOpened && modal}
+      {isModalOpened && (submitOrderSuccess || submitOrderFailed) && (
+        <Modal onClose={closeModal}>
+          <OrderDetails />
+        </Modal>
+      )}
     </>
   );
 };

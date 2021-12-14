@@ -15,7 +15,7 @@ export const ConstructorIngredient = ({ name, image, price, _id, index}) => {
   const isBun = constructorItems.length && constructorItems[0].type === "bun"
 
 
-    const [spec, dropRef] = useDrop({
+    const [, dropRef] = useDrop({
       accept: 'constructor-item',
       hover: (item, monitor) => {
 
@@ -38,7 +38,7 @@ export const ConstructorIngredient = ({ name, image, price, _id, index}) => {
       },
     })
 
-    const [{ isDragging }, dragRef] = useDrag({
+    const [, dragRef] = useDrag({
       type: 'constructor-item',
       item: { index },
       collect: (monitor) => ({

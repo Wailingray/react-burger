@@ -11,15 +11,15 @@ import {
   RECALCULATE_PRICE,
 } from "../actions/ingredients";
 
-import { hardCode } from "../../utils/utils";
+import { burgerExample } from "../../utils/utils";
 
 const initialState = {
   ingredientItems: [],
   ingredientItemsRequest: false,
   ingredientItemsFailed: false,
-  ingredientItemsError: '',
+  ingredientItemsError: "",
 
-  constructorItems: [/* ...hardCode */],
+  constructorItems: [...burgerExample],
 
   totalPrice: 0,
 
@@ -45,15 +45,15 @@ export const ingredientsReducer = (state = initialState, action) => {
       return {
         ...initialState,
         ingredientItemsFailed: true,
-        ingredientItemsError: action.error
+        ingredientItemsError: action.error,
       };
     }
     case SEND_TO_MODAL: {
       return {
         ...state,
-        currentIngredient: [...state.ingredientItems].find(
-          (item) => item._id === action.id
-        ),
+        currentIngredient: JSON.parse(
+          JSON.stringify(state.ingredientItems)
+        ).find((item) => item._id === action.id),
       };
     }
     case RESET_CURRENT_INGREDIENT: {
@@ -69,16 +69,13 @@ export const ingredientsReducer = (state = initialState, action) => {
           ...state.constructorItems,
           [...state.ingredientItems].find((item) => item._id === action.id),
         ],
-        ingredientItems: [...state.ingredientItems].map((item) =>
-          item._id === action.id ? { ...item, __v: ++item.__v } : item
-        ),
       };
     }
     case RECALCULATE_PRICE: {
       return {
         ...state,
         totalPrice: state.constructorItems.reduce(
-          (partial_sum, el) => partial_sum + el.price,
+          (sum, el) => sum + el.price,
           0
         ),
       };
@@ -89,27 +86,8 @@ export const ingredientsReducer = (state = initialState, action) => {
         constructorItems:
           state.constructorItems.length &&
           state.constructorItems[0].type === "bun"
-            ? [
-                [...state.ingredientItems].find(
-                  (item) => item._id === action.id
-                ),
-                ...[...state.constructorItems].slice(1),
-              ]
-            : [
-                [...state.ingredientItems].find(
-                  (item) => item._id === action.id
-                ),
-                ...state.constructorItems,
-              ],
-
-        ingredientItems: [...state.ingredientItems].map((item) => {
-          if (item.type === "bun") {
-            if (item._id === action.id) return { ...item, __v: 1 };
-            else return { ...item, __v: 0 };
-          } else {
-            return item;
-          }
-        }),
+            ? [state.ingredientItems.find((item) => item._id === action.id)].concat(state.constructorItems.slice(1))
+            : [state.ingredientItems.find((item) => item._id === action.id)].concat(state.constructorItems),
       };
     }
     case MOVE_ITEM: {
@@ -133,9 +111,6 @@ export const ingredientsReducer = (state = initialState, action) => {
         ...state,
         constructorItems: [...state.constructorItems].filter(
           (item, index) => index !== action.index
-        ),
-        ingredientItems: [...state.ingredientItems].map((item) =>
-          item._id === action.id ? { ...item, __v: --item.__v } : item
         ),
       };
     }
