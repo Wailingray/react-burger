@@ -5,7 +5,7 @@ import styles from "./order-details.module.css"
 
 const OrderDetails = () => {
 
-  const { order, submitOrderSuccess, submitOrderFailed } = useSelector(state => state.order);
+  const { order, submitOrderSuccess, submitOrderFailed, submitOrderError } = useSelector(state => state.order);
 
   if (submitOrderSuccess) return (
   <>
@@ -29,7 +29,7 @@ const OrderDetails = () => {
     </span>
     <p className="text text_type_main-medium mt-8 mb-8">Что-то пошло не так!</p>
     <p className="text text_type_main-medium mb-2">
-      Возникла ошибка
+      Возникла ошибка! Код ошибки: {submitOrderError}
     </p>
     <p className="text text_type_main-medium text_color_inactive mb-30">
       Пожалуйста, попробуйте ещё раз позднее

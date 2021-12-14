@@ -17,6 +17,7 @@ const initialState = {
   ingredientItems: [],
   ingredientItemsRequest: false,
   ingredientItemsFailed: false,
+  ingredientItemsError: '',
 
   constructorItems: [/* ...hardCode */],
 
@@ -42,9 +43,9 @@ export const ingredientsReducer = (state = initialState, action) => {
     }
     case GET_ITEMS_FAILED: {
       return {
-        ...state,
+        ...initialState,
         ingredientItemsFailed: true,
-        ingredientItemsRequest: false,
+        ingredientItemsError: action.error
       };
     }
     case SEND_TO_MODAL: {

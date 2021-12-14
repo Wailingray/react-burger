@@ -9,7 +9,8 @@ const initialState = {
   order: {},
   submitOrderRequest: false,
   submitOrderFailed: false,
-  submitOrderSuccess: false
+  submitOrderSuccess: false,
+  submitOrderError: ''
 }
 
 export const orderReducer = (state = initialState, action) => {
@@ -28,9 +29,9 @@ export const orderReducer = (state = initialState, action) => {
     }
     case SUBMIT_ORDER_FAILED: {
       return {
-        ...state,
+        ...initialState,
         submitOrderFailed: true,
-        submitOrderRequest: false,
+        submitOrderError: action.error
       };
     }
     case ORDER_RESET: {
