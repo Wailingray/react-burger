@@ -1,72 +1,108 @@
-import { React, useState, useContext, useEffect, useMemo } from "react";
+import { React, useState, useEffect, useMemo, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import styles from "./burger-constructor.module.css";
-import { DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
-import { BurgerContext } from "../../context/burger-context";
-import { submitOrder } from "../api/api";
+import { useDrop } from "react-dnd";
+import { dispatchOrder, ORDER_RESET } from "../../services/actions/order";
+import {
+  ADD_TO_CONSTRUCTOR,
+  REPLACE_BUN,
+  RECALCULATE_PRICE,
+} from "../../services/actions/ingredients";
+import { ConstructorIngredient } from "../constructor-ingredient/constructor-ingredient";
 
 const BurgerConstructor = () => {
-  const [isModalOpened, setIsModalOpened] = useState(false);
-  const [reply, setReply] = useState(null);
-  const [error, setError] = useState(null);
-  const [cart, setCart] = useState([]);
-  const [sum, setSum] = useState(null);
+  const dispatch = useDispatch();
 
-  const openModal = () => {
+  useEffect(() => {
+    dispatch({
+      type: RECALCULATE_PRICE,
+    });
+  }, [dispatch]);
+
+  const { constructorItems, totalPrice } = useSelector(
+    (state) => state.ingredients
+  );
+  const { submitOrderRequest, submitOrderSuccess, submitOrderFailed } =
+    useSelector((state) => state.order);
+
+  const [isModalOpened, setIsModalOpened] = useState(false);
+
+  const submitOrder = useCallback(() => {
     setIsModalOpened(true);
-  };
+    dispatch(dispatchOrder(constructorItems.map((item) => item._id)));
+  }, [dispatch, constructorItems]);
 
   const closeModal = () => {
     setIsModalOpened(false);
+    dispatch({
+      type: ORDER_RESET,
+    });
   };
 
-  const array = useContext(BurgerContext);
-  const bun = useMemo(() => array.find((el) => el.type === "bun"));
-  const noBunsArray = useMemo(() => array.filter((el) => el.type !== "bun"));
+  const [{ isHover }, dropTarget] = useDrop({
+    accept: "item",
+    collect: (monitor) => ({
+      isHover: monitor.isOver(),
+    }),
+    drop(item) {
+      addItem(item);
+    },
+  });
 
-  useEffect(() => {
-    bun &&
-      setSum(
-        noBunsArray.reduce((acc, el) => acc + el.price, 0) + bun.price * 2
-      );
-    bun && setCart([].concat(bun._id).concat(noBunsArray.map((el) => el._id)));
-  }, [array, bun]);
+  const sectionClassName = `${styles.section} pl-4 pr-2 pb-15
+  ${isHover ? styles.onHover : ""}`;
 
-  const sendOrder = () => {
-    submitOrder(cart)
-      .then((replyObj) => {
-        setReply(replyObj);
-        console.log(replyObj.name);
-      })
-      .catch((err) => {
-        setError(err);
-      })
-      .finally(() => {
-        openModal();
-      });
+  const bun = useMemo(
+    () => constructorItems.find((el) => el.type === "bun"),
+    [constructorItems]
+  );
+  const noBunsArray = useMemo(
+    () => constructorItems.filter((el) => el.type !== "bun"),
+    [constructorItems]
+  );
+
+  const addItem = (item) => {
+    const isBun = item.ingType === "bun";
+    dispatch({
+      type: isBun ? REPLACE_BUN : ADD_TO_CONSTRUCTOR,
+      id: item.id,
+    });
+    dispatch({
+      type: RECALCULATE_PRICE,
+    });
   };
 
   const renderProducts = ({ name, image, price, _id }, index) => {
     return (
       <li key={index} className={styles.ingredient}>
-        <DragIcon type="primary" />
-        <ConstructorElement
-          isLocked={false}
-          text={name}
+        <ConstructorIngredient
+          name={name}
+          image={image}
           price={price}
-          thumbnail={image}
+          _id={_id}
+          index={index}
         />
       </li>
     );
   };
 
+  const isDisabled =
+    constructorItems.length > 1 && bun && !submitOrderRequest ? false : true;
+  const buttonText =
+    constructorItems.length > 1 && bun
+      ? submitOrderRequest
+        ? "Подождите..."
+        : "Оформить заказ"
+      : "Соберите бургер!";
+
   return (
     <>
-      <section className={`${styles.section} pl-4 pr-2 pb-15`}>
+      <section ref={dropTarget} className={sectionClassName}>
         <ul className={`${styles.ingredientList} mt-25 mb-10`}>
           {bun && (
             <li key={bun._id} className={`${styles.ingredient} pr-2`}>
@@ -80,10 +116,10 @@ const BurgerConstructor = () => {
             </li>
           )}
           <ul className={styles.innerList}>
-            {noBunsArray.map(renderProducts)}
+            {noBunsArray && noBunsArray.map(renderProducts)}
           </ul>
           {bun && (
-            <li key={bun._id + 1} className={`${styles.ingredient} pr-2`}>
+            <li key={bun._id + "низ"} className={`${styles.ingredient} pr-2`}>
               <ConstructorElement
                 type="bottom"
                 isLocked={true}
@@ -96,16 +132,21 @@ const BurgerConstructor = () => {
         </ul>
         <div className={`${styles.confirmationZone} mt-10`}>
           <p className="text text_type_digits-medium">
-            {sum} <CurrencyIcon type="primary" />
+            {totalPrice} <CurrencyIcon type="primary" />
           </p>
-          <Button onClick={sendOrder} type="primary" size="large">
-            Оформить заказ
+          <Button
+            onClick={submitOrder}
+            disabled={isDisabled ? "disabled" : ""}
+            type="primary"
+            size="large"
+          >
+            {buttonText}
           </Button>
         </div>
       </section>
-      {isModalOpened && (
+      {isModalOpened && (submitOrderSuccess || submitOrderFailed) && (
         <Modal onClose={closeModal}>
-          <OrderDetails orderNum={reply.order.number} error={error} />
+          <OrderDetails />
         </Modal>
       )}
     </>

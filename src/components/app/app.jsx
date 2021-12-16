@@ -1,51 +1,23 @@
-import { React, useEffect, useState } from "react";
-
-import { getData } from "../api/api";
+import { React } from "react";
 import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
-import BurgerIngridients from "../burger-ingredients/burger-ingredients";
+import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
-import { BurgerContext } from "../../context/burger-context";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 function App() {
-  const [error, setError] = useState(false);
-  const [loaded, setLoaded] = useState(false);
-  const [items, setItems] = useState([]);
-
-  useEffect(() => {
-    getData()
-      .then((res) => {
-        setLoaded(true);
-        setItems(res.data);
-      })
-      .catch((err) => {
-        setLoaded(true);
-        setError(err);
-      });
-  }, []);
-
-  if (error) {
-    return (
-      <p className={`${styles.message} text text_type_main-large`}>
-        Ошибка: {error}
-      </p>
-    );
-  } else if (!loaded) {
-    return (
-      <p className={`${styles.message} text text_type_main-large`}>
-        Загрузка...
-      </p>
-    );
-  } else
-    return (
-      <BurgerContext.Provider value={items}>
-        <AppHeader />
-        <main className={styles.main}>
-          <BurgerIngridients />
-          <BurgerConstructor />
-        </main>
-      </BurgerContext.Provider>
-    );
+  return (
+    <>
+      <AppHeader />
+      <DndProvider backend={HTML5Backend}>
+      <main className={styles.main}>
+        <BurgerIngredients />
+        <BurgerConstructor />
+      </main>
+      </DndProvider>
+    </>
+  );
 }
 
 export default App;
