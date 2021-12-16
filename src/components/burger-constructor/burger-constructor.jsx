@@ -67,16 +67,11 @@ const BurgerConstructor = () => {
   );
 
   const addItem = (item) => {
-    item.ingType === "bun"
-      ? dispatch({
-          type: REPLACE_BUN,
-          id: item.id,
-          ingType: item.type,
-        })
-      : dispatch({
-          type: ADD_TO_CONSTRUCTOR,
-          id: item.id,
-        });
+    const isBun = item.ingType === "bun";
+    dispatch({
+      type: isBun ? REPLACE_BUN : ADD_TO_CONSTRUCTOR,
+      id: item.id,
+    });
     dispatch({
       type: RECALCULATE_PRICE,
     });
@@ -95,6 +90,15 @@ const BurgerConstructor = () => {
       </li>
     );
   };
+
+  const isDisabled =
+    constructorItems.length > 1 && bun && !submitOrderRequest ? false : true;
+  const buttonText =
+    constructorItems.length > 1 && bun
+      ? submitOrderRequest
+        ? "Подождите..."
+        : "Оформить заказ"
+      : "Соберите бургер!";
 
   return (
     <>
@@ -130,26 +134,14 @@ const BurgerConstructor = () => {
           <p className="text text_type_digits-medium">
             {totalPrice} <CurrencyIcon type="primary" />
           </p>
-          {constructorItems.length > 1 && bun ? (
-            submitOrderRequest ? (
-              <Button
-                onClick={submitOrder}
-                disabled="disabled"
-                type="primary"
-                size="large"
-              >
-                Подождите...
-              </Button>
-            ) : (
-              <Button onClick={submitOrder} type="primary" size="large">
-                Оформить заказ
-              </Button>
-            )
-          ) : (
-            <Button disabled="disabled" type="primary" size="large">
-              Соберите бургер!
-            </Button>
-          )}
+          <Button
+            onClick={submitOrder}
+            disabled={isDisabled ? "disabled" : ""}
+            type="primary"
+            size="large"
+          >
+            {buttonText}
+          </Button>
         </div>
       </section>
       {isModalOpened && (submitOrderSuccess || submitOrderFailed) && (

@@ -5,12 +5,12 @@ export const SUBMIT_ORDER_SUCCESS = "SUBMIT_ORDER_SUCCESS";
 export const SUBMIT_ORDER_FAILED = "SUBMIT_ORDER_FAILED";
 export const ORDER_RESET = "ORDER_RESET";
 
-export function dispatchOrder(idList) {
+export function dispatchOrder(userOrder) {
   return function (dispatch) {
     dispatch({
       type: SUBMIT_ORDER_REQUEST,
     });
-    submitOrder(idList)
+    submitOrder(userOrder)
       .then((res) => {
         dispatch({
           type: SUBMIT_ORDER_SUCCESS,
