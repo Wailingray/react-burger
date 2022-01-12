@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./ingredient-details.module.css";
 import { useSelector } from 'react-redux';
 
-const IngredientDetails = () => {
+const IngredientDetail: React.FC = () => {
 
   const { currentIngredient } = useSelector(state => state.ingredients);
 

@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Logo } from '@ya.praktikum/react-developer-burger-ui-components';
 import { BurgerIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ListIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './app-header.module.css';
 
-const AppHeader = () => {
+const AppHeader: FC = () => {
   return (
     <header className={styles.header}>
       <div className={styles.logo}><Logo/></div>

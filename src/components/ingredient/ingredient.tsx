@@ -5,8 +5,10 @@ import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
 import { useDrag } from "react-dnd";
+import { IngProps } from "../../utils/interfaces";
 
-const Ingredient = (props) => {
+
+const Ingredient: React.FC<IngProps> = (props) => {
   const [counter, setCounter] = useState(0);
 
   const { constructorItems } = useSelector((state) => state.ingredients);
@@ -47,11 +49,5 @@ const Ingredient = (props) => {
   );
 };
 
-Ingredient.propTypes = {
-  image: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  id: PropTypes.string.isRequired,
-};
 
 export default Ingredient;
