@@ -1,5 +1,4 @@
-import {
-  React,
+import React,{
   useState,
   useMemo,
   useEffect,
@@ -17,14 +16,15 @@ import Ingredient from "../ingredient/ingredient";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import { getItems } from "../../services/actions/ingredients";
 import Modal from "../modal/modal";
+import { ICoordinates } from "../../utils/interfaces";
 
-const BurgerIngredients = () => {
-  const [isModalOpened, setIsModalOpened] = useState(false);
-  const [current, setCurrent] = useState("one");
+const BurgerIngredients : React.FC = () => {
+  const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
+  const [current, setCurrent] = useState<string>("one");
 
-  const bunRef = useRef(null);
-  const sauceRef = useRef(null);
-  const mainRef = useRef(null);
+  const bunRef = useRef<HTMLHeadingElement | null>(null)
+  const sauceRef = useRef<HTMLHeadingElement | null>(null)
+  const mainRef = useRef<HTMLHeadingElement | null>(null)
 
   const dispatch = useDispatch();
 
@@ -61,22 +61,23 @@ const BurgerIngredients = () => {
     resetCurrentIngredient();
   };
 
-  const showIngredient = (evt) => {
+  const showIngredient = (evt: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
     setCurrentIngredient(evt.currentTarget.id);
     openModal();
   };
 
   const handleScroll = useCallback((e) => {
+
     const mainBlockTopCoordinate = e.target.getBoundingClientRect().top;
 
-    const getCoordinates = (ref) => {
+    const getCoordinates = (ref: React.MutableRefObject<HTMLHeadingElement>): ICoordinates => {
       return {
         top: ref.current.parentNode.getBoundingClientRect().top,
         bottom: ref.current.parentNode.getBoundingClientRect().bottom,
       };
     };
 
-    const isInView = (coordinates) => {
+    const isInView = (coordinates: ICoordinates) => {
       return (
         coordinates.top - mainBlockTopCoordinate / 2 <=
           mainBlockTopCoordinate &&
@@ -86,9 +87,9 @@ const BurgerIngredients = () => {
     const sauceHeaderCoordinates = getCoordinates(sauceRef);
     const mainHeaderCoordinates = getCoordinates(mainRef);
 
-    if (isInView(sauceHeaderCoordinates, "two")) {
+    if (isInView(sauceHeaderCoordinates)) {
       setCurrent("two");
-    } else if (isInView(mainHeaderCoordinates, "three")) {
+    } else if (isInView(mainHeaderCoordinates)) {
       setCurrent("three");
     } else setCurrent("one");
   }, []);
@@ -189,7 +190,7 @@ const BurgerIngredients = () => {
             active={current === "one"}
             onClick={(value) => {
               setCurrent(value);
-              bunRef.current.scrollIntoView({ behavior: "smooth" });
+              bunRef.current?.scrollIntoView({ behavior: "smooth" });
             }}
           >
             Булки
@@ -199,7 +200,7 @@ const BurgerIngredients = () => {
             active={current === "two"}
             onClick={(value) => {
               setCurrent(value);
-              sauceRef.current.scrollIntoView({ behavior: "smooth" });
+              sauceRef.current?.scrollIntoView({ behavior: "smooth" });
             }}
           >
             Соусы
@@ -209,7 +210,7 @@ const BurgerIngredients = () => {
             active={current === "three"}
             onClick={(value) => {
               setCurrent(value);
-              mainRef.current.scrollIntoView({ behavior: "smooth" });
+              mainRef.current?.scrollIntoView({ behavior: "smooth" });
             }}
           >
             Начинки

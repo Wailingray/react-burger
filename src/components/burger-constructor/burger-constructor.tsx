@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styles from "./burger-constructor.module.css";
 import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -14,8 +14,9 @@ import {
   RECALCULATE_PRICE,
 } from "../../services/actions/ingredients";
 import { ConstructorIngredient } from "../constructor-ingredient/constructor-ingredient";
+import { ConstructorDraggableEl, ConstructorEL, IngProps } from "../../utils/interfaces";
 
-const BurgerConstructor = () => {
+const BurgerConstructor: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -49,7 +50,7 @@ const BurgerConstructor = () => {
     collect: (monitor) => ({
       isHover: monitor.isOver(),
     }),
-    drop(item) {
+    drop(item : ConstructorDraggableEl ) {
       addItem(item);
     },
   });
@@ -66,7 +67,7 @@ const BurgerConstructor = () => {
     [constructorItems]
   );
 
-  const addItem = (item) => {
+  const addItem = (item : ConstructorDraggableEl) => {
     const isBun = item.ingType === "bun";
     dispatch({
       type: isBun ? REPLACE_BUN : ADD_TO_CONSTRUCTOR,
@@ -77,7 +78,7 @@ const BurgerConstructor = () => {
     });
   };
 
-  const renderProducts = ({ name, image, price, _id }, index) => {
+  const renderProducts = ({ name, image, price, _id }: ConstructorEL, index : number) => {
     return (
       <li key={index} className={styles.ingredient}>
         <ConstructorIngredient
@@ -136,7 +137,6 @@ const BurgerConstructor = () => {
           </p>
           <Button
             onClick={submitOrder}
-            disabled={isDisabled ? "disabled" : ""}
             type="primary"
             size="large"
           >

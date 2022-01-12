@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import doneImage from "../../images/done.svg";
 import styles from "./order-details.module.css"
 
-const OrderDetails = () => {
+const OrderDetails: React.FC = () => {
 
   const { order, submitOrderSuccess, submitOrderFailed, submitOrderError } = useSelector(state => state.order);
 
@@ -22,7 +22,7 @@ const OrderDetails = () => {
     </p>
   </>
   )
-  if (submitOrderFailed) return (
+  else return (
     <>
     <span className={`${styles.digits} text text_type_digits-large mt-30`}>
       ----
