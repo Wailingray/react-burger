@@ -23,6 +23,6 @@ export interface ConstructorEL {
 }
 
 export interface ICoordinates {
-  top: number;
-  bottom: number;
+  top: number | undefined;
+  bottom: number| undefined;
 }

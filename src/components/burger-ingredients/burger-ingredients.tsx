@@ -22,9 +22,9 @@ const BurgerIngredients : React.FC = () => {
   const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
   const [current, setCurrent] = useState<string>("one");
 
-  const bunRef = useRef<HTMLHeadingElement | null>(null)
-  const sauceRef = useRef<HTMLHeadingElement | null>(null)
-  const mainRef = useRef<HTMLHeadingElement | null>(null)
+  const bunRef = useRef<HTMLHeadingElement>(null)
+  const sauceRef = useRef<HTMLHeadingElement>(null)
+  const mainRef = useRef<HTMLHeadingElement>(null)
 
   const dispatch = useDispatch();
 
@@ -68,17 +68,23 @@ const BurgerIngredients : React.FC = () => {
 
   const handleScroll = useCallback((e) => {
 
-    const mainBlockTopCoordinate = e.target.getBoundingClientRect().top;
+      const mainBlockTopCoordinate = e.target.getBoundingClientRect().top;
 
-    const getCoordinates = (ref: React.MutableRefObject<HTMLHeadingElement>): ICoordinates => {
-      return {
-        top: ref.current.parentNode.getBoundingClientRect().top,
-        bottom: ref.current.parentNode.getBoundingClientRect().bottom,
+    const getCoordinates = (ref: React.RefObject<HTMLHeadingElement> | null): ICoordinates => {
+      if (ref !== null) {
+        return {
+          top: ref?.current?.getBoundingClientRect().top,
+          bottom: ref?.current?.getBoundingClientRect().bottom,
+        };
+      }
+      else return {
+        top: undefined,
+        bottom: undefined,
       };
     };
 
-    const isInView = (coordinates: ICoordinates) => {
-      return (
+    const isInView = (coordinates: ICoordinates ) => {
+      if (coordinates && coordinates.top && coordinates.bottom ) return (
         coordinates.top - mainBlockTopCoordinate / 2 <=
           mainBlockTopCoordinate &&
         coordinates.bottom - mainBlockTopCoordinate / 2 > mainBlockTopCoordinate
@@ -92,7 +98,8 @@ const BurgerIngredients : React.FC = () => {
     } else if (isInView(mainHeaderCoordinates)) {
       setCurrent("three");
     } else setCurrent("one");
-  }, []);
+
+  }, [sauceRef, mainRef]);
 
   const renderIngredient = (el) => {
     return (
