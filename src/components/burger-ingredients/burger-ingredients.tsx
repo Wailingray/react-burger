@@ -22,9 +22,9 @@ const BurgerIngredients : React.FC = () => {
   const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
   const [current, setCurrent] = useState<string>("one");
 
-  const bunRef = useRef<HTMLHeadingElement>(null)
-  const sauceRef = useRef<HTMLHeadingElement>(null)
-  const mainRef = useRef<HTMLHeadingElement>(null)
+  const bunRef = useRef<HTMLHeadingElement | null>(null)
+  const sauceRef = useRef<HTMLHeadingElement | null>(null)
+  const mainRef = useRef<HTMLHeadingElement | null>(null)
 
   const dispatch = useDispatch();
 
@@ -99,7 +99,7 @@ const BurgerIngredients : React.FC = () => {
       setCurrent("three");
     } else setCurrent("one");
 
-  }, [sauceRef, mainRef]);
+  }, []);
 
   const renderIngredient = (el) => {
     return (

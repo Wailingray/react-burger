@@ -1,3 +1,5 @@
+import { TIngredient, TResponseBody } from "../../utils/types";
+
 export const apiConfig = {
   ingredientsUrl: `https://norma.nomoreparties.space/api/ingredients`,
   ordersUrl: `https://norma.nomoreparties.space/api/orders`,
@@ -12,7 +14,9 @@ const getResponse = (res) => {
   return Promise.reject(res.status);
 };
 
-export const getIngredients = () => {
+export const getIngredients = (): Promise<
+TResponseBody<'data', TIngredient[]>
+> => {
   return fetch(apiConfig.ingredientsUrl, {
     headers: apiConfig.headers,
   }).then(getResponse);
