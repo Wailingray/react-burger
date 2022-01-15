@@ -7,7 +7,7 @@ export const apiConfig = {
     "Content-Type": "application/json",
   },
 };
-const getResponse = (res) => {
+const getResponse = (res: Response) => {
   if (res.ok) {
     return res.json();
   }
@@ -22,7 +22,7 @@ TResponseBody<'data', TIngredient[]>
   }).then(getResponse);
 };
 
-export const submitOrder = (userOrder) => {
+export const submitOrder = (userOrder: string[]) => {
   return fetch(apiConfig.ordersUrl, {
     method: "POST",
     headers: apiConfig.headers,

@@ -92,15 +92,6 @@ const BurgerConstructor: React.FC = () => {
     );
   };
 
-  const isDisabled =
-    constructorItems.length > 1 && bun && !submitOrderRequest ? false : true;
-  const buttonText =
-    constructorItems.length > 1 && bun
-      ? submitOrderRequest
-        ? "Подождите..."
-        : "Оформить заказ"
-      : "Соберите бургер!";
-
   return (
     <>
       <section ref={dropTarget} className={sectionClassName}>

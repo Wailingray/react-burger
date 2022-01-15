@@ -11,6 +11,17 @@ export type TIngredient = {
   __v: number;
 }
 
+export type TOrder = {
+  type: string;
+  order: {
+    success: boolean,
+    name: string,
+    order: {
+      number: number
+    }
+  }
+}
+
 export type TResponseBody<TDataKey extends string = '', TDataType = {}> = {
   [key in TDataKey]: TDataType
 } & {

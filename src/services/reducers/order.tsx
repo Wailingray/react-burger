@@ -1,19 +1,29 @@
+import { TOrder } from "../../utils/types";
 import {
   SUBMIT_ORDER_REQUEST,
   SUBMIT_ORDER_FAILED,
   SUBMIT_ORDER_SUCCESS,
-  ORDER_RESET
+  ORDER_RESET,
+  TOrderActions,
 } from "../actions/order";
 
-const initialState = {
+type TOrderState = {
+  order: {} | TOrder;
+  submitOrderRequest: boolean;
+  submitOrderFailed: boolean;
+  submitOrderSuccess: boolean;
+  submitOrderError: number | null;
+};
+
+const initialState: TOrderState = {
   order: {},
   submitOrderRequest: false,
   submitOrderFailed: false,
   submitOrderSuccess: false,
-  submitOrderError: ''
-}
+  submitOrderError: null,
+};
 
-export const orderReducer = (state = initialState, action) => {
+export const orderReducer = (state = initialState, action: TOrderActions) => {
   switch (action.type) {
     case SUBMIT_ORDER_REQUEST: {
       return { ...state, submitOrderRequest: true };
@@ -24,14 +34,14 @@ export const orderReducer = (state = initialState, action) => {
         submitOrderFailed: false,
         order: action,
         submitOrderRequest: false,
-        submitOrderSuccess: true
+        submitOrderSuccess: true,
       };
     }
     case SUBMIT_ORDER_FAILED: {
       return {
         ...initialState,
         submitOrderFailed: true,
-        submitOrderError: action.error
+        submitOrderError: action.error,
       };
     }
     case ORDER_RESET: {
@@ -44,4 +54,4 @@ export const orderReducer = (state = initialState, action) => {
       return state;
     }
   }
-}
+};

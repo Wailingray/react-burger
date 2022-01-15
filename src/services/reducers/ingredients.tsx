@@ -9,15 +9,32 @@ import {
   REPLACE_BUN,
   MOVE_ITEM,
   RECALCULATE_PRICE,
+  TIngredientActions,
 } from "../actions/ingredients";
 
 import { burgerExample } from "../../utils/utils";
+import { TIngredient } from "../../utils/types";
 
-const initialState = {
+type TIngredientsState = {
+  ingredientItems: readonly TIngredient[];
+  ingredientItemsRequest: boolean;
+  ingredientItemsFailed: boolean;
+  ingredientItemsError: number | null;
+
+  constructorItems: readonly TIngredient[];
+
+  totalPrice: number;
+
+  currentIngredient: TIngredient | {};
+
+  currentTab: "one" | "two" | "three";
+};
+
+const initialState: TIngredientsState = {
   ingredientItems: [],
   ingredientItemsRequest: false,
   ingredientItemsFailed: false,
-  ingredientItemsError: "",
+  ingredientItemsError: null,
 
   constructorItems: [...burgerExample],
 
@@ -25,10 +42,13 @@ const initialState = {
 
   currentIngredient: {},
 
-  currentTab: "items",
+  currentTab: "one",
 };
 
-export const ingredientsReducer = (state = initialState, action) => {
+export const ingredientsReducer = (
+  state = initialState,
+  action: TIngredientActions
+): TIngredientsState => {
   switch (action.type) {
     case GET_ITEMS_REQUEST: {
       return { ...state, ingredientItemsRequest: true };
@@ -53,7 +73,7 @@ export const ingredientsReducer = (state = initialState, action) => {
         ...state,
         currentIngredient: JSON.parse(
           JSON.stringify(state.ingredientItems)
-        ).find((item) => item._id === action.id),
+        ).find((item: TIngredient) => item._id === action.id),
       };
     }
     case RESET_CURRENT_INGREDIENT: {
@@ -67,7 +87,7 @@ export const ingredientsReducer = (state = initialState, action) => {
         ...state,
         constructorItems: [
           ...state.constructorItems,
-          [...state.ingredientItems].find((item) => item._id === action.id),
+          [...state.ingredientItems].find((item) => item._id === action.id)!,
         ],
       };
     }
@@ -86,8 +106,12 @@ export const ingredientsReducer = (state = initialState, action) => {
         constructorItems:
           state.constructorItems.length &&
           state.constructorItems[0].type === "bun"
-            ? [state.ingredientItems.find((item) => item._id === action.id)].concat(state.constructorItems.slice(1))
-            : [state.ingredientItems.find((item) => item._id === action.id)].concat(state.constructorItems),
+            ? [
+                state.ingredientItems.find((item) => item._id === action.id)!,
+              ].concat(state.constructorItems.slice(1))
+            : [
+                state.ingredientItems.find((item) => item._id === action.id)!,
+              ].concat(state.constructorItems),
       };
     }
     case MOVE_ITEM: {
@@ -97,11 +121,11 @@ export const ingredientsReducer = (state = initialState, action) => {
           if (idx === action.dragIndex) {
             return [...state.constructorItems].find(
               (item, idx) => idx === action.hoverIndex
-            );
+            )!;
           } else if (idx === action.hoverIndex) {
             return [...state.constructorItems].find(
               (item, idx) => idx === action.dragIndex
-            );
+            )!;
           } else return item;
         }),
       };
