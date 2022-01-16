@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import {
   SEND_TO_MODAL,
-  RESET_CURRENT_INGREDIENT,
+  RESET_CURRENT_INGREDIENT
 } from "../../services/actions/ingredients";
 import styles from "./burger-ingredients.module.css";
 import Ingredient from "../ingredient/ingredient";
@@ -17,6 +17,8 @@ import IngredientDetails from "../ingredient-details/ingredient-details";
 import { getItems } from "../../services/actions/ingredients";
 import Modal from "../modal/modal";
 import { ICoordinates } from "../../utils/interfaces";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { TIngredient } from "../../utils/types";
 
 const BurgerIngredients : React.FC = () => {
   const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
@@ -26,7 +28,7 @@ const BurgerIngredients : React.FC = () => {
   const sauceRef = useRef<HTMLHeadingElement | null>(null)
   const mainRef = useRef<HTMLHeadingElement | null>(null)
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getItems());
@@ -37,9 +39,9 @@ const BurgerIngredients : React.FC = () => {
     ingredientItemsRequest,
     ingredientItemsFailed,
     ingredientItemsError,
-  } = useSelector((state) => state.ingredients);
+  } = useAppSelector((state) => state.ingredients);
 
-  const setCurrentIngredient = (id) => {
+  const setCurrentIngredient = (id : string) => {
     dispatch({
       type: SEND_TO_MODAL,
       id,
@@ -101,7 +103,7 @@ const BurgerIngredients : React.FC = () => {
 
   }, []);
 
-  const renderIngredient = (el) => {
+  const renderIngredient = (el : TIngredient) => {
     return (
       <li
         key={el._id}

@@ -20,6 +20,7 @@ export interface ConstructorEL {
   image: string;
   name: string;
   price: number;
+  index: number;
 }
 
 export interface ICoordinates {

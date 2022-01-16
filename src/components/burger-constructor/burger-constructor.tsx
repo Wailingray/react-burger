@@ -14,10 +14,11 @@ import {
   RECALCULATE_PRICE,
 } from "../../services/actions/ingredients";
 import { ConstructorIngredient } from "../constructor-ingredient/constructor-ingredient";
-import { ConstructorDraggableEl, ConstructorEL, IngProps } from "../../utils/interfaces";
+import { ConstructorDraggableEl, ConstructorEL } from "../../utils/interfaces";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
 const BurgerConstructor: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch({
@@ -25,11 +26,11 @@ const BurgerConstructor: React.FC = () => {
     });
   }, [dispatch]);
 
-  const { constructorItems, totalPrice } = useSelector(
+  const { constructorItems, totalPrice } = useAppSelector(
     (state) => state.ingredients
   );
   const { submitOrderRequest, submitOrderSuccess, submitOrderFailed } =
-    useSelector((state) => state.order);
+  useAppSelector((state) => state.order);
 
   const [isModalOpened, setIsModalOpened] = useState(false);
 
@@ -78,7 +79,7 @@ const BurgerConstructor: React.FC = () => {
     });
   };
 
-  const renderProducts = ({ name, image, price, _id }: ConstructorEL, index : number) => {
+  const renderProducts = ({ name, image, price, _id }: ConstructorEL, index : number)  => {
     return (
       <li key={index} className={styles.ingredient}>
         <ConstructorIngredient
@@ -131,7 +132,7 @@ const BurgerConstructor: React.FC = () => {
             type="primary"
             size="large"
           >
-            {buttonText}
+            Оформить заказ
           </Button>
         </div>
       </section>

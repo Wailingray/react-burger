@@ -5,25 +5,27 @@ import { REMOVE_FROM_CONSTRUCTOR, MOVE_ITEM, RECALCULATE_PRICE } from "../../ser
 import { useSelector, useDispatch } from "react-redux";
 import { useDrop, useDrag } from "react-dnd";
 import styles from './constructor-ingredient.module.css'
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { TIngredient } from "../../utils/types";
+import { ConstructorEL } from "../../utils/interfaces"
 
-export const ConstructorIngredient = ({ name, image, price, _id, index}) => {
+export const ConstructorIngredient : React.FC<ConstructorEL> = ({ name, image, price, _id, index}) => {
+  const dispatch = useAppDispatch()
 
-  const dispatch = useDispatch()
-
-  const { constructorItems } = useSelector((state) => state.ingredients);
+  const { constructorItems } = useAppSelector((state) => state.ingredients);
 
   const isBun = constructorItems.length && constructorItems[0].type === "bun"
 
 
     const [, dropRef] = useDrop({
       accept: 'constructor-item',
-      hover: (item, monitor) => {
+      hover: (item: ConstructorEL, monitor) => {
 
           const dragIndex = item.index
           const hoverIndex = index
-          const hoverBoundingRect = ref.current?.getBoundingClientRect()
+          const hoverBoundingRect = ref?.current.getBoundingClientRect()
           const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
-          const hoverActualY = monitor.getClientOffset().y - hoverBoundingRect.top
+          const hoverActualY = monitor.getClientOffset()!.y - hoverBoundingRect.top
 
 
           if (dragIndex < hoverIndex && hoverActualY < hoverMiddleY) return
@@ -46,8 +48,8 @@ export const ConstructorIngredient = ({ name, image, price, _id, index}) => {
       }),
     })
 
-    const ref = useRef(null)
-    const dragDropRef = dragRef(dropRef(ref))
+    const ref : React.MutableRefObject<null> = useRef(null)
+    const dragDropRef : RefObject<HTMLDivElement> = dragRef(dropRef(ref))
 
   return (
     <>
