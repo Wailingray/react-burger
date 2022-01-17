@@ -89,9 +89,10 @@ export const getItemsFailed = (error: number): IGetItemsFailed => ({
   error,
 });
 
-/* export const AddToConstructor = (): IAddToConstructor => ({
-  type: GET_ITEMS_REQUEST
-}) */
+ export const AddToConstructor = (item: TIngredient): IAddToConstructor => ({
+  type: ADD_TO_CONSTRUCTOR,
+  id: item._id,
+})
 
 export const getItems: AppThunk = () => (dispatch: AppDispatch) => {
   dispatch(getItemsRequest());

@@ -1,5 +1,6 @@
 import { AppDispatch, AppThunk } from "../..";
 import { submitOrder } from "../../components/api/api";
+import { TOrder } from "../../utils/types";
 
 export const SUBMIT_ORDER_REQUEST: "SUBMIT_ORDER_REQUEST" =
   "SUBMIT_ORDER_REQUEST";
@@ -14,7 +15,7 @@ export interface ISubmitOrderRequest {
 
 export interface ISubmitOrderSuccess {
   readonly type: typeof SUBMIT_ORDER_SUCCESS;
-  readonly order: string[];
+  readonly order: TOrder;
 }
 
 export interface ISubmitOrderFailed {
@@ -36,7 +37,7 @@ export const submitOrderRequest = (): ISubmitOrderRequest => ({
   type: SUBMIT_ORDER_REQUEST,
 });
 
-export const submitOrderSuccess = (order: string[]): ISubmitOrderSuccess => ({
+export const submitOrderSuccess = (order: TOrder): ISubmitOrderSuccess => ({
   type: SUBMIT_ORDER_SUCCESS,
   order,
 });
@@ -53,7 +54,7 @@ export const dispatchOrder: AppThunk =
       .then((res) => {
         dispatch(submitOrderSuccess(res));
       })
-      .catch((err) => {
+      /* .catch((err) => {
         dispatch(submitOrderFailed(err));
-      });
+      }); */
   };

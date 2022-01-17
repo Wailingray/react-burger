@@ -1,29 +1,28 @@
 export type TIngredient = {
   _id: string;
   name: string;
-  type: string;
+  type: "bun" | "sauce" | "main";
   proteins: number;
   fat: number;
   carbohydrates: number;
   calories: number;
   price: number;
   image: string;
-  __v: number;
-}
+  image_mobile: string;
+  image_large: string;
+  __v: 0;
+};
 
 export type TOrder = {
-  type: string;
+  success: boolean;
+  name: string;
   order: {
-    success: boolean,
-    name: string,
-    order: {
-      number: number
-    }
-  }
-}
+    number: number;
+  };
+};
 
-export type TResponseBody<TDataKey extends string = '', TDataType = {}> = {
-  [key in TDataKey]: TDataType
+export type TResponseBody<TDataKey extends string = "", TDataType = {}> = {
+  [key in TDataKey]: TDataType;
 } & {
   success: boolean;
   message?: string;

@@ -79,7 +79,7 @@ const BurgerConstructor: React.FC = () => {
     });
   };
 
-  const renderProducts = ({ name, image, price, _id }: ConstructorEL, index : number)  => {
+  const renderProducts = ({ name, image, price, _id }: ConstructorEL, index : number) => {
     return (
       <li key={index} className={styles.ingredient}>
         <ConstructorIngredient

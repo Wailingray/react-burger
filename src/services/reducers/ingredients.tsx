@@ -25,7 +25,7 @@ type TIngredientsState = {
 
   totalPrice: number;
 
-  currentIngredient: TIngredient | {};
+  currentIngredient: TIngredient | null;
 
   currentTab: "one" | "two" | "three";
 };
@@ -40,7 +40,7 @@ const initialState: TIngredientsState = {
 
   totalPrice: 0,
 
-  currentIngredient: {},
+  currentIngredient: null,
 
   currentTab: "one",
 };
@@ -79,7 +79,7 @@ export const ingredientsReducer = (
     case RESET_CURRENT_INGREDIENT: {
       return {
         ...state,
-        currentIngredient: {},
+        currentIngredient: null,
       };
     }
     case ADD_TO_CONSTRUCTOR: {

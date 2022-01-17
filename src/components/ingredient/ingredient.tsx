@@ -6,12 +6,13 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import PropTypes from "prop-types";
 import { useDrag } from "react-dnd";
 import { IngProps } from "../../utils/interfaces";
+import { useAppSelector } from "../../hooks/hooks";
 
 
 const Ingredient: React.FC<IngProps> = (props) => {
   const [counter, setCounter] = useState(0);
 
-  const { constructorItems } = useSelector((state) => state.ingredients);
+  const { constructorItems } = useAppSelector((state) => state.ingredients);
 
   useEffect(() => {
     setCounter(constructorItems.filter((el) => el._id === props.id).length);

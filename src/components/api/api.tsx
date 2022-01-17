@@ -14,20 +14,22 @@ const getResponse = (res: Response) => {
   return Promise.reject(res.status);
 };
 
-export const getIngredients = (): Promise<
+export const getIngredients = async (): Promise<
 TResponseBody<'data', TIngredient[]>
 > => {
-  return fetch(apiConfig.ingredientsUrl, {
+  const res = await fetch(apiConfig.ingredientsUrl, {
     headers: apiConfig.headers,
-  }).then(getResponse);
+  });
+  return getResponse(res);
 };
 
-export const submitOrder = (userOrder: string[]) => {
-  return fetch(apiConfig.ordersUrl, {
+export const submitOrder = async (userOrder: string[]) => {
+  const res = await fetch(apiConfig.ordersUrl, {
     method: "POST",
     headers: apiConfig.headers,
     body: JSON.stringify({
       ingredients: userOrder,
     }),
-  }).then(getResponse);
+  });
+  return getResponse(res);
 };

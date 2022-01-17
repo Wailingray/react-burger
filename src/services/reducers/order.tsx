@@ -8,7 +8,7 @@ import {
 } from "../actions/order";
 
 type TOrderState = {
-  order: {} | TOrder;
+  order: TOrder | null;
   submitOrderRequest: boolean;
   submitOrderFailed: boolean;
   submitOrderSuccess: boolean;
@@ -16,14 +16,14 @@ type TOrderState = {
 };
 
 const initialState: TOrderState = {
-  order: {},
+  order: null,
   submitOrderRequest: false,
   submitOrderFailed: false,
   submitOrderSuccess: false,
   submitOrderError: null,
 };
 
-export const orderReducer = (state = initialState, action: TOrderActions) => {
+export const orderReducer = (state = initialState, action: TOrderActions) : TOrderState => {
   switch (action.type) {
     case SUBMIT_ORDER_REQUEST: {
       return { ...state, submitOrderRequest: true };
@@ -32,7 +32,7 @@ export const orderReducer = (state = initialState, action: TOrderActions) => {
       return {
         ...state,
         submitOrderFailed: false,
-        order: action,
+        order: action.order,
         submitOrderRequest: false,
         submitOrderSuccess: true,
       };
