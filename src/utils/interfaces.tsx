@@ -22,8 +22,3 @@ export interface ConstructorEL {
   price: number;
   index? : number
 }
-
-export interface ICoordinates {
-  top: number | undefined;
-  bottom: number| undefined;
-}

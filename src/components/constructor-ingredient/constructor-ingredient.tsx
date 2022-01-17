@@ -2,15 +2,13 @@ import React, { useRef } from "react";
 import { DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
 import {
-  REMOVE_FROM_CONSTRUCTOR,
-  MOVE_ITEM,
-  RECALCULATE_PRICE,
+  moveItem,
+  recalculatePrice,
+  removeFromConstructor,
 } from "../../services/actions/ingredients";
-import { useSelector, useDispatch } from "react-redux";
 import { useDrop, useDrag } from "react-dnd";
 import styles from "./constructor-ingredient.module.css";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-import { TIngredient } from "../../utils/types";
 import { ConstructorEL } from "../../utils/interfaces";
 
 export const ConstructorIngredient: React.FC<ConstructorEL> = ({
@@ -41,11 +39,10 @@ export const ConstructorIngredient: React.FC<ConstructorEL> = ({
         if (dragIndex! < hoverIndex! && hoverActualY < hoverMiddleY) return;
         if (dragIndex! > hoverIndex! && hoverActualY > hoverMiddleY) return;
 
-        dispatch({
-          type: MOVE_ITEM,
-          dragIndex: dragIndex! + (isBun ? 1 : 0),
-          hoverIndex: hoverIndex! + (isBun ? 1 : 0),
-        });
+        dispatch(
+          moveItem(dragIndex! + (isBun ? 1 : 0), hoverIndex! + (isBun ? 1 : 0))
+        );
+
         item.index = hoverIndex;
       }
     },
@@ -59,7 +56,7 @@ export const ConstructorIngredient: React.FC<ConstructorEL> = ({
     }),
   });
 
-  const ref: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
+  const ref: React.RefObject<HTMLDivElement> = useRef(null);
   const dragDropRef: any = dragRef(dropRef(ref));
 
   return (
@@ -67,20 +64,13 @@ export const ConstructorIngredient: React.FC<ConstructorEL> = ({
       <div className={styles.ingredient} id={_id} ref={dragDropRef}>
         <DragIcon type="primary" />
         <ConstructorElement
-          /*           style={{ width: "100%" }} */
           isLocked={false}
           text={name}
           price={price}
           thumbnail={image}
           handleClose={() => {
-            dispatch({
-              type: REMOVE_FROM_CONSTRUCTOR,
-              id: _id,
-              index: index! + (isBun ? 1 : 0),
-            });
-            dispatch({
-              type: RECALCULATE_PRICE,
-            });
+            dispatch(removeFromConstructor(index! + (isBun ? 1 : 0)));
+            dispatch(recalculatePrice());
           }}
         />
       </div>

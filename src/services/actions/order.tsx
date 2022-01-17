@@ -47,6 +47,10 @@ export const submitOrderFailed = (error: number): ISubmitOrderFailed => ({
   error,
 });
 
+export const resetOrder = (): IOrderReset => ({
+  type: ORDER_RESET,
+});
+
 export const dispatchOrder: AppThunk =
   (userOrder: string[]) => (dispatch: AppDispatch) => {
     dispatch(submitOrderRequest());
@@ -54,7 +58,7 @@ export const dispatchOrder: AppThunk =
       .then((res) => {
         dispatch(submitOrderSuccess(res));
       })
-      /* .catch((err) => {
+      .catch((err) => {
         dispatch(submitOrderFailed(err));
-      }); */
+      });
   };

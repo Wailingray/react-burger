@@ -1,12 +1,12 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { useAppSelector } from "../../hooks/hooks";
 import doneImage from "../../images/done.svg";
 import styles from "./order-details.module.css";
 
 const OrderDetails: React.FC = () => {
-  const { order, submitOrderSuccess, submitOrderError } =
-    useAppSelector((state) => state.order);
+  const { order, submitOrderSuccess, submitOrderError } = useAppSelector(
+    (state) => state.order
+  );
 
   if (submitOrderSuccess && order !== null) {
     return (

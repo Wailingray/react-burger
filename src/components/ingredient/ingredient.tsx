@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import styles from "./ingredient.module.css";
 import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
 import { useDrag } from "react-dnd";
 import { IngProps } from "../../utils/interfaces";
 import { useAppSelector } from "../../hooks/hooks";
-
 
 const Ingredient: React.FC<IngProps> = (props) => {
   const [counter, setCounter] = useState(0);
@@ -49,6 +46,5 @@ const Ingredient: React.FC<IngProps> = (props) => {
     </div>
   );
 };
-
 
 export default Ingredient;

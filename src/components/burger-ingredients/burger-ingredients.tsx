@@ -1,32 +1,30 @@
-import React,{
+import React, {
   useState,
   useMemo,
   useEffect,
   useRef,
   useCallback,
 } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import {
-  SEND_TO_MODAL,
-  RESET_CURRENT_INGREDIENT
+  sendToModal,
+  resetCurrentIngredient,
 } from "../../services/actions/ingredients";
 import styles from "./burger-ingredients.module.css";
 import Ingredient from "../ingredient/ingredient";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import { getItems } from "../../services/actions/ingredients";
 import Modal from "../modal/modal";
-import { ICoordinates } from "../../utils/interfaces";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { TIngredient } from "../../utils/types";
 
-const BurgerIngredients : React.FC = () => {
+const BurgerIngredients: React.FC = () => {
   const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
   const [current, setCurrent] = useState<string>("one");
 
-  const bunRef = useRef<HTMLHeadingElement | null>(null)
-  const sauceRef = useRef<HTMLHeadingElement | null>(null)
-  const mainRef = useRef<HTMLHeadingElement | null>(null)
+  const bunRef = useRef<HTMLHeadingElement | null>(null);
+  const sauceRef = useRef<HTMLHeadingElement | null>(null);
+  const mainRef = useRef<HTMLHeadingElement | null>(null);
 
   const dispatch = useAppDispatch();
 
@@ -41,69 +39,52 @@ const BurgerIngredients : React.FC = () => {
     ingredientItemsError,
   } = useAppSelector((state) => state.ingredients);
 
-  const setCurrentIngredient = (id : string) => {
-    dispatch({
-      type: SEND_TO_MODAL,
-      id,
-    });
-  };
-
-  const resetCurrentIngredient = () => {
-    dispatch({
-      type: RESET_CURRENT_INGREDIENT,
-    });
-  };
-
   const openModal = () => {
     setIsModalOpened(true);
   };
 
   const closeModal = () => {
     setIsModalOpened(false);
-    resetCurrentIngredient();
+    dispatch(resetCurrentIngredient());
   };
 
   const showIngredient = (evt: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-    setCurrentIngredient(evt.currentTarget.id);
+    dispatch(sendToModal(evt.currentTarget.id));
     openModal();
   };
 
   const handleScroll = useCallback((e) => {
+    const mainBlockTopCoordinate = e.target.getBoundingClientRect().top;
 
-      const mainBlockTopCoordinate = e.target.getBoundingClientRect().top;
-
-    const getCoordinates = (ref: React.RefObject<HTMLHeadingElement> | null): ICoordinates => {
-      if (ref !== null) {
-        return {
-          top: ref?.current?.getBoundingClientRect().top,
-          bottom: ref?.current?.getBoundingClientRect().bottom,
-        };
-      }
-      else return {
-        top: undefined,
-        bottom: undefined,
-      };
+    const getTopCoordinate = (
+      ref: React.RefObject<HTMLHeadingElement> | null
+    ): number => {
+      if (ref !== null) return ref?.current?.getBoundingClientRect().top!;
+      else return 0;
     };
 
-    const isInView = (coordinates: ICoordinates ) => {
-      if (coordinates && coordinates.top && coordinates.bottom ) return (
-        coordinates.top - mainBlockTopCoordinate / 2 <=
-          mainBlockTopCoordinate &&
-        coordinates.bottom - mainBlockTopCoordinate / 2 > mainBlockTopCoordinate
-      );
+    const getDistance = (topCoordinate: number) => {
+      return Math.abs(topCoordinate - mainBlockTopCoordinate);
     };
-    const sauceHeaderCoordinates = getCoordinates(sauceRef);
-    const mainHeaderCoordinates = getCoordinates(mainRef);
 
-    if (isInView(sauceHeaderCoordinates)) {
+    const sauceHeaderCoordinates = getTopCoordinate(sauceRef);
+    const mainHeaderCoordinates = getTopCoordinate(mainRef);
+    const bunHeaderCoordinates = getTopCoordinate(bunRef);
+
+    const closestBlockCoord = Math.min(
+      getDistance(sauceHeaderCoordinates)!,
+      getDistance(mainHeaderCoordinates)!,
+      getDistance(bunHeaderCoordinates)!
+    );
+
+    if (closestBlockCoord === getDistance(sauceHeaderCoordinates)) {
       setCurrent("two");
-    } else if (isInView(mainHeaderCoordinates)) {
+    } else if (closestBlockCoord === getDistance(mainHeaderCoordinates)) {
       setCurrent("three");
     } else setCurrent("one");
-
   }, []);
 
-  const renderIngredient = (el : TIngredient) => {
+  const renderIngredient = (el: TIngredient) => {
     return (
       <li
         key={el._id}

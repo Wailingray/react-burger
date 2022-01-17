@@ -89,10 +89,41 @@ export const getItemsFailed = (error: number): IGetItemsFailed => ({
   error,
 });
 
- export const AddToConstructor = (item: TIngredient): IAddToConstructor => ({
+export const addToConstructor = (id: string): IAddToConstructor => ({
   type: ADD_TO_CONSTRUCTOR,
-  id: item._id,
-})
+  id,
+});
+
+export const recalculatePrice = (): IRecalculatePrice => ({
+  type: RECALCULATE_PRICE,
+});
+
+export const replaceBun = (id: string): IReplaceBun => ({
+  type: REPLACE_BUN,
+  id,
+});
+
+export const sendToModal = (id: string): ISendToModal => ({
+  type: SEND_TO_MODAL,
+  id,
+});
+
+export const resetCurrentIngredient = (): IResetCurrentIngredient => ({
+  type: RESET_CURRENT_INGREDIENT,
+});
+
+export const moveItem = (dragIndex: number, hoverIndex: number): IMoveItem => ({
+  type: MOVE_ITEM,
+  dragIndex,
+  hoverIndex,
+});
+
+export const removeFromConstructor = (
+  index: number
+): IRemoveFromConstructor => ({
+  type: REMOVE_FROM_CONSTRUCTOR,
+  index,
+});
 
 export const getItems: AppThunk = () => (dispatch: AppDispatch) => {
   dispatch(getItemsRequest());

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import styles from "./burger-constructor.module.css";
 import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -7,11 +6,11 @@ import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { useDrop } from "react-dnd";
-import { dispatchOrder, ORDER_RESET } from "../../services/actions/order";
+import { dispatchOrder, resetOrder } from "../../services/actions/order";
 import {
-  ADD_TO_CONSTRUCTOR,
-  REPLACE_BUN,
-  RECALCULATE_PRICE,
+  recalculatePrice,
+  replaceBun,
+  addToConstructor,
 } from "../../services/actions/ingredients";
 import { ConstructorIngredient } from "../constructor-ingredient/constructor-ingredient";
 import { ConstructorDraggableEl, ConstructorEL } from "../../utils/interfaces";
@@ -21,16 +20,14 @@ const BurgerConstructor: React.FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch({
-      type: RECALCULATE_PRICE,
-    });
+    dispatch(recalculatePrice());
   }, [dispatch]);
 
   const { constructorItems, totalPrice } = useAppSelector(
     (state) => state.ingredients
   );
-  const { submitOrderRequest, submitOrderSuccess, submitOrderFailed } =
-  useAppSelector((state) => state.order);
+  const { submitOrderSuccess, submitOrderFailed } =
+    useAppSelector((state) => state.order);
 
   const [isModalOpened, setIsModalOpened] = useState(false);
 
@@ -41,9 +38,7 @@ const BurgerConstructor: React.FC = () => {
 
   const closeModal = () => {
     setIsModalOpened(false);
-    dispatch({
-      type: ORDER_RESET,
-    });
+    dispatch(resetOrder());
   };
 
   const [{ isHover }, dropTarget] = useDrop({
@@ -51,7 +46,7 @@ const BurgerConstructor: React.FC = () => {
     collect: (monitor) => ({
       isHover: monitor.isOver(),
     }),
-    drop(item : ConstructorDraggableEl ) {
+    drop(item: ConstructorDraggableEl) {
       addItem(item);
     },
   });
@@ -68,18 +63,16 @@ const BurgerConstructor: React.FC = () => {
     [constructorItems]
   );
 
-  const addItem = (item : ConstructorDraggableEl) => {
+  const addItem = (item: ConstructorDraggableEl) => {
     const isBun = item.ingType === "bun";
-    dispatch({
-      type: isBun ? REPLACE_BUN : ADD_TO_CONSTRUCTOR,
-      id: item.id,
-    });
-    dispatch({
-      type: RECALCULATE_PRICE,
-    });
+    isBun ? dispatch(replaceBun(item.id)) : dispatch(addToConstructor(item.id));
+    dispatch(recalculatePrice());
   };
 
-  const renderProducts = ({ name, image, price, _id }: ConstructorEL, index : number) => {
+  const renderProducts = (
+    { name, image, price, _id }: ConstructorEL,
+    index: number
+  ) => {
     return (
       <li key={index} className={styles.ingredient}>
         <ConstructorIngredient
@@ -127,11 +120,7 @@ const BurgerConstructor: React.FC = () => {
           <p className="text text_type_digits-medium">
             {totalPrice} <CurrencyIcon type="primary" />
           </p>
-          <Button
-            onClick={submitOrder}
-            type="primary"
-            size="large"
-          >
+          <Button onClick={submitOrder} type="primary" size="large">
             Оформить заказ
           </Button>
         </div>

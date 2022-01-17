@@ -23,7 +23,10 @@ const initialState: TOrderState = {
   submitOrderError: null,
 };
 
-export const orderReducer = (state = initialState, action: TOrderActions) : TOrderState => {
+export const orderReducer = (
+  state = initialState,
+  action: TOrderActions
+): TOrderState => {
   switch (action.type) {
     case SUBMIT_ORDER_REQUEST: {
       return { ...state, submitOrderRequest: true };

@@ -15,7 +15,7 @@ const getResponse = (res: Response) => {
 };
 
 export const getIngredients = async (): Promise<
-TResponseBody<'data', TIngredient[]>
+  TResponseBody<"data", TIngredient[]>
 > => {
   const res = await fetch(apiConfig.ingredientsUrl, {
     headers: apiConfig.headers,
