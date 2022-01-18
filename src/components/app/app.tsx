@@ -5,25 +5,21 @@ import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import { HomePage } from "../../pages/home";
+import { LoginPage } from "../../pages/login";
 function App() {
   return (
     <Router>
       <AppHeader />
-      <Routes>
-        <Route path="/">
-          <DndProvider backend={HTML5Backend}>
-            <main className={styles.main}>
-              <BurgerIngredients />
-              <BurgerConstructor />
-            </main>
-          </DndProvider>
+      <Switch>
+        <Route path="/" exact={true}>
+          <HomePage />
         </Route>
-        <Route path="/login">
-          <p>123123123</p>
+        <Route path="/login" exact={true}>
+          <LoginPage />
         </Route>
-      </Routes>
+      </Switch>
     </Router>
   );
 }

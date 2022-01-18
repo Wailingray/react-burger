@@ -1,0 +1,16 @@
+.main {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: flex-end;
+  gap: 40px;
+}
+
+.message {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
