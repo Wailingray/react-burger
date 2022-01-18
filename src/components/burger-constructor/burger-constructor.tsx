@@ -6,7 +6,10 @@ import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { useDrop } from "react-dnd";
-import { dispatchOrder, resetOrder } from "../../services/actions/order";
+import {
+  dispatchOrder,
+  resetOrder,
+} from "../../services/actions/order";
 import {
   recalculatePrice,
   replaceBun,
@@ -26,9 +29,8 @@ const BurgerConstructor: React.FC = () => {
   const { constructorItems, totalPrice } = useAppSelector(
     (state) => state.ingredients
   );
-  const { submitOrderSuccess, submitOrderFailed } = useAppSelector(
-    (state) => state.order
-  );
+  const { submitOrderSuccess, submitOrderFailed, submitOrderRequest } =
+    useAppSelector((state) => state.order);
 
   const [isModalOpened, setIsModalOpened] = useState(false);
 
@@ -86,6 +88,9 @@ const BurgerConstructor: React.FC = () => {
       </li>
     );
   };
+
+  const buttonText = submitOrderRequest ? "Подождите..." : "Оформить заказ";
+
   return (
     <>
       <section ref={dropTarget} className={sectionClassName}>
@@ -117,7 +122,8 @@ const BurgerConstructor: React.FC = () => {
           )}
           {constructorItems.length === 0 && (
             <p className="mt-15 text text_type_main-medium">
-              Пожалуйста, перенесите сюда булку и ингредиенты для создания заказа
+              Пожалуйста, перенесите сюда булку и ингредиенты для создания
+              заказа
             </p>
           )}
         </ul>
@@ -126,7 +132,7 @@ const BurgerConstructor: React.FC = () => {
             {totalPrice} <CurrencyIcon type="primary" />
           </p>
           <Button onClick={submitOrder} type="primary" size="large">
-            Оформить заказ
+            {buttonText}
           </Button>
         </div>
       </section>
