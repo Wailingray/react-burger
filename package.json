@@ -1,5 +1,5 @@
 {
-  "homepage" : "http://Wailingray.github.io/react-burger",
+  "homepage": "http://Wailingray.github.io/react-burger",
   "name": "react-burger",
   "version": "0.1.0",
   "private": true,
@@ -20,6 +20,7 @@
     "react-dom": "^17.0.2",
     "react-intersection-observer": "^8.33.0",
     "react-redux": "^7.2.6",
+    "react-router-dom": "^6.2.1",
     "react-scripts": "4.0.3",
     "react-spring": "^9.3.0",
     "redux": "^4.1.2",
