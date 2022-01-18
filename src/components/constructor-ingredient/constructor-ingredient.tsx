@@ -8,7 +8,7 @@ import {
 } from "../../services/actions/ingredients";
 import { useDrop, useDrag } from "react-dnd";
 import styles from "./constructor-ingredient.module.css";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
 import { ConstructorEL } from "../../utils/interfaces";
 
 export const ConstructorIngredient: React.FC<ConstructorEL> = ({

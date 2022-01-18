@@ -4,7 +4,7 @@ import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useDrag } from "react-dnd";
 import { IngProps } from "../../utils/interfaces";
-import { useAppSelector } from "../../hooks/hooks";
+import { useAppSelector } from "../../services/hooks/hooks";
 
 const Ingredient: React.FC<IngProps> = (props) => {
   const [counter, setCounter] = useState(0);

@@ -10,6 +10,7 @@ import {
   MOVE_ITEM,
   RECALCULATE_PRICE,
   TIngredientActions,
+  RESET_CONSTRUCTOR,
 } from "../actions/ingredients";
 
 import { burgerExample } from "../../utils/utils";
@@ -137,6 +138,12 @@ export const ingredientsReducer = (
           (item, index) => index !== action.index
         ),
       };
+    }
+    case RESET_CONSTRUCTOR: {
+      return {
+        ...state,
+        constructorItems: []
+      }
     }
     default: {
       return state;

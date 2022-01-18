@@ -14,6 +14,7 @@ export const RECALCULATE_PRICE: "RECALCULATE_PRICE" = "RECALCULATE_PRICE";
 export const SEND_TO_MODAL: "SEND_TO_MODAL" = "SEND_TO_MODAL";
 export const RESET_CURRENT_INGREDIENT: "RESET_CURRENT_INGREDIENT" =
   "RESET_CURRENT_INGREDIENT";
+export const RESET_CONSTRUCTOR: "RESET_CONSTRUCTOR" = "RESET_CONSTRUCTOR";
 
 export interface IGetItemsRequest {
   readonly type: typeof GET_ITEMS_REQUEST;
@@ -63,6 +64,10 @@ export interface IResetCurrentIngredient {
   readonly type: typeof RESET_CURRENT_INGREDIENT;
 }
 
+export interface IResetConstructor {
+  readonly type: typeof RESET_CONSTRUCTOR;
+}
+
 export type TIngredientActions =
   | IGetItemsRequest
   | IGetItemsSuccess
@@ -73,6 +78,7 @@ export type TIngredientActions =
   | IMoveItem
   | IRecalculatePrice
   | ISendToModal
+  | IResetConstructor
   | IResetCurrentIngredient;
 
 export const getItemsRequest = (): IGetItemsRequest => ({
@@ -123,6 +129,10 @@ export const removeFromConstructor = (
 ): IRemoveFromConstructor => ({
   type: REMOVE_FROM_CONSTRUCTOR,
   index,
+});
+
+export const resetConstructor = (): IResetConstructor => ({
+  type: RESET_CONSTRUCTOR,
 });
 
 export const getItems: AppThunk = () => (dispatch: AppDispatch) => {

@@ -15,7 +15,7 @@ import Ingredient from "../ingredient/ingredient";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import { getItems } from "../../services/actions/ingredients";
 import Modal from "../modal/modal";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
 import { TIngredient } from "../../utils/types";
 
 const BurgerIngredients: React.FC = () => {

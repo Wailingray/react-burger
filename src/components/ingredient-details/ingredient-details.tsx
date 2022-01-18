@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./ingredient-details.module.css";
-import { useAppSelector } from "../../hooks/hooks";
+import { useAppSelector } from "../../services/hooks/hooks";
 
 const IngredientDetails: React.FC = () => {
   const { currentIngredient } = useAppSelector((state) => state.ingredients);

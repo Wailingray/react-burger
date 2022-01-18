@@ -14,7 +14,7 @@ import {
 } from "../../services/actions/ingredients";
 import { ConstructorIngredient } from "../constructor-ingredient/constructor-ingredient";
 import { ConstructorDraggableEl, ConstructorEL } from "../../utils/interfaces";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
 
 const BurgerConstructor: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -26,8 +26,9 @@ const BurgerConstructor: React.FC = () => {
   const { constructorItems, totalPrice } = useAppSelector(
     (state) => state.ingredients
   );
-  const { submitOrderSuccess, submitOrderFailed } =
-    useAppSelector((state) => state.order);
+  const { submitOrderSuccess, submitOrderFailed } = useAppSelector(
+    (state) => state.order
+  );
 
   const [isModalOpened, setIsModalOpened] = useState(false);
 
@@ -85,7 +86,6 @@ const BurgerConstructor: React.FC = () => {
       </li>
     );
   };
-
   return (
     <>
       <section ref={dropTarget} className={sectionClassName}>
@@ -114,6 +114,11 @@ const BurgerConstructor: React.FC = () => {
                 thumbnail={bun.image}
               />
             </li>
+          )}
+          {constructorItems.length === 0 && (
+            <p className="mt-15 text text_type_main-medium">
+              Пожалуйста, перенесите сюда булку и ингредиенты для создания заказа
+            </p>
           )}
         </ul>
         <div className={`${styles.confirmationZone} mt-10`}>

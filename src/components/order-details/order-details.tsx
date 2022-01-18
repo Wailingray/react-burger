@@ -1,5 +1,5 @@
 import React from "react";
-import { useAppSelector } from "../../hooks/hooks";
+import { useAppSelector } from "../../services/hooks/hooks";
 import doneImage from "../../images/done.svg";
 import styles from "./order-details.module.css";
 
