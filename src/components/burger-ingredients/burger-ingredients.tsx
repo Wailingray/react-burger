@@ -1,32 +1,32 @@
-import {
-  React,
+import React, {
   useState,
   useMemo,
   useEffect,
   useRef,
   useCallback,
 } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import {
-  SEND_TO_MODAL,
-  RESET_CURRENT_INGREDIENT,
+  sendToModal,
+  resetCurrentIngredient,
 } from "../../services/actions/ingredients";
 import styles from "./burger-ingredients.module.css";
 import Ingredient from "../ingredient/ingredient";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import { getItems } from "../../services/actions/ingredients";
 import Modal from "../modal/modal";
+import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
+import { TIngredient } from "../../utils/types";
 
-const BurgerIngredients = () => {
-  const [isModalOpened, setIsModalOpened] = useState(false);
-  const [current, setCurrent] = useState("one");
+const BurgerIngredients: React.FC = () => {
+  const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
+  const [current, setCurrent] = useState<string>("one");
 
-  const bunRef = useRef(null);
-  const sauceRef = useRef(null);
-  const mainRef = useRef(null);
+  const bunRef = useRef<HTMLHeadingElement | null>(null);
+  const sauceRef = useRef<HTMLHeadingElement | null>(null);
+  const mainRef = useRef<HTMLHeadingElement | null>(null);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getItems());
@@ -37,20 +37,7 @@ const BurgerIngredients = () => {
     ingredientItemsRequest,
     ingredientItemsFailed,
     ingredientItemsError,
-  } = useSelector((state) => state.ingredients);
-
-  const setCurrentIngredient = (id) => {
-    dispatch({
-      type: SEND_TO_MODAL,
-      id,
-    });
-  };
-
-  const resetCurrentIngredient = () => {
-    dispatch({
-      type: RESET_CURRENT_INGREDIENT,
-    });
-  };
+  } = useAppSelector((state) => state.ingredients);
 
   const openModal = () => {
     setIsModalOpened(true);
@@ -58,42 +45,46 @@ const BurgerIngredients = () => {
 
   const closeModal = () => {
     setIsModalOpened(false);
-    resetCurrentIngredient();
+    dispatch(resetCurrentIngredient());
   };
 
-  const showIngredient = (evt) => {
-    setCurrentIngredient(evt.currentTarget.id);
+  const showIngredient = (evt: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+    dispatch(sendToModal(evt.currentTarget.id));
     openModal();
   };
 
   const handleScroll = useCallback((e) => {
     const mainBlockTopCoordinate = e.target.getBoundingClientRect().top;
 
-    const getCoordinates = (ref) => {
-      return {
-        top: ref.current.parentNode.getBoundingClientRect().top,
-        bottom: ref.current.parentNode.getBoundingClientRect().bottom,
-      };
+    const getTopCoordinate = (
+      ref: React.RefObject<HTMLHeadingElement> | null
+    ): number => {
+      if (ref !== null) return ref?.current?.getBoundingClientRect().top!;
+      else return 0;
     };
 
-    const isInView = (coordinates) => {
-      return (
-        coordinates.top - mainBlockTopCoordinate / 2 <=
-          mainBlockTopCoordinate &&
-        coordinates.bottom - mainBlockTopCoordinate / 2 > mainBlockTopCoordinate
-      );
+    const getDistance = (topCoordinate: number) => {
+      return Math.abs(topCoordinate - mainBlockTopCoordinate);
     };
-    const sauceHeaderCoordinates = getCoordinates(sauceRef);
-    const mainHeaderCoordinates = getCoordinates(mainRef);
 
-    if (isInView(sauceHeaderCoordinates, "two")) {
+    const sauceHeaderCoordinates = getTopCoordinate(sauceRef);
+    const mainHeaderCoordinates = getTopCoordinate(mainRef);
+    const bunHeaderCoordinates = getTopCoordinate(bunRef);
+
+    const closestBlockCoord = Math.min(
+      getDistance(sauceHeaderCoordinates)!,
+      getDistance(mainHeaderCoordinates)!,
+      getDistance(bunHeaderCoordinates)!
+    );
+
+    if (closestBlockCoord === getDistance(sauceHeaderCoordinates)) {
       setCurrent("two");
-    } else if (isInView(mainHeaderCoordinates, "three")) {
+    } else if (closestBlockCoord === getDistance(mainHeaderCoordinates)) {
       setCurrent("three");
     } else setCurrent("one");
   }, []);
 
-  const renderIngredient = (el) => {
+  const renderIngredient = (el: TIngredient) => {
     return (
       <li
         key={el._id}
@@ -189,7 +180,7 @@ const BurgerIngredients = () => {
             active={current === "one"}
             onClick={(value) => {
               setCurrent(value);
-              bunRef.current.scrollIntoView({ behavior: "smooth" });
+              bunRef.current?.scrollIntoView({ behavior: "smooth" });
             }}
           >
             Булки
@@ -199,7 +190,7 @@ const BurgerIngredients = () => {
             active={current === "two"}
             onClick={(value) => {
               setCurrent(value);
-              sauceRef.current.scrollIntoView({ behavior: "smooth" });
+              sauceRef.current?.scrollIntoView({ behavior: "smooth" });
             }}
           >
             Соусы
@@ -209,7 +200,7 @@ const BurgerIngredients = () => {
             active={current === "three"}
             onClick={(value) => {
               setCurrent(value);
-              mainRef.current.scrollIntoView({ behavior: "smooth" });
+              mainRef.current?.scrollIntoView({ behavior: "smooth" });
             }}
           >
             Начинки

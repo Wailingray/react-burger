@@ -1,4 +1,6 @@
-export const burgerExample = [
+import { TIngredient } from "./types";
+
+export const burgerExample : TIngredient[] = [
   {
     _id: "60d3b41abdacab0026a733c6",
     name: "Краторная булка N-200i",

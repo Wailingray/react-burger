@@ -1,5 +1,4 @@
-import { React, useState, useEffect, useMemo, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import styles from "./burger-constructor.module.css";
 import { ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -7,28 +6,31 @@ import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { useDrop } from "react-dnd";
-import { dispatchOrder, ORDER_RESET } from "../../services/actions/order";
 import {
-  ADD_TO_CONSTRUCTOR,
-  REPLACE_BUN,
-  RECALCULATE_PRICE,
+  dispatchOrder,
+  resetOrder,
+} from "../../services/actions/order";
+import {
+  recalculatePrice,
+  replaceBun,
+  addToConstructor,
 } from "../../services/actions/ingredients";
 import { ConstructorIngredient } from "../constructor-ingredient/constructor-ingredient";
+import { ConstructorDraggableEl, ConstructorEL } from "../../utils/interfaces";
+import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
 
-const BurgerConstructor = () => {
-  const dispatch = useDispatch();
+const BurgerConstructor: React.FC = () => {
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch({
-      type: RECALCULATE_PRICE,
-    });
+    dispatch(recalculatePrice());
   }, [dispatch]);
 
-  const { constructorItems, totalPrice } = useSelector(
+  const { constructorItems, totalPrice } = useAppSelector(
     (state) => state.ingredients
   );
-  const { submitOrderRequest, submitOrderSuccess, submitOrderFailed } =
-    useSelector((state) => state.order);
+  const { submitOrderSuccess, submitOrderFailed, submitOrderRequest } =
+    useAppSelector((state) => state.order);
 
   const [isModalOpened, setIsModalOpened] = useState(false);
 
@@ -39,9 +41,7 @@ const BurgerConstructor = () => {
 
   const closeModal = () => {
     setIsModalOpened(false);
-    dispatch({
-      type: ORDER_RESET,
-    });
+    dispatch(resetOrder());
   };
 
   const [{ isHover }, dropTarget] = useDrop({
@@ -49,7 +49,7 @@ const BurgerConstructor = () => {
     collect: (monitor) => ({
       isHover: monitor.isOver(),
     }),
-    drop(item) {
+    drop(item: ConstructorDraggableEl) {
       addItem(item);
     },
   });
@@ -66,18 +66,16 @@ const BurgerConstructor = () => {
     [constructorItems]
   );
 
-  const addItem = (item) => {
+  const addItem = (item: ConstructorDraggableEl) => {
     const isBun = item.ingType === "bun";
-    dispatch({
-      type: isBun ? REPLACE_BUN : ADD_TO_CONSTRUCTOR,
-      id: item.id,
-    });
-    dispatch({
-      type: RECALCULATE_PRICE,
-    });
+    isBun ? dispatch(replaceBun(item.id)) : dispatch(addToConstructor(item.id));
+    dispatch(recalculatePrice());
   };
 
-  const renderProducts = ({ name, image, price, _id }, index) => {
+  const renderProducts = (
+    { name, image, price, _id }: ConstructorEL,
+    index: number
+  ) => {
     return (
       <li key={index} className={styles.ingredient}>
         <ConstructorIngredient
@@ -91,14 +89,7 @@ const BurgerConstructor = () => {
     );
   };
 
-  const isDisabled =
-    constructorItems.length > 1 && bun && !submitOrderRequest ? false : true;
-  const buttonText =
-    constructorItems.length > 1 && bun
-      ? submitOrderRequest
-        ? "Подождите..."
-        : "Оформить заказ"
-      : "Соберите бургер!";
+  const buttonText = submitOrderRequest ? "Подождите..." : "Оформить заказ";
 
   return (
     <>
@@ -129,17 +120,18 @@ const BurgerConstructor = () => {
               />
             </li>
           )}
+          {constructorItems.length === 0 && (
+            <p className="mt-15 text text_type_main-medium">
+              Пожалуйста, перенесите сюда булку и ингредиенты для создания
+              заказа
+            </p>
+          )}
         </ul>
         <div className={`${styles.confirmationZone} mt-10`}>
           <p className="text text_type_digits-medium">
             {totalPrice} <CurrencyIcon type="primary" />
           </p>
-          <Button
-            onClick={submitOrder}
-            disabled={isDisabled ? "disabled" : ""}
-            type="primary"
-            size="large"
-          >
+          <Button onClick={submitOrder} type="primary" size="large">
             {buttonText}
           </Button>
         </div>
