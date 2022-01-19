@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./login.module.css";
+import styles from "./forgot-password.module.css";
 import {
   EmailInput,
   Input,
@@ -8,51 +8,42 @@ import { PasswordInput } from "@ya.praktikum/react-developer-burger-ui-component
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link } from "react-router-dom";
 
-export const LoginPage: React.FC = () => {
+export const ResetPasswordPage: React.FC = () => {
   return (
     <div className={`${styles.formContainer}`}>
       <form className={styles.form} action="">
-        <p className="text text_type_main-medium mb-6">Вход</p>
+        <p className="text text_type_main-medium mb-6">Восстановление пароля</p>
         <form className={`${styles.inputContainer} mb-6`}>
           <Input
             value={""}
-            name={"email"}
-            placeholder="E-mail"
+            name={"new_password"}
+            placeholder="Введите новый пароль"
             size="default"
             onChange={(e) => e.target.value}
+            icon={"ShowIcon"}
           />
         </form>
         <form className={`${styles.inputContainer} mb-6`}>
-          <PasswordInput
+          <Input
             value={""}
-            name={"password"}
+            name={"code"}
+            placeholder="Введите код из письма"
             size="default"
             onChange={(e) => e.target.value}
           />
         </form>
         <Button type="primary" size="large">
-          Войти
+          Сохранить
         </Button>
         <div className={`${styles.linkContainer} mt-20 mb-4`}>
           <p className="text text_type_main-default text_color_inactive">
-            Вы — новый пользователь?
+            Вспомнили пароль?
           </p>
           <Link
             className={`${styles.link} text text_type_main-default text_color_inactive`}
-            to={"/register"}
+            to={"/login"}
           >
-            Зарегистрироваться
-          </Link>
-        </div>
-        <div className={`${styles.linkContainer} mb-4`}>
-          <p className="text text_type_main-default text_color_inactive">
-            Забыли пароль?
-          </p>
-          <Link
-            className={`${styles.link} text text_type_main-default text_color_inactive`}
-            to={"/forgot-password"}
-          >
-            Восстановить пароль
+            Войти
           </Link>
         </div>
       </form>

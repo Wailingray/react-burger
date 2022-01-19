@@ -21,6 +21,11 @@ export type TOrder = {
   };
 };
 
+export type TSubmitEmailReply = {
+  success: boolean;
+  message: string;
+};
+
 export type TResponseBody<TDataKey extends string = "", TDataType = {}> = {
   [key in TDataKey]: TDataType;
 } & {

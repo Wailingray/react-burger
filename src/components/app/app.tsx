@@ -8,6 +8,9 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 import { HomePage } from "../../pages/home";
 import { LoginPage } from "../../pages/login";
+import { RegisterPage } from "../../pages/register";
+import { ForgotPasswordPage } from "../../pages/forgot-password";
+import { ResetPasswordPage } from "../../pages/reset-password";
 function App() {
   return (
     <Router>
@@ -18,6 +21,15 @@ function App() {
         </Route>
         <Route path="/login" exact={true}>
           <LoginPage />
+        </Route>
+        <Route path="/register" exact={true}>
+          <RegisterPage />
+        </Route>
+        <Route path="/forgot-password" exact={true}>
+          <ForgotPasswordPage />
+        </Route>
+        <Route path="/reset-password" exact={true}>
+          <ResetPasswordPage />
         </Route>
       </Switch>
     </Router>

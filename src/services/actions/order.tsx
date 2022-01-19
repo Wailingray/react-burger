@@ -60,7 +60,7 @@ export const dispatchOrder: AppThunk =
         dispatch(submitOrderSuccess(res));
       })
       .then(() => {
-        dispatch(resetConstructor())
+        dispatch(resetConstructor());
       })
       .catch((err) => {
         dispatch(submitOrderFailed(err));
