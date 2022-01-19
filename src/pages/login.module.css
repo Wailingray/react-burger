@@ -21,8 +21,19 @@
   justify-content: center;
 }
 
-.link {
+.inputContainer div {
+  width: 100%;
+  text-align: right;
+}
+
+.linkContainer {
+  gap: 8px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
+}
+
+.link {
+  text-decoration: none;
+  color: #4C4CFF;
 }
