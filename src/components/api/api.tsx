@@ -1,6 +1,7 @@
 import { TIngredient, TResponseBody } from "../../utils/types";
 
 export const apiConfig = {
+  passwordResetUrl: `https://norma.nomoreparties.space/api/password-reset`,
   ingredientsUrl: `https://norma.nomoreparties.space/api/ingredients`,
   ordersUrl: `https://norma.nomoreparties.space/api/orders`,
   headers: {
@@ -9,6 +10,7 @@ export const apiConfig = {
 };
 const getResponse = (res: Response) => {
   if (res.ok) {
+    console.log(res)
     return res.json();
   }
   return Promise.reject(res.status);
@@ -29,6 +31,17 @@ export const submitOrder = async (userOrder: string[]) => {
     headers: apiConfig.headers,
     body: JSON.stringify({
       ingredients: userOrder,
+    }),
+  });
+  return getResponse(res);
+};
+
+export const submitUserEmail = async (email: string) => {
+  const res = await fetch(apiConfig.passwordResetUrl, {
+    method: "POST",
+    headers: apiConfig.headers,
+    body: JSON.stringify({
+      email,
     }),
   });
   return getResponse(res);

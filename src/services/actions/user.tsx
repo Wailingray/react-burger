@@ -1,4 +1,6 @@
+import { useHistory } from "react-router-dom";
 import { AppDispatch, AppThunk } from "../..";
+import { submitUserEmail } from "../../components/api/api";
 import { TSubmitEmailReply } from "../../utils/types";
 
 export const SUBMIT_USER_EMAIL_REQUEST: "SUBMIT_USER_EMAIL_REQUEST" =
@@ -14,7 +16,7 @@ export interface ISubmitUserEmailRequest {
 
 export interface ISubmitUserEmailSuccess {
   readonly type: typeof SUBMIT_USER_EMAIL_SUCCESS;
-  readonly reply: TSubmitEmailReply;
+  reply: TSubmitEmailReply
 }
 
 export interface ISubmitUserEmailFailed {
@@ -35,7 +37,7 @@ export const submitUserEmailRequest = (): ISubmitUserEmailRequest => ({
 
 export const submitUserEmailSuccess = (reply: TSubmitEmailReply): ISubmitUserEmailSuccess => ({
   type: SUBMIT_USER_EMAIL_SUCCESS,
-  reply,
+  reply
 });
 
 export const submitUserEmailFailed = (error: number): ISubmitUserEmailFailed => ({
@@ -46,14 +48,11 @@ export const submitUserEmailFailed = (error: number): ISubmitUserEmailFailed => 
 export const dispatchUserEmail: AppThunk =
   (email: string) => (dispatch: AppDispatch) => {
     dispatch(submitUserEmailRequest());
-    submitOrder(userOrder)
+    submitUserEmail(email)
       .then((res) => {
-        dispatch(submitOrderSuccess(res));
-      })
-      .then(() => {
-        dispatch(resetConstructor());
+        dispatch(submitUserEmailSuccess(res));
       })
       .catch((err) => {
-        dispatch(submitOrderFailed(err));
+        dispatch(submitUserEmailFailed(err));
       });
   };

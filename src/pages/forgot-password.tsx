@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styles from "./forgot-password.module.css";
 import {
   EmailInput,
@@ -6,16 +6,44 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
+import { dispatchUserEmail } from "../services/actions/user";
 
 export const ForgotPasswordPage: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const {
+    submitUserEmailRequest,
+    submitUserEmailSuccess,
+    submitUserEmailFailed,
+    submitUserEmailError,
+  } = useAppSelector((state) => state.user);
+  const history = useHistory();
 
-  const handleSubmit = (e: React.SyntheticEvent<Element, Event>) => {
-    e.preventDefault()
-    console.log(value)
-  }
+  const redirect = useCallback(
+    () => {
+      if (submitUserEmailSuccess)
+        history.replace({ pathname: "/reset-password" });
+    },[submitUserEmailSuccess]
+  )
 
-  const [value, setValue] = React.useState("")
+
+  const handleSubmit = useCallback(
+    (e: React.SyntheticEvent<Element, Event>) => {
+      e.preventDefault();
+      dispatch(dispatchUserEmail(value));
+      if(!submitUserEmailRequest) redirect()
+    },
+    [
+      history,
+      submitUserEmailSuccess,
+      submitUserEmailFailed,
+      submitUserEmailError,
+      submitUserEmailRequest
+    ]
+  );
+  console.log(submitUserEmailSuccess);
+  const [value, setValue] = React.useState("");
 
   return (
     <div className={`${styles.formContainer}`}>
@@ -30,6 +58,11 @@ export const ForgotPasswordPage: React.FC = () => {
             onChange={(e) => setValue(e.target.value)}
           />
         </form>
+        {submitUserEmailFailed && (
+          <p className="text text_type_main-default text_color_inactive mt-4">
+            Произошла ошибка! Код ошибки: {submitUserEmailError}
+          </p>
+        )}
         <Button type="primary" size="large" onClick={(e) => handleSubmit(e)}>
           Восстановить
         </Button>

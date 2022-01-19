@@ -1,15 +1,18 @@
-import { SUBMIT_USER_EMAIL_REQUEST, SUBMIT_USER_EMAIL_SUCCESS, TUserActions } from "../actions/user";
+import {
+  SUBMIT_USER_EMAIL_FAILED,
+  SUBMIT_USER_EMAIL_REQUEST,
+  SUBMIT_USER_EMAIL_SUCCESS,
+  TUserActions,
+} from "../actions/user";
 
 export type TUserState = {
-  email: null | string
-  submitUserEmailRequest: boolean,
-  submitUserEmailFailed: boolean,
-  submitUserEmailSuccess: boolean,
-  submitUserEmailError: null | number,
-}
+  submitUserEmailRequest: boolean;
+  submitUserEmailFailed: boolean;
+  submitUserEmailSuccess: boolean;
+  submitUserEmailError: null | number;
+};
 
 const initialState: TUserState = {
-  email: null,
   submitUserEmailRequest: false,
   submitUserEmailFailed: false,
   submitUserEmailSuccess: false,
@@ -25,25 +28,19 @@ export const userReducer = (
       return { ...state, submitUserEmailRequest: true };
     }
     case SUBMIT_USER_EMAIL_SUCCESS: {
+      console.log(action.reply)
       return {
         ...state,
         submitUserEmailFailed: false,
-        email: action.,
-        submitOrderRequest: false,
-        submitOrderSuccess: true,
+        submitUserEmailRequest: false,
+        submitUserEmailSuccess: true,
       };
     }
-    case SUBMIT_ORDER_FAILED: {
+    case SUBMIT_USER_EMAIL_FAILED: {
       return {
         ...initialState,
-        submitOrderFailed: true,
-        submitOrderError: action.error,
-      };
-    }
-    case ORDER_RESET: {
-      return {
-        ...state,
-        submitOrderSuccess: false,
+        submitUserEmailFailed: true,
+        submitUserEmailError: action.error,
       };
     }
     default: {
