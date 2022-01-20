@@ -1,7 +1,8 @@
-import { TIngredient, TResponseBody } from "../../utils/types";
+import { TIngredient, TResetPwdBody, TResponseBody } from "../../utils/types";
 
 export const apiConfig = {
-  passwordResetUrl: `https://norma.nomoreparties.space/api/password-reset`,
+  passwordResetUrlStep2: `https://norma.nomoreparties.space/api/password-reset/reset`,
+  passwordResetUrlStep1: `https://norma.nomoreparties.space/api/password-reset`,
   ingredientsUrl: `https://norma.nomoreparties.space/api/ingredients`,
   ordersUrl: `https://norma.nomoreparties.space/api/orders`,
   headers: {
@@ -10,7 +11,7 @@ export const apiConfig = {
 };
 const getResponse = (res: Response) => {
   if (res.ok) {
-    console.log(res)
+    console.log(res);
     return res.json();
   }
   return Promise.reject(res.status);
@@ -37,12 +38,21 @@ export const submitOrder = async (userOrder: string[]) => {
 };
 
 export const submitUserEmail = async (email: string) => {
-  const res = await fetch(apiConfig.passwordResetUrl, {
+  const res = await fetch(apiConfig.passwordResetUrlStep1, {
     method: "POST",
     headers: apiConfig.headers,
     body: JSON.stringify({
       email,
     }),
+  });
+  return getResponse(res);
+};
+
+export const submitResetPwd = async (RequestBody: TResetPwdBody) => {
+  const res = await fetch(apiConfig.passwordResetUrlStep2, {
+    method: "POST",
+    headers: apiConfig.headers,
+    body: JSON.stringify(RequestBody),
   });
   return getResponse(res);
 };

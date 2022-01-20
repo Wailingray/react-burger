@@ -21,9 +21,14 @@ export type TOrder = {
   };
 };
 
-export type TSubmitEmailReply = {
+export type TSuccessfulReply = {
   success: boolean;
   message: string;
+};
+
+export type TResetPwdBody = {
+  password: string;
+  token: string;
 };
 
 export type TResponseBody<TDataKey extends string = "", TDataType = {}> = {

@@ -1,4 +1,7 @@
 import {
+  SUBMIT_PWD_RESET_FAILED,
+  SUBMIT_PWD_RESET_REQUEST,
+  SUBMIT_PWD_RESET_SUCCESS,
   SUBMIT_USER_EMAIL_FAILED,
   SUBMIT_USER_EMAIL_REQUEST,
   SUBMIT_USER_EMAIL_SUCCESS,
@@ -10,6 +13,10 @@ export type TUserState = {
   submitUserEmailFailed: boolean;
   submitUserEmailSuccess: boolean;
   submitUserEmailError: null | number;
+  submitPwdResetRequest: boolean;
+  submitPwdResetFailed: boolean;
+  submitPwdResetSuccess: boolean;
+  submitPwdResetError: null | number;
 };
 
 const initialState: TUserState = {
@@ -17,6 +24,10 @@ const initialState: TUserState = {
   submitUserEmailFailed: false,
   submitUserEmailSuccess: false,
   submitUserEmailError: null,
+  submitPwdResetRequest: false,
+  submitPwdResetFailed: false,
+  submitPwdResetSuccess: false,
+  submitPwdResetError: null,
 };
 
 export const userReducer = (
@@ -28,7 +39,6 @@ export const userReducer = (
       return { ...state, submitUserEmailRequest: true };
     }
     case SUBMIT_USER_EMAIL_SUCCESS: {
-      console.log(action.reply)
       return {
         ...state,
         submitUserEmailFailed: false,
@@ -38,9 +48,27 @@ export const userReducer = (
     }
     case SUBMIT_USER_EMAIL_FAILED: {
       return {
-        ...initialState,
+        ...state,
         submitUserEmailFailed: true,
         submitUserEmailError: action.error,
+      };
+    }
+    case SUBMIT_PWD_RESET_REQUEST: {
+      return { ...state, submitPwdResetRequest: true };
+    }
+    case SUBMIT_PWD_RESET_SUCCESS: {
+      return {
+        ...state,
+        submitPwdResetFailed: false,
+        submitPwdResetRequest: false,
+        submitPwdResetSuccess: true,
+      };
+    }
+    case SUBMIT_PWD_RESET_FAILED: {
+      return {
+        ...state,
+        submitPwdResetFailed: true,
+        submitPwdResetError: action.error,
       };
     }
     default: {

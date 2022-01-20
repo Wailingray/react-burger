@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styles from "./forgot-password.module.css";
 import {
   EmailInput,
@@ -18,31 +18,21 @@ export const ForgotPasswordPage: React.FC = () => {
     submitUserEmailFailed,
     submitUserEmailError,
   } = useAppSelector((state) => state.user);
-  const history = useHistory();
+  let history = useHistory();
 
-  const redirect = useCallback(
-    () => {
-      if (submitUserEmailSuccess)
-        history.replace({ pathname: "/reset-password" });
-    },[submitUserEmailSuccess]
-  )
-
+  useEffect(() => {
+    if (submitUserEmailSuccess && !submitUserEmailRequest)
+      history.push({ pathname: "/reset-password" });
+  }, [submitUserEmailSuccess, submitUserEmailRequest]);
 
   const handleSubmit = useCallback(
     (e: React.SyntheticEvent<Element, Event>) => {
       e.preventDefault();
       dispatch(dispatchUserEmail(value));
-      if(!submitUserEmailRequest) redirect()
     },
-    [
-      history,
-      submitUserEmailSuccess,
-      submitUserEmailFailed,
-      submitUserEmailError,
-      submitUserEmailRequest
-    ]
+    []
   );
-  console.log(submitUserEmailSuccess);
+
   const [value, setValue] = React.useState("");
 
   return (
@@ -59,7 +49,7 @@ export const ForgotPasswordPage: React.FC = () => {
           />
         </form>
         {submitUserEmailFailed && (
-          <p className="text text_type_main-default text_color_inactive mt-4">
+          <p className="text text_type_main-default text_color_inactive mb-4">
             Произошла ошибка! Код ошибки: {submitUserEmailError}
           </p>
         )}

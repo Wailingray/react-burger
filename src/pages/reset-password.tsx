@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./forgot-password.module.css";
 import {
   EmailInput,
@@ -7,32 +7,56 @@ import {
 import { PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link } from "react-router-dom";
+import { useAppDispatch } from "../services/hooks/hooks";
+import { dispatchPwdReset } from "../services/actions/user";
 
 export const ResetPasswordPage: React.FC = () => {
+  const [pwdValue, setPwdValue] = useState("");
+  const [codeValue, setCodeValue] = useState("");
+  const dispatch = useAppDispatch();
+
+  const handleSubmit = (
+    e: React.SyntheticEvent<Element, Event>,
+    pwdValue: string,
+    codeValue: string
+  ) => {
+    e.preventDefault();
+    dispatch(
+      dispatchPwdReset({
+        password: pwdValue,
+        token: codeValue,
+      })
+    );
+  };
+
   return (
     <div className={`${styles.formContainer}`}>
       <form className={styles.form} action="">
         <p className="text text_type_main-medium mb-6">Восстановление пароля</p>
         <form className={`${styles.inputContainer} mb-6`}>
           <Input
-            value={""}
-            name={"new_password"}
+            value={pwdValue}
+            name={"password"}
             placeholder="Введите новый пароль"
             size="default"
-            onChange={(e) => e.target.value}
+            onChange={(e) => setPwdValue(e.target.value)}
             icon={"ShowIcon"}
           />
         </form>
         <form className={`${styles.inputContainer} mb-6`}>
           <Input
-            value={""}
+            value={codeValue}
             name={"code"}
             placeholder="Введите код из письма"
             size="default"
-            onChange={(e) => e.target.value}
+            onChange={(e) => setCodeValue(e.target.value)}
           />
         </form>
-        <Button type="primary" size="large">
+        <Button
+          type="primary"
+          size="large"
+          onClick={(e) => handleSubmit(e, pwdValue, codeValue)}
+        >
           Сохранить
         </Button>
         <div className={`${styles.linkContainer} mt-20 mb-4`}>
