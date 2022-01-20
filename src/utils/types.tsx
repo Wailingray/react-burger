@@ -26,9 +26,25 @@ export type TSuccessfulReply = {
   message: string;
 };
 
+export type TSuccessfulRegisterReply = {
+  success: true;
+  user: {
+    email: string;
+    name: string;
+  };
+  accessToken: string;
+  refreshToken: string;
+};
+
 export type TResetPwdBody = {
   password: string;
   token: string;
+};
+
+export type TRegisterBody = {
+  email: string;
+  password: string;
+  name: string;
 };
 
 export type TResponseBody<TDataKey extends string = "", TDataType = {}> = {

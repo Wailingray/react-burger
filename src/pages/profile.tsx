@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./profile.module.css";
 import { Link, NavLink } from "react-router-dom";
 import {
@@ -9,6 +9,11 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 export const ProfilePage = () => {
+
+  const [nameValue, setNameValue] = useState("");
+  const [emailValue, setEmailValue] = useState("");
+  const [pwdValue, setPwdValue] = useState("");
+
   return (
     <div className={`${styles.profilePageContainer}`}>
       <div className={`${styles.navContainer}`}>
@@ -16,18 +21,21 @@ export const ProfilePage = () => {
           <NavLink
             className={`${styles.link} text text_type_main-medium`}
             to={"/profile"}
+            activeClassName={`${styles.activeLink}`}
           >
             Профиль
           </NavLink>
           <NavLink
             className={`${styles.link} text text_type_main-medium`}
-            to={"/profile"}
+            to={"/profile/orders"}
+            activeClassName={`${styles.activeLink}`}
           >
             История заказов
           </NavLink>
           <NavLink
             className={`${styles.link} text text_type_main-medium`}
-            to={"/profile"}
+            to={"/profile/login"}
+            activeClassName={`${styles.activeLink}`}
           >
             Выход
           </NavLink>
@@ -42,27 +50,27 @@ export const ProfilePage = () => {
         <form className={styles.form} action="">
           <form className={`${styles.inputContainer} mb-6`}>
             <Input
-              value={"фыв"}
+              value={nameValue}
               name={"name"}
               placeholder="Имя"
               size="default"
-              onChange={(e) => e.target.value}
+              onChange={(e) => setNameValue(e.target.value)}
             />
           </form>
           <form className={`${styles.inputContainer} mb-6`}>
             <EmailInput
-              value={"фыв"}
-              name={"name"}
+              value={emailValue}
+              name={"email"}
               size="default"
-              onChange={(e) => e.target.value}
+              onChange={(e) => setEmailValue(e.target.value)}
             />
           </form>
           <form className={`${styles.inputContainer} mb-6`}>
             <PasswordInput
-              value={""}
+              value={pwdValue}
               name={"password"}
               size="default"
-              onChange={(e) => e.target.value}
+              onChange={(e) => setPwdValue(e.target.value)}
             />
           </form>
           <Button type="primary" size="large">

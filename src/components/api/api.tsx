@@ -1,6 +1,12 @@
-import { TIngredient, TResetPwdBody, TResponseBody } from "../../utils/types";
+import {
+  TIngredient,
+  TRegisterBody,
+  TResetPwdBody,
+  TResponseBody,
+} from "../../utils/types";
 
 export const apiConfig = {
+  registerUrl: `https://norma.nomoreparties.space/api/auth/register`,
   passwordResetUrlStep2: `https://norma.nomoreparties.space/api/password-reset/reset`,
   passwordResetUrlStep1: `https://norma.nomoreparties.space/api/password-reset`,
   ingredientsUrl: `https://norma.nomoreparties.space/api/ingredients`,
@@ -50,6 +56,15 @@ export const submitUserEmail = async (email: string) => {
 
 export const submitResetPwd = async (RequestBody: TResetPwdBody) => {
   const res = await fetch(apiConfig.passwordResetUrlStep2, {
+    method: "POST",
+    headers: apiConfig.headers,
+    body: JSON.stringify(RequestBody),
+  });
+  return getResponse(res);
+};
+
+export const registerRequest = async (RequestBody: TRegisterBody) => {
+  const res = await fetch(apiConfig.registerUrl, {
     method: "POST",
     headers: apiConfig.headers,
     body: JSON.stringify(RequestBody),

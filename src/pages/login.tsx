@@ -7,8 +7,13 @@ import {
 import { PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link } from "react-router-dom";
+import { useAppDispatch } from "../services/hooks/hooks";
 
 export const LoginPage: React.FC = () => {
+  const dispatch = useAppDispatch();
+
+  const register = () => {};
+
   return (
     <div className={`${styles.formContainer}`}>
       <form className={styles.form} action="">
@@ -30,7 +35,7 @@ export const LoginPage: React.FC = () => {
             onChange={(e) => e.target.value}
           />
         </form>
-        <Button type="primary" size="large">
+        <Button onClick={() => register()} type="primary" size="large">
           Войти
         </Button>
         <div className={`${styles.linkContainer} mt-20 mb-4`}>
