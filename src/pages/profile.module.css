@@ -1,0 +1,63 @@
+.form {
+  min-width: 480px;
+  min-height: 430px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.profilePageContainer {
+  padding-top: 180px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 60px;
+}
+
+.navContainer {
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+}
+
+.formContainer {
+  display: flex;
+}
+
+.navLinkList {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.inputContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inputContainer div {
+  width: 100%;
+  text-align: right;
+}
+
+.linkContainer {
+  gap: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.link {
+  text-decoration: none;
+  color: #8585ad;
+  line-height: 64px;
+}
+
+.comment {
+  opacity: 0.4;
+}
