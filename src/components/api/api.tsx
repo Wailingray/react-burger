@@ -3,9 +3,11 @@ import {
   TRegisterBody,
   TResetPwdBody,
   TResponseBody,
+  TSignInBody,
 } from "../../services/utils/types";
 
 export const apiConfig = {
+  signInUrl: `https://norma.nomoreparties.space/api/auth/login`,
   registerUrl: `https://norma.nomoreparties.space/api/auth/register`,
   passwordResetUrlStep2: `https://norma.nomoreparties.space/api/password-reset/reset`,
   passwordResetUrlStep1: `https://norma.nomoreparties.space/api/password-reset`,
@@ -65,6 +67,15 @@ export const submitResetPwd = async (RequestBody: TResetPwdBody) => {
 
 export const registerRequest = async (RequestBody: TRegisterBody) => {
   const res = await fetch(apiConfig.registerUrl, {
+    method: "POST",
+    headers: apiConfig.headers,
+    body: JSON.stringify(RequestBody),
+  });
+  return getResponse(res);
+};
+
+export const signInRequest = async (RequestBody: TSignInBody) => {
+  const res = await fetch(apiConfig.signInUrl, {
     method: "POST",
     headers: apiConfig.headers,
     body: JSON.stringify(RequestBody),

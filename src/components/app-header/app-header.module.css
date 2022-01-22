@@ -1,7 +1,7 @@
 .header {
   margin: 0 auto;
   max-width: 1920px;
-  background: #1C1C21;
+  background: #1c1c21;
 }
 
 .logo {
@@ -34,9 +34,12 @@
 }
 
 .link {
-  color: white;
   text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.activeLink .p {
+  color: #f2f2f3;
 }

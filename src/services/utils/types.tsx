@@ -41,6 +41,11 @@ export type TResetPwdBody = {
   token: string;
 };
 
+export type TSignInBody = {
+  email: string;
+  password: string;
+};
+
 export type TRegisterBody = {
   email: string;
   password: string;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./login.module.css";
 import {
   EmailInput,
@@ -6,13 +6,39 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link } from "react-router-dom";
-import { useAppDispatch } from "../services/hooks/hooks";
+import { Link, useHistory } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
+import { dispatchSignIn } from "../services/actions/user";
 
 export const LoginPage: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const [pwd, setPwd] = useState("");
+
   const dispatch = useAppDispatch();
 
-  const register = () => {};
+  const {
+    submitServerRequest,
+    submitSignInSuccess,
+    submitServerFailed,
+    submitServerError,
+  } = useAppSelector((state) => state.user);
+
+  let history = useHistory();
+
+  useEffect(() => {
+    if (submitSignInSuccess && !submitServerRequest)
+      history.push({ pathname: "/" });
+  }, [submitSignInSuccess, submitServerRequest]);
+
+  const signIn = (e: React.SyntheticEvent<Element, Event>) => {
+    e.preventDefault();
+    dispatch(
+      dispatchSignIn({
+        email: email,
+        password: pwd,
+      })
+    );
+  };
 
   return (
     <div className={`${styles.formContainer}`}>
@@ -20,22 +46,22 @@ export const LoginPage: React.FC = () => {
         <p className="text text_type_main-medium mb-6">Вход</p>
         <form className={`${styles.inputContainer} mb-6`}>
           <Input
-            value={""}
+            value={email}
             name={"email"}
             placeholder="E-mail"
             size="default"
-            onChange={(e) => e.target.value}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </form>
         <form className={`${styles.inputContainer} mb-6`}>
           <PasswordInput
-            value={""}
+            value={pwd}
             name={"password"}
             size="default"
-            onChange={(e) => e.target.value}
+            onChange={(e) => setPwd(e.target.value)}
           />
         </form>
-        <Button onClick={() => register()} type="primary" size="large">
+        <Button onClick={(e) => signIn(e)} type="primary" size="large">
           Войти
         </Button>
         <div className={`${styles.linkContainer} mt-20 mb-4`}>

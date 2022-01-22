@@ -3,6 +3,7 @@ import {
   SUBMIT_PWD_RESET_SUCCESS,
   SUBMIT_SERVER_FAILED,
   SUBMIT_SERVER_REQUEST,
+  SUBMIT_SIGN_IN_SUCCESS,
   SUBMIT_USER_EMAIL_SUCCESS,
   TUserActions,
 } from "../actions/user";
@@ -13,6 +14,7 @@ export type TUserState = {
   submitServerFailed: boolean;
   submitServerError: number | null;
   submitUserEmailSuccess: boolean;
+  submitSignInSuccess: boolean;
   submitPwdResetSuccess: boolean;
   user: TUser
 };
@@ -22,6 +24,7 @@ const initialState: TUserState = {
   submitServerFailed: false,
   submitServerError: null,
   submitUserEmailSuccess: false,
+  submitSignInSuccess: false,
   submitPwdResetSuccess: false,
   user: {
     email: '',
@@ -68,6 +71,14 @@ export const userReducer = (
           name: action.user.name,
         }
       }
+    }
+    case SUBMIT_SIGN_IN_SUCCESS: {
+      return {
+        ...state,
+        submitServerFailed: false,
+        submitServerRequest: false,
+        submitSignInSuccess: true,
+      };
     }
     default: {
       return state;

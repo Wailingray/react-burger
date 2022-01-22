@@ -1,12 +1,14 @@
 import { AppDispatch, AppThunk } from "../..";
 import {
   registerRequest,
+  signInRequest,
   submitResetPwd,
   submitUserEmail,
 } from "../../components/api/api";
 import {
   TRegisterBody,
   TResetPwdBody,
+  TSignInBody,
   TSuccessfulRegisterReply,
   TSuccessfulReply,
   TUser,
@@ -23,6 +25,8 @@ export const SUBMIT_PWD_RESET_SUCCESS: "SUBMIT_PWD_RESET_SUCCESS" =
   "SUBMIT_PWD_RESET_SUCCESS";
 export const SUBMIT_REGISTER_SUCCESS: "SUBMIT_REGISTER_SUCCESS" =
   "SUBMIT_REGISTER_SUCCESS";
+export const SUBMIT_SIGN_IN_SUCCESS: "SUBMIT_SIGN_IN_SUCCESS" =
+  "SUBMIT_SIGN_IN_SUCCESS";
 export const SET_USER: "SET_USER" = "SET_USER";
 
 export interface ISubmitServerRequest {
@@ -49,6 +53,11 @@ export interface ISubmitRegisterSuccess {
   reply: TSuccessfulRegisterReply;
 }
 
+export interface ISubmitSignInSuccess {
+  readonly type: typeof SUBMIT_SIGN_IN_SUCCESS;
+  reply: TSuccessfulRegisterReply;
+}
+
 export interface ISetUser {
   readonly type: typeof SET_USER;
   user: TUser;
@@ -60,6 +69,7 @@ export type TUserActions =
   | ISubmitUserEmailSuccess
   | ISubmitResetPwdSuccess
   | ISubmitRegisterSuccess
+  | ISubmitSignInSuccess
   | ISetUser;
 
 export const submitRegisterSuccess = (
@@ -89,6 +99,13 @@ export const submitResetPwdSuccess = (
   reply: TSuccessfulReply
 ): ISubmitResetPwdSuccess => ({
   type: SUBMIT_PWD_RESET_SUCCESS,
+  reply,
+});
+
+export const submitSignInSuccess = (
+  reply: TSuccessfulRegisterReply
+): ISubmitSignInSuccess => ({
+  type: SUBMIT_SIGN_IN_SUCCESS,
   reply,
 });
 
@@ -127,6 +144,28 @@ export const dispatchRegister: AppThunk =
     registerRequest(request)
       .then((res) => {
         dispatch(submitRegisterSuccess(res));
+        let accessToken, refreshToken;
+        if (res.accessToken.indexOf("Bearer") === 0) {
+          accessToken = res.accessToken.split("Bearer ")[1];
+        }
+        refreshToken = res.refreshToken;
+        if (accessToken && refreshToken) {
+          setCookie("accessToken", accessToken, { expires: 100 });
+          setCookie("refreshToken", refreshToken);
+        }
+        dispatch(setUser(res.user));
+      })
+      .catch((err) => {
+        dispatch(submitServerFailed(err));
+      });
+  };
+
+export const dispatchSignIn: AppThunk =
+  (request: TSignInBody) => (dispatch: AppDispatch) => {
+    dispatch(submitServerRequest());
+    signInRequest(request)
+      .then((res) => {
+        dispatch(submitSignInSuccess(res));
         console.log(res);
         let accessToken, refreshToken;
         if (res.accessToken.indexOf("Bearer") === 0) {
