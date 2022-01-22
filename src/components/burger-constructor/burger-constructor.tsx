@@ -16,7 +16,7 @@ import {
   addToConstructor,
 } from "../../services/actions/ingredients";
 import { ConstructorIngredient } from "../constructor-ingredient/constructor-ingredient";
-import { ConstructorDraggableEl, ConstructorEL } from "../../utils/interfaces";
+import { ConstructorDraggableEl, ConstructorEL } from "../../services/utils/interfaces";
 import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
 
 const BurgerConstructor: React.FC = () => {

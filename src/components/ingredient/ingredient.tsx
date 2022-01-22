@@ -3,7 +3,7 @@ import styles from "./ingredient.module.css";
 import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useDrag } from "react-dnd";
-import { IngProps } from "../../utils/interfaces";
+import { IngProps } from "../../services/utils/interfaces";
 import { useAppSelector } from "../../services/hooks/hooks";
 
 const Ingredient: React.FC<IngProps> = (props) => {

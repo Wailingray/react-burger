@@ -16,7 +16,7 @@ import IngredientDetails from "../ingredient-details/ingredient-details";
 import { getItems } from "../../services/actions/ingredients";
 import Modal from "../modal/modal";
 import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
-import { TIngredient } from "../../utils/types";
+import { TIngredient } from "../../services/utils/types";
 
 const BurgerIngredients: React.FC = () => {
   const [isModalOpened, setIsModalOpened] = useState<boolean>(false);

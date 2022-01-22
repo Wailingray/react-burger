@@ -3,7 +3,7 @@ import {
   TRegisterBody,
   TResetPwdBody,
   TResponseBody,
-} from "../../utils/types";
+} from "../../services/utils/types";
 
 export const apiConfig = {
   registerUrl: `https://norma.nomoreparties.space/api/auth/register`,

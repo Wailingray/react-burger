@@ -1,4 +1,4 @@
-import { TOrder } from "../../utils/types";
+import { TOrder } from "../utils/types";
 import {
   SUBMIT_ORDER_REQUEST,
   SUBMIT_ORDER_FAILED,

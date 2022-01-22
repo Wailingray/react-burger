@@ -9,7 +9,7 @@ import {
 import { useDrop, useDrag } from "react-dnd";
 import styles from "./constructor-ingredient.module.css";
 import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
-import { ConstructorEL } from "../../utils/interfaces";
+import { ConstructorEL } from "../../services/utils/interfaces";
 
 export const ConstructorIngredient: React.FC<ConstructorEL> = ({
   name,

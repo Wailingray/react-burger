@@ -13,8 +13,8 @@ import {
   RESET_CONSTRUCTOR,
 } from "../actions/ingredients";
 
-import { burgerExample } from "../../utils/utils";
-import { TIngredient } from "../../utils/types";
+import { burgerExample } from "../utils/utils";
+import { TIngredient } from "../utils/types";
 
 type TIngredientsState = {
   ingredientItems: readonly TIngredient[];

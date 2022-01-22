@@ -1,33 +1,32 @@
 import {
-  SUBMIT_PWD_RESET_FAILED,
-  SUBMIT_PWD_RESET_REQUEST,
+  SET_USER,
   SUBMIT_PWD_RESET_SUCCESS,
-  SUBMIT_USER_EMAIL_FAILED,
-  SUBMIT_USER_EMAIL_REQUEST,
+  SUBMIT_SERVER_FAILED,
+  SUBMIT_SERVER_REQUEST,
   SUBMIT_USER_EMAIL_SUCCESS,
   TUserActions,
 } from "../actions/user";
+import { TUser } from "../utils/types";
 
 export type TUserState = {
-  submitUserEmailRequest: boolean;
-  submitUserEmailFailed: boolean;
+  submitServerRequest: boolean;
+  submitServerFailed: boolean;
+  submitServerError: number | null;
   submitUserEmailSuccess: boolean;
-  submitUserEmailError: null | number;
-  submitPwdResetRequest: boolean;
-  submitPwdResetFailed: boolean;
   submitPwdResetSuccess: boolean;
-  submitPwdResetError: null | number;
+  user: TUser
 };
 
 const initialState: TUserState = {
-  submitUserEmailRequest: false,
-  submitUserEmailFailed: false,
+  submitServerRequest: false,
+  submitServerFailed: false,
+  submitServerError: null,
   submitUserEmailSuccess: false,
-  submitUserEmailError: null,
-  submitPwdResetRequest: false,
-  submitPwdResetFailed: false,
   submitPwdResetSuccess: false,
-  submitPwdResetError: null,
+  user: {
+    email: '',
+    name: '',
+  }
 };
 
 export const userReducer = (
@@ -35,41 +34,40 @@ export const userReducer = (
   action: TUserActions
 ): TUserState => {
   switch (action.type) {
-    case SUBMIT_USER_EMAIL_REQUEST: {
-      return { ...state, submitUserEmailRequest: true };
+    case SUBMIT_SERVER_REQUEST: {
+      return { ...state, submitServerRequest: true };
     }
     case SUBMIT_USER_EMAIL_SUCCESS: {
       return {
         ...state,
-        submitUserEmailFailed: false,
-        submitUserEmailRequest: false,
+        submitServerFailed: false,
+        submitServerRequest: false,
         submitUserEmailSuccess: true,
       };
     }
-    case SUBMIT_USER_EMAIL_FAILED: {
+    case SUBMIT_SERVER_FAILED: {
       return {
         ...state,
-        submitUserEmailFailed: true,
-        submitUserEmailError: action.error,
+        submitServerFailed: true,
+        submitServerError: action.error,
       };
-    }
-    case SUBMIT_PWD_RESET_REQUEST: {
-      return { ...state, submitPwdResetRequest: true };
     }
     case SUBMIT_PWD_RESET_SUCCESS: {
       return {
         ...state,
-        submitPwdResetFailed: false,
-        submitPwdResetRequest: false,
+        submitServerFailed: false,
+        submitServerRequest: false,
         submitPwdResetSuccess: true,
       };
     }
-    case SUBMIT_PWD_RESET_FAILED: {
+    case SET_USER: {
       return {
         ...state,
-        submitPwdResetFailed: true,
-        submitPwdResetError: action.error,
-      };
+        user: {
+          email: action.user.email,
+          name: action.user.name,
+        }
+      }
     }
     default: {
       return state;

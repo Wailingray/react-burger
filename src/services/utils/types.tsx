@@ -47,6 +47,11 @@ export type TRegisterBody = {
   name: string;
 };
 
+export type TUser = {
+  email: string;
+  name: string;
+};
+
 export type TResponseBody<TDataKey extends string = "", TDataType = {}> = {
   [key in TDataKey]: TDataType;
 } & {

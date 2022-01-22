@@ -1,6 +1,6 @@
 import { AppDispatch, AppThunk } from "../..";
 import { submitOrder } from "../../components/api/api";
-import { TOrder } from "../../utils/types";
+import { TOrder } from "../utils/types";
 import { resetConstructor } from "./ingredients";
 
 export const SUBMIT_ORDER_REQUEST: "SUBMIT_ORDER_REQUEST" =

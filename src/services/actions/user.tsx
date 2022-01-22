@@ -9,29 +9,24 @@ import {
   TResetPwdBody,
   TSuccessfulRegisterReply,
   TSuccessfulReply,
-} from "../../utils/types";
+  TUser,
+} from "../utils/types";
+import { setCookie } from "../utils/utils";
 
-export const SUBMIT_USER_EMAIL_REQUEST: "SUBMIT_USER_EMAIL_REQUEST" =
-  "SUBMIT_USER_EMAIL_REQUEST";
+export const SUBMIT_SERVER_REQUEST: "SUBMIT_SERVER_REQUEST" =
+  "SUBMIT_SERVER_REQUEST";
 export const SUBMIT_USER_EMAIL_SUCCESS: "SUBMIT_USER_EMAIL_SUCCESS" =
   "SUBMIT_USER_EMAIL_SUCCESS";
-export const SUBMIT_USER_EMAIL_FAILED: "SUBMIT_USER_EMAIL_FAILED" =
+export const SUBMIT_SERVER_FAILED: "SUBMIT_USER_EMAIL_FAILED" =
   "SUBMIT_USER_EMAIL_FAILED";
-export const SUBMIT_PWD_RESET_REQUEST: "SUBMIT_PWD_RESET_REQUEST" =
-  "SUBMIT_PWD_RESET_REQUEST";
 export const SUBMIT_PWD_RESET_SUCCESS: "SUBMIT_PWD_RESET_SUCCESS" =
   "SUBMIT_PWD_RESET_SUCCESS";
-export const SUBMIT_PWD_RESET_FAILED: "SUBMIT_PWD_RESET_FAILED" =
-  "SUBMIT_PWD_RESET_FAILED";
-export const SUBMIT_REGISTER_REQUEST: "SUBMIT_REGISTER_REQUEST" =
-  "SUBMIT_REGISTER_REQUEST";
 export const SUBMIT_REGISTER_SUCCESS: "SUBMIT_REGISTER_SUCCESS" =
   "SUBMIT_REGISTER_SUCCESS";
-export const SUBMIT_REGISTER_FAILED: "SUBMIT_REGISTER_FAILED" =
-  "SUBMIT_REGISTER_FAILED";
+export const SET_USER: "SET_USER" = "SET_USER";
 
-export interface ISubmitUserEmailRequest {
-  readonly type: typeof SUBMIT_USER_EMAIL_REQUEST;
+export interface ISubmitServerRequest {
+  readonly type: typeof SUBMIT_SERVER_REQUEST;
 }
 
 export interface ISubmitUserEmailSuccess {
@@ -39,13 +34,9 @@ export interface ISubmitUserEmailSuccess {
   reply: TSuccessfulReply;
 }
 
-export interface ISubmitUserEmailFailed {
-  readonly type: typeof SUBMIT_USER_EMAIL_FAILED;
+export interface ISubmitServerFailed {
+  readonly type: typeof SUBMIT_SERVER_FAILED;
   readonly error: number;
-}
-
-export interface ISubmitResetPwdRequest {
-  readonly type: typeof SUBMIT_PWD_RESET_REQUEST;
 }
 
 export interface ISubmitResetPwdSuccess {
@@ -53,39 +44,23 @@ export interface ISubmitResetPwdSuccess {
   reply: TSuccessfulReply;
 }
 
-export interface ISubmitResetPwdFailed {
-  readonly type: typeof SUBMIT_PWD_RESET_FAILED;
-  readonly error: number;
-}
-
-export interface ISubmitRegisterRequest {
-  readonly type: typeof SUBMIT_REGISTER_REQUEST;
-}
-
 export interface ISubmitRegisterSuccess {
   readonly type: typeof SUBMIT_REGISTER_SUCCESS;
   reply: TSuccessfulRegisterReply;
 }
 
-export interface ISubmitRegisterFailed {
-  readonly type: typeof SUBMIT_REGISTER_FAILED;
-  readonly error: number;
+export interface ISetUser {
+  readonly type: typeof SET_USER;
+  user: TUser;
 }
 
 export type TUserActions =
-  | ISubmitUserEmailRequest
-  | ISubmitUserEmailFailed
+  | ISubmitServerRequest
+  | ISubmitServerFailed
   | ISubmitUserEmailSuccess
-  | ISubmitResetPwdRequest
   | ISubmitResetPwdSuccess
-  | ISubmitResetPwdFailed
-  | ISubmitRegisterRequest
   | ISubmitRegisterSuccess
-  | ISubmitRegisterFailed;
-
-export const submitRegisterRequest = (): ISubmitRegisterRequest => ({
-  type: SUBMIT_REGISTER_REQUEST,
-});
+  | ISetUser;
 
 export const submitRegisterSuccess = (
   reply: TSuccessfulRegisterReply
@@ -94,13 +69,8 @@ export const submitRegisterSuccess = (
   reply,
 });
 
-export const submitRegisterFailed = (error: number): ISubmitRegisterFailed => ({
-  type: SUBMIT_REGISTER_FAILED,
-  error,
-});
-
-export const submitUserEmailRequest = (): ISubmitUserEmailRequest => ({
-  type: SUBMIT_USER_EMAIL_REQUEST,
+export const submitServerRequest = (): ISubmitServerRequest => ({
+  type: SUBMIT_SERVER_REQUEST,
 });
 
 export const submitUserEmailSuccess = (
@@ -110,15 +80,9 @@ export const submitUserEmailSuccess = (
   reply,
 });
 
-export const submitUserEmailFailed = (
-  error: number
-): ISubmitUserEmailFailed => ({
-  type: SUBMIT_USER_EMAIL_FAILED,
+export const submitServerFailed = (error: number): ISubmitServerFailed => ({
+  type: SUBMIT_SERVER_FAILED,
   error,
-});
-
-export const submitResetPwdRequest = (): ISubmitResetPwdRequest => ({
-  type: SUBMIT_PWD_RESET_REQUEST,
 });
 
 export const submitResetPwdSuccess = (
@@ -128,55 +92,55 @@ export const submitResetPwdSuccess = (
   reply,
 });
 
-export const submitResetPwdFailed = (error: number): ISubmitResetPwdFailed => ({
-  type: SUBMIT_PWD_RESET_FAILED,
-  error,
+export const setUser = (user: TUser): ISetUser => ({
+  type: SET_USER,
+  user,
 });
 
 export const dispatchUserEmail: AppThunk =
   (email: string) => (dispatch: AppDispatch) => {
-    dispatch(submitUserEmailRequest());
+    dispatch(submitServerRequest());
     submitUserEmail(email)
       .then((res) => {
         dispatch(submitUserEmailSuccess(res));
       })
       .catch((err) => {
-        dispatch(submitUserEmailFailed(err));
+        dispatch(submitServerFailed(err));
       });
   };
 
 export const dispatchPwdReset: AppThunk =
   (request: TResetPwdBody) => (dispatch: AppDispatch) => {
-    dispatch(submitResetPwdRequest());
+    dispatch(submitServerRequest());
     submitResetPwd(request)
       .then((res) => {
         dispatch(submitResetPwdSuccess(res));
       })
       .catch((err) => {
-        dispatch(submitResetPwdFailed(err));
+        dispatch(submitServerFailed(err));
       });
   };
 
-/* export const dispatchRegister: AppThunk =
+export const dispatchRegister: AppThunk =
   (request: TRegisterBody) => (dispatch: AppDispatch) => {
-    dispatch(submitRegisterRequest());
-    registerRequest(request);
-    const data = await loginRequest(form)
+    dispatch(submitServerRequest());
+    registerRequest(request)
       .then((res) => {
-        let authToken;
-        res.headers.forEach((header) => {
-          if (header.indexOf("Bearer") === 0) {
-            authToken = header.split("Bearer ")[1];
-          }
-        });
-        if (authToken) {
-          setCookie("token", authToken);
+        dispatch(submitRegisterSuccess(res));
+        console.log(res);
+        let accessToken, refreshToken;
+        if (res.accessToken.indexOf("Bearer") === 0) {
+          accessToken = res.accessToken.split("Bearer ")[1];
         }
-        return res.json();
+        refreshToken = res.refreshToken;
+        if (accessToken && refreshToken) {
+          setCookie("accessToken", accessToken, { expires: 100 });
+          setCookie("refreshToken", refreshToken);
+          console.log(document.cookie);
+        }
+        dispatch(setUser(res.user));
       })
-      .then((data) => data);
-
-    if (data.success) {
-      setUser({ ...data.user, id: data.user._id });
-    }
-  }; */
+      .catch((err) => {
+        dispatch(submitServerFailed(err));
+      });
+  };

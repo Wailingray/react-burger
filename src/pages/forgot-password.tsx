@@ -13,17 +13,17 @@ import { dispatchUserEmail } from "../services/actions/user";
 export const ForgotPasswordPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const {
-    submitUserEmailRequest,
+    submitServerRequest,
     submitUserEmailSuccess,
-    submitUserEmailFailed,
-    submitUserEmailError,
+    submitServerFailed,
+    submitServerError,
   } = useAppSelector((state) => state.user);
   let history = useHistory();
 
   useEffect(() => {
-    if (submitUserEmailSuccess && !submitUserEmailRequest)
+    if (submitUserEmailSuccess && !submitServerRequest)
       history.push({ pathname: "/reset-password" });
-  }, [submitUserEmailSuccess, submitUserEmailRequest]);
+  }, [submitUserEmailSuccess, submitServerRequest]);
 
   const handleSubmit = useCallback(
     (e: React.SyntheticEvent<Element, Event>) => {
@@ -48,9 +48,9 @@ export const ForgotPasswordPage: React.FC = () => {
             onChange={(e) => setValue(e.target.value)}
           />
         </form>
-        {submitUserEmailFailed && (
+        {submitServerFailed && (
           <p className="text text_type_main-default text_color_inactive mb-4">
-            Произошла ошибка! Код ошибки: {submitUserEmailError}
+            Произошла ошибка! Код ошибки: {submitServerError}
           </p>
         )}
         <Button type="primary" size="large" onClick={(e) => handleSubmit(e)}>
