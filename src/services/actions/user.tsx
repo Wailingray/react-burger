@@ -16,7 +16,7 @@ import {
   TSuccessfulReply,
   TUser,
 } from "../utils/types";
-import { getCookie, setCookie } from "../utils/utils";
+import { getCookie, setCookie, setTokens } from "../utils/utils";
 
 export const SUBMIT_SERVER_REQUEST: "SUBMIT_SERVER_REQUEST" =
   "SUBMIT_SERVER_REQUEST";
@@ -180,17 +180,7 @@ export const dispatchSignIn: AppThunk =
     signInRequest(request)
       .then((res) => {
         dispatch(submitSignInSuccess(res));
-        console.log(res);
-        let accessToken, refreshToken;
-        if (res.accessToken.indexOf("Bearer") === 0) {
-          accessToken = res.accessToken.split("Bearer ")[1];
-        }
-        refreshToken = res.refreshToken;
-        if (accessToken && refreshToken) {
-          setCookie("accessToken", accessToken, { expires: 100 });
-          setCookie("refreshToken", refreshToken);
-          console.log(document.cookie);
-        }
+        setTokens(res);
         dispatch(setUser(res.user));
       })
       .catch((err) => {
@@ -200,23 +190,38 @@ export const dispatchSignIn: AppThunk =
 
 export const dispatchGetUser: AppThunk = () => (dispatch: AppDispatch) => {
   dispatch(submitServerRequest());
-  getUserRequest()
-    .then((res: TSuccessfulGetUserReply) => {
-      dispatch(submitGetUserSuccess());
-      dispatch(setUser(res.user));
-    })
-    .catch((err) => {
-      let refreshToken = getCookie("refreshToken");
-      console.log(refreshToken);
-      if (refreshToken) {
-        dispatch(submitServerRequest());
-        updateTokenRequest(refreshToken)
-          .then(() => {
-            getUserRequest();
-          })
-          .catch((err) => {
-            dispatch(submitServerFailed(err));
-          });
-      }
-    });
+  let accessToken = getCookie("accessToken");
+  if (accessToken) {
+    getUserRequest(accessToken)
+      .then((res: TSuccessfulGetUserReply) => {
+        dispatch(submitGetUserSuccess());
+        dispatch(setUser(res.user));
+      })
+      .catch((err) => {
+        dispatch(submitServerFailed(err));
+      });
+  } else {
+    let refreshToken = getCookie("refreshToken");
+    if (refreshToken) {
+      dispatch(submitServerRequest());
+      updateTokenRequest(refreshToken)
+        .then((res) => {
+          setTokens(res);
+          accessToken = getCookie("accessToken");
+          if (accessToken) {
+            getUserRequest(accessToken)
+              .then((res: TSuccessfulGetUserReply) => {
+                dispatch(submitGetUserSuccess());
+                dispatch(setUser(res.user));
+              })
+              .catch((err) => {
+                dispatch(submitServerFailed(err));
+              });
+          }
+        })
+        .catch((err) => {
+          dispatch(submitServerFailed(err));
+        });
+    }
+  }
 };

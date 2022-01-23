@@ -18,14 +18,9 @@ export const apiConfig = {
   ordersUrl: `https://norma.nomoreparties.space/api/orders`,
   headers: {
     "Content-Type": "application/json",
-  },
-  authHeaders: {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + getCookie("accessToken"),
-  },
+  }
 };
 const getResponse = (res: Response) => {
-  console.log(res);
   if (res.ok) {
     return res.json();
   }
@@ -90,20 +85,22 @@ export const signInRequest = async (RequestBody: TSignInBody) => {
   return getResponse(res);
 };
 
-export const getUserRequest = async () => {
+export const getUserRequest = async (accessToken: string) => {
   const res = await fetch(apiConfig.getUserUrl, {
     method: "GET",
-    headers: apiConfig.authHeaders,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + accessToken,
+    },
   });
   return getResponse(res);
 };
 
 export const updateTokenRequest = async (refreshToken: string) => {
-  console.log(JSON.stringify({ token: `{{${refreshToken}}}` }));
   const res = await fetch(apiConfig.updateTokenUrl, {
     method: "POST",
     headers: apiConfig.headers,
-    body: JSON.stringify({ token: `{{${refreshToken}}}` }),
+    body: JSON.stringify({ token: refreshToken}),
   });
   return getResponse(res);
 };

@@ -1,4 +1,4 @@
-import { TIngredient } from "./types";
+import { TIngredient, TSuccessfulRegisterReply } from "./types";
 
 export const burgerExample : TIngredient[] = [
   {
@@ -137,4 +137,16 @@ export function setCookie(name: string, value: string, props?: any) {
 
 export function deleteCookie(name: string) {
   setCookie(name, '', { expires: -1 });
+}
+
+export const setTokens = (res: TSuccessfulRegisterReply) => {
+  let accessToken, refreshToken;
+  if (res.accessToken.indexOf("Bearer") === 0) {
+    accessToken = res.accessToken.split("Bearer ")[1];
+  }
+  refreshToken = res.refreshToken;
+  if (accessToken && refreshToken) {
+    setCookie("accessToken", accessToken, { expires: 100 });
+    setCookie("refreshToken", refreshToken);
+  }
 }
