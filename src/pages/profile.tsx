@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./profile.module.css";
 import { Link, NavLink } from "react-router-dom";
 import {
@@ -7,8 +7,26 @@ import {
   Input,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
+import { dispatchGetUser } from "../services/actions/user";
 
 export const ProfilePage = () => {
+
+  const dispatch = useAppDispatch()
+
+  const { user, submitServerRequest } = useAppSelector(
+    (state) => state.user
+  );
+  useEffect(() => {
+    dispatch(dispatchGetUser())
+  }, []);
+
+  useEffect(() => {
+    setEmailValue(user.email)
+    setNameValue(user.name)
+  }, [user]);
+
+
 
   const [nameValue, setNameValue] = useState("");
   const [emailValue, setEmailValue] = useState("");

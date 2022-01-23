@@ -5,8 +5,11 @@ import {
   TResponseBody,
   TSignInBody,
 } from "../../services/utils/types";
+import { getCookie } from "../../services/utils/utils";
 
 export const apiConfig = {
+  updateTokenUrl: `https://norma.nomoreparties.space/api/auth/token`,
+  getUserUrl: `https://norma.nomoreparties.space/api/auth/user`,
   signInUrl: `https://norma.nomoreparties.space/api/auth/login`,
   registerUrl: `https://norma.nomoreparties.space/api/auth/register`,
   passwordResetUrlStep2: `https://norma.nomoreparties.space/api/password-reset/reset`,
@@ -16,10 +19,13 @@ export const apiConfig = {
   headers: {
     "Content-Type": "application/json",
   },
+  authHeaders: {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer " + getCookie("accessToken"),
+  },
 };
 const getResponse = (res: Response) => {
   if (res.ok) {
-    console.log(res);
     return res.json();
   }
   return Promise.reject(res.status);
@@ -79,6 +85,23 @@ export const signInRequest = async (RequestBody: TSignInBody) => {
     method: "POST",
     headers: apiConfig.headers,
     body: JSON.stringify(RequestBody),
+  });
+  return getResponse(res);
+};
+
+export const getUserRequest = async () => {
+  const res = await fetch(apiConfig.getUserUrl, {
+    method: 'GET',
+    headers: apiConfig.authHeaders,
+  });
+  return getResponse(res);
+};
+
+export const updateTokenRequest = async () => {
+  const res = await fetch(apiConfig.updateTokenUrl, {
+    method: 'POST',
+    headers: apiConfig.headers,
+    body: JSON.stringify(getCookie("refreshToken")),
   });
   return getResponse(res);
 };

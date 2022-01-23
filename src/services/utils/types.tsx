@@ -36,6 +36,14 @@ export type TSuccessfulRegisterReply = {
   refreshToken: string;
 };
 
+export type TSuccessfulGetUserReply = {
+  success: true;
+  user: {
+    email: string;
+    name: string;
+  };
+};
+
 export type TResetPwdBody = {
   password: string;
   token: string;

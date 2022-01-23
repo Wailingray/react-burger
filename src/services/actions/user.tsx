@@ -1,14 +1,17 @@
 import { AppDispatch, AppThunk } from "../..";
 import {
+  getUserRequest,
   registerRequest,
   signInRequest,
   submitResetPwd,
   submitUserEmail,
+  updateTokenRequest,
 } from "../../components/api/api";
 import {
   TRegisterBody,
   TResetPwdBody,
   TSignInBody,
+  TSuccessfulGetUserReply,
   TSuccessfulRegisterReply,
   TSuccessfulReply,
   TUser,
@@ -19,14 +22,16 @@ export const SUBMIT_SERVER_REQUEST: "SUBMIT_SERVER_REQUEST" =
   "SUBMIT_SERVER_REQUEST";
 export const SUBMIT_USER_EMAIL_SUCCESS: "SUBMIT_USER_EMAIL_SUCCESS" =
   "SUBMIT_USER_EMAIL_SUCCESS";
-export const SUBMIT_SERVER_FAILED: "SUBMIT_USER_EMAIL_FAILED" =
-  "SUBMIT_USER_EMAIL_FAILED";
+export const SUBMIT_SERVER_FAILED: "SUBMIT_SERVER_FAILED" =
+  "SUBMIT_SERVER_FAILED";
 export const SUBMIT_PWD_RESET_SUCCESS: "SUBMIT_PWD_RESET_SUCCESS" =
   "SUBMIT_PWD_RESET_SUCCESS";
 export const SUBMIT_REGISTER_SUCCESS: "SUBMIT_REGISTER_SUCCESS" =
   "SUBMIT_REGISTER_SUCCESS";
 export const SUBMIT_SIGN_IN_SUCCESS: "SUBMIT_SIGN_IN_SUCCESS" =
   "SUBMIT_SIGN_IN_SUCCESS";
+export const SUBMIT_GET_USER_SUCCESS: "SUBMIT_GET_USER_SUCCESS" =
+  "SUBMIT_GET_USER_SUCCESS";
 export const SET_USER: "SET_USER" = "SET_USER";
 
 export interface ISubmitServerRequest {
@@ -58,6 +63,10 @@ export interface ISubmitSignInSuccess {
   reply: TSuccessfulRegisterReply;
 }
 
+export interface ISubmitGetUserSuccess {
+  readonly type: typeof SUBMIT_GET_USER_SUCCESS;
+}
+
 export interface ISetUser {
   readonly type: typeof SET_USER;
   user: TUser;
@@ -70,6 +79,7 @@ export type TUserActions =
   | ISubmitResetPwdSuccess
   | ISubmitRegisterSuccess
   | ISubmitSignInSuccess
+  | ISubmitGetUserSuccess
   | ISetUser;
 
 export const submitRegisterSuccess = (
@@ -107,6 +117,10 @@ export const submitSignInSuccess = (
 ): ISubmitSignInSuccess => ({
   type: SUBMIT_SIGN_IN_SUCCESS,
   reply,
+});
+
+export const submitGetUserSuccess = (): ISubmitGetUserSuccess => ({
+  type: SUBMIT_GET_USER_SUCCESS,
 });
 
 export const setUser = (user: TUser): ISetUser => ({
@@ -150,7 +164,7 @@ export const dispatchRegister: AppThunk =
         }
         refreshToken = res.refreshToken;
         if (accessToken && refreshToken) {
-          setCookie("accessToken", accessToken, { expires: 100 });
+          setCookie("accessToken", accessToken, { expires: 600 });
           setCookie("refreshToken", refreshToken);
         }
         dispatch(setUser(res.user));
@@ -183,3 +197,22 @@ export const dispatchSignIn: AppThunk =
         dispatch(submitServerFailed(err));
       });
   };
+
+export const dispatchGetUser: AppThunk = () => (dispatch: AppDispatch) => {
+  dispatch(submitServerRequest());
+  getUserRequest()
+    .then((res: TSuccessfulGetUserReply) => {
+      dispatch(submitGetUserSuccess());
+      dispatch(setUser(res.user));
+    })
+    .catch((err) => {
+      try {
+        dispatch(submitServerRequest());
+        updateTokenRequest().then(() => {
+          dispatchGetUser();
+        });
+      } catch (err: any) {
+        console.log(err);
+      }
+    });
+};
