@@ -21,10 +21,11 @@ export const apiConfig = {
   },
   authHeaders: {
     "Content-Type": "application/json",
-    "Authorization": "Bearer " + getCookie("accessToken"),
+    Authorization: "Bearer " + getCookie("accessToken"),
   },
 };
 const getResponse = (res: Response) => {
+  console.log(res);
   if (res.ok) {
     return res.json();
   }
@@ -91,17 +92,18 @@ export const signInRequest = async (RequestBody: TSignInBody) => {
 
 export const getUserRequest = async () => {
   const res = await fetch(apiConfig.getUserUrl, {
-    method: 'GET',
+    method: "GET",
     headers: apiConfig.authHeaders,
   });
   return getResponse(res);
 };
 
-export const updateTokenRequest = async () => {
+export const updateTokenRequest = async (refreshToken: string) => {
+  console.log(JSON.stringify({ token: `{{${refreshToken}}}` }));
   const res = await fetch(apiConfig.updateTokenUrl, {
-    method: 'POST',
+    method: "POST",
     headers: apiConfig.headers,
-    body: JSON.stringify(getCookie("refreshToken")),
+    body: JSON.stringify({ token: `{{${refreshToken}}}` }),
   });
   return getResponse(res);
 };

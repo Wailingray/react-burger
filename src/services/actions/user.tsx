@@ -16,7 +16,7 @@ import {
   TSuccessfulReply,
   TUser,
 } from "../utils/types";
-import { setCookie } from "../utils/utils";
+import { getCookie, setCookie } from "../utils/utils";
 
 export const SUBMIT_SERVER_REQUEST: "SUBMIT_SERVER_REQUEST" =
   "SUBMIT_SERVER_REQUEST";
@@ -206,13 +206,17 @@ export const dispatchGetUser: AppThunk = () => (dispatch: AppDispatch) => {
       dispatch(setUser(res.user));
     })
     .catch((err) => {
-      try {
+      let refreshToken = getCookie("refreshToken");
+      console.log(refreshToken);
+      if (refreshToken) {
         dispatch(submitServerRequest());
-        updateTokenRequest().then(() => {
-          dispatchGetUser();
-        });
-      } catch (err: any) {
-        console.log(err);
+        updateTokenRequest(refreshToken)
+          .then(() => {
+            getUserRequest();
+          })
+          .catch((err) => {
+            dispatch(submitServerFailed(err));
+          });
       }
     });
 };
