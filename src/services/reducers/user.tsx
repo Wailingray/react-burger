@@ -1,5 +1,6 @@
 import {
   SET_USER,
+  SUBMIT_CHANGE_CREDENTIALS_SUCCESS,
   SUBMIT_LOGOUT_SUCCESS,
   SUBMIT_PWD_RESET_SUCCESS,
   SUBMIT_SERVER_FAILED,
@@ -17,6 +18,7 @@ export type TUserState = {
   submitUserEmailSuccess: boolean;
   submitLogoutSuccess: boolean;
   submitSignInSuccess: boolean;
+  submitChangeCredentialsSuccess: boolean;
   submitPwdResetSuccess: boolean;
   user: TUser;
 };
@@ -28,6 +30,7 @@ const initialState: TUserState = {
   submitLogoutSuccess: false,
   submitUserEmailSuccess: false,
   submitSignInSuccess: false,
+  submitChangeCredentialsSuccess: false,
   submitPwdResetSuccess: false,
   user: {
     email: "",
@@ -91,6 +94,14 @@ export const userReducer = (
         submitServerRequest: false,
         submitLogoutSuccess: true,
         user: initialState.user,
+      };
+    }
+    case SUBMIT_CHANGE_CREDENTIALS_SUCCESS: {
+      return {
+        ...state,
+        submitServerFailed: false,
+        submitServerRequest: false,
+        submitChangeCredentialsSuccess: true,
       };
     }
     default: {

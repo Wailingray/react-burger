@@ -8,14 +8,22 @@ import {
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
-import { dispatchGetUser, dispatchLogout } from "../services/actions/user";
+import {
+  dispatchChangeCredentials,
+  dispatchGetUser,
+  dispatchLogout,
+  submitChangeCredentialsSuccess,
+} from "../services/actions/user";
 
 export const ProfilePage = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
-  const { user, submitServerRequest, submitLogoutSuccess } = useAppSelector(
-    (state) => state.user
-  );
+  const {
+    user,
+    submitServerRequest,
+    submitLogoutSuccess,
+    submitChangeCredentialsSuccess,
+  } = useAppSelector((state) => state.user);
   useEffect(() => {
     dispatch(dispatchGetUser());
   }, []);
@@ -31,6 +39,23 @@ export const ProfilePage = () => {
 
   const handleLogout = () => {
     dispatch(dispatchLogout());
+  };
+
+  const resetInput = (e: React.SyntheticEvent<Element, Event>) => {
+    e.preventDefault()
+    setEmailValue(user.email);
+    setNameValue(user.name);
+  };
+
+  const handleSubmit = (e: React.SyntheticEvent<Element, Event>) => {
+    e.preventDefault();
+    dispatch(
+      dispatchChangeCredentials({
+        email: emailValue,
+        password: pwdValue,
+        name: nameValue,
+      })
+    );
   };
 
   const [nameValue, setNameValue] = useState("");
@@ -95,11 +120,21 @@ export const ProfilePage = () => {
               onChange={(e) => setPwdValue(e.target.value)}
             />
           </form>
-          <div className={`${styles.buttonsContainer} mb-6`}>
-            <Button type="primary" size="medium">
+          {submitChangeCredentialsSuccess && !submitServerRequest &&(
+            <p className="text text_type_main-default text_color_inactive">
+              {" "}
+              Данные успешно изменены!
+            </p>
+          )}
+          <div className={`${styles.buttonsContainer} mt-6`}>
+            <Button type="primary" onClick={(e) => resetInput(e)} size="medium">
               Отмена
             </Button>
-            <Button type="primary" size="medium">
+            <Button
+              type="primary"
+              onClick={(e) => handleSubmit(e)}
+              size="medium"
+            >
               Сохранить
             </Button>
           </div>

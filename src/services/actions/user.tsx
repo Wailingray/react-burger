@@ -1,5 +1,6 @@
 import { AppDispatch, AppThunk } from "../..";
 import {
+  changeCredentialsRequest,
   getUserRequest,
   logoutRequest,
   registerRequest,
@@ -37,8 +38,9 @@ export const SUBMIT_UPDATE_TOKENS_SUCCESS: "SUBMIT_UPDATE_TOKENS_SUCCESS" =
   "SUBMIT_UPDATE_TOKENS_SUCCESS";
 export const SUBMIT_LOGOUT_SUCCESS: "SUBMIT_LOGOUT_SUCCESS" =
   "SUBMIT_LOGOUT_SUCCESS";
-export const REMOVE_USER: "REMOVE_USER" =
-  "REMOVE_USER";
+export const SUBMIT_CHANGE_CREDENTIALS_SUCCESS: "SUBMIT_CHANGE_CREDENTIALS_SUCCESS" =
+  "SUBMIT_CHANGE_CREDENTIALS_SUCCESS";
+export const REMOVE_USER: "REMOVE_USER" = "REMOVE_USER";
 export const SET_USER: "SET_USER" = "SET_USER";
 
 export interface ISubmitServerRequest {
@@ -82,6 +84,10 @@ export interface ISubmitUpdateTokensSuccess {
   readonly type: typeof SUBMIT_UPDATE_TOKENS_SUCCESS;
 }
 
+export interface ISubmitChangeCredentialsSuccess {
+  readonly type: typeof SUBMIT_CHANGE_CREDENTIALS_SUCCESS;
+}
+
 export interface IRemoveUser {
   readonly type: typeof REMOVE_USER;
 }
@@ -102,6 +108,7 @@ export type TUserActions =
   | ISubmitLogoutSuccess
   | ISubmitUpdateTokensSuccess
   | IRemoveUser
+  | ISubmitChangeCredentialsSuccess
   | ISetUser;
 
 export const submitRegisterSuccess = (
@@ -141,13 +148,18 @@ export const submitSignInSuccess = (
   reply,
 });
 
+export const submitChangeCredentialsSuccess =
+  (): ISubmitChangeCredentialsSuccess => ({
+    type: SUBMIT_CHANGE_CREDENTIALS_SUCCESS,
+  });
+
 export const submitGetUserSuccess = (): ISubmitGetUserSuccess => ({
   type: SUBMIT_GET_USER_SUCCESS,
 });
 
 export const submitLogoutSuccess = (): ISubmitLogoutSuccess => ({
   type: SUBMIT_LOGOUT_SUCCESS,
-})
+});
 
 export const setUser = (user: TUser): ISetUser => ({
   type: SET_USER,
@@ -156,11 +168,11 @@ export const setUser = (user: TUser): ISetUser => ({
 
 export const submitUpdateTokensSuccess = (): ISubmitUpdateTokensSuccess => ({
   type: SUBMIT_UPDATE_TOKENS_SUCCESS,
-})
+});
 
-export const removeUser = () : IRemoveUser => ({
+export const removeUser = (): IRemoveUser => ({
   type: REMOVE_USER,
-})
+});
 
 export const dispatchUserEmail: AppThunk =
   (email: string) => (dispatch: AppDispatch) => {
@@ -267,12 +279,52 @@ export const dispatchLogout: AppThunk = () => (dispatch: AppDispatch) => {
     logoutRequest(refreshToken)
       .then(() => {
         dispatch(submitLogoutSuccess());
-        dispatch(removeUser())
-        deleteCookie("accessToken")
-        deleteCookie("refreshToken")
+        dispatch(removeUser());
+        deleteCookie("accessToken");
+        deleteCookie("refreshToken");
       })
       .catch((err) => {
         dispatch(submitServerFailed(err));
       });
   }
 };
+
+export const dispatchChangeCredentials: AppThunk =
+  (request: TRegisterBody) => (dispatch: AppDispatch) => {
+    dispatch(submitServerRequest());
+    let accessToken = getCookie("accessToken");
+    if (accessToken) {
+      changeCredentialsRequest(accessToken, request)
+        .then((res: TSuccessfulGetUserReply) => {
+          dispatch(submitChangeCredentialsSuccess());
+          dispatch(setUser(res.user));
+        })
+        .catch((err) => {
+          dispatch(submitServerFailed(err));
+        });
+    } else {
+      let refreshToken = getCookie("refreshToken");
+      if (refreshToken) {
+        dispatch(submitServerRequest());
+        updateTokenRequest(refreshToken)
+          .then((res) => {
+            setTokens(res);
+            accessToken = getCookie("accessToken");
+            if (accessToken) {
+              changeCredentialsRequest(accessToken, request)
+                .then((res: TSuccessfulGetUserReply) => {
+                  console.log(res);
+                  dispatch(submitChangeCredentialsSuccess());
+                  dispatch(setUser(res.user));
+                })
+                .catch((err) => {
+                  dispatch(submitServerFailed(err));
+                });
+            }
+          })
+          .catch((err) => {
+            dispatch(submitServerFailed(err));
+          });
+      }
+    }
+  };

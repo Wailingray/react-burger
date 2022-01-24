@@ -19,7 +19,7 @@ export const apiConfig = {
   ordersUrl: `https://norma.nomoreparties.space/api/orders`,
   headers: {
     "Content-Type": "application/json",
-  }
+  },
 };
 const getResponse = (res: Response) => {
   if (res.ok) {
@@ -101,17 +101,31 @@ export const updateTokenRequest = async (refreshToken: string) => {
   const res = await fetch(apiConfig.updateTokenUrl, {
     method: "POST",
     headers: apiConfig.headers,
-    body: JSON.stringify({ token: refreshToken}),
+    body: JSON.stringify({ token: refreshToken }),
   });
   return getResponse(res);
 };
-
 
 export const logoutRequest = async (accessToken: string) => {
   const res = await fetch(apiConfig.logoutUrl, {
     method: "POST",
     headers: apiConfig.headers,
-    body: JSON.stringify({ token: accessToken}),
+    body: JSON.stringify({ token: accessToken }),
   });
   return getResponse(res);
-}
+};
+
+export const changeCredentialsRequest = async (
+  accessToken: string,
+  newCredentials: TRegisterBody
+) => {
+  const res = await fetch(apiConfig.getUserUrl, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + accessToken,
+    },
+    body: JSON.stringify(newCredentials),
+  });
+  return getResponse(res);
+};
