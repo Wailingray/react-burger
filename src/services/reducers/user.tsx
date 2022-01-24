@@ -1,5 +1,6 @@
 import {
   SET_USER,
+  SUBMIT_LOGOUT_SUCCESS,
   SUBMIT_PWD_RESET_SUCCESS,
   SUBMIT_SERVER_FAILED,
   SUBMIT_SERVER_REQUEST,
@@ -14,22 +15,24 @@ export type TUserState = {
   submitServerFailed: boolean;
   submitServerError: number | null;
   submitUserEmailSuccess: boolean;
+  submitLogoutSuccess: boolean;
   submitSignInSuccess: boolean;
   submitPwdResetSuccess: boolean;
-  user: TUser
+  user: TUser;
 };
 
 const initialState: TUserState = {
   submitServerRequest: false,
   submitServerFailed: false,
   submitServerError: null,
+  submitLogoutSuccess: false,
   submitUserEmailSuccess: false,
   submitSignInSuccess: false,
   submitPwdResetSuccess: false,
   user: {
-    email: '',
-    name: '',
-  }
+    email: "",
+    name: "",
+  },
 };
 
 export const userReducer = (
@@ -69,8 +72,8 @@ export const userReducer = (
         user: {
           email: action.user.email,
           name: action.user.name,
-        }
-      }
+        },
+      };
     }
     case SUBMIT_SIGN_IN_SUCCESS: {
       return {
@@ -78,6 +81,16 @@ export const userReducer = (
         submitServerFailed: false,
         submitServerRequest: false,
         submitSignInSuccess: true,
+        submitLogoutSuccess: false,
+      };
+    }
+    case SUBMIT_LOGOUT_SUCCESS: {
+      return {
+        ...state,
+        submitServerFailed: false,
+        submitServerRequest: false,
+        submitLogoutSuccess: true,
+        user: initialState.user,
       };
     }
     default: {

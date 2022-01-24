@@ -1,6 +1,7 @@
 import { AppDispatch, AppThunk } from "../..";
 import {
   getUserRequest,
+  logoutRequest,
   registerRequest,
   signInRequest,
   submitResetPwd,
@@ -16,7 +17,7 @@ import {
   TSuccessfulReply,
   TUser,
 } from "../utils/types";
-import { getCookie, setCookie, setTokens } from "../utils/utils";
+import { deleteCookie, getCookie, setCookie, setTokens } from "../utils/utils";
 
 export const SUBMIT_SERVER_REQUEST: "SUBMIT_SERVER_REQUEST" =
   "SUBMIT_SERVER_REQUEST";
@@ -32,6 +33,12 @@ export const SUBMIT_SIGN_IN_SUCCESS: "SUBMIT_SIGN_IN_SUCCESS" =
   "SUBMIT_SIGN_IN_SUCCESS";
 export const SUBMIT_GET_USER_SUCCESS: "SUBMIT_GET_USER_SUCCESS" =
   "SUBMIT_GET_USER_SUCCESS";
+export const SUBMIT_UPDATE_TOKENS_SUCCESS: "SUBMIT_UPDATE_TOKENS_SUCCESS" =
+  "SUBMIT_UPDATE_TOKENS_SUCCESS";
+export const SUBMIT_LOGOUT_SUCCESS: "SUBMIT_LOGOUT_SUCCESS" =
+  "SUBMIT_LOGOUT_SUCCESS";
+export const REMOVE_USER: "REMOVE_USER" =
+  "REMOVE_USER";
 export const SET_USER: "SET_USER" = "SET_USER";
 
 export interface ISubmitServerRequest {
@@ -67,6 +74,18 @@ export interface ISubmitGetUserSuccess {
   readonly type: typeof SUBMIT_GET_USER_SUCCESS;
 }
 
+export interface ISubmitLogoutSuccess {
+  readonly type: typeof SUBMIT_LOGOUT_SUCCESS;
+}
+
+export interface ISubmitUpdateTokensSuccess {
+  readonly type: typeof SUBMIT_UPDATE_TOKENS_SUCCESS;
+}
+
+export interface IRemoveUser {
+  readonly type: typeof REMOVE_USER;
+}
+
 export interface ISetUser {
   readonly type: typeof SET_USER;
   user: TUser;
@@ -80,6 +99,9 @@ export type TUserActions =
   | ISubmitRegisterSuccess
   | ISubmitSignInSuccess
   | ISubmitGetUserSuccess
+  | ISubmitLogoutSuccess
+  | ISubmitUpdateTokensSuccess
+  | IRemoveUser
   | ISetUser;
 
 export const submitRegisterSuccess = (
@@ -123,10 +145,22 @@ export const submitGetUserSuccess = (): ISubmitGetUserSuccess => ({
   type: SUBMIT_GET_USER_SUCCESS,
 });
 
+export const submitLogoutSuccess = (): ISubmitLogoutSuccess => ({
+  type: SUBMIT_LOGOUT_SUCCESS,
+})
+
 export const setUser = (user: TUser): ISetUser => ({
   type: SET_USER,
   user,
 });
+
+export const submitUpdateTokensSuccess = (): ISubmitUpdateTokensSuccess => ({
+  type: SUBMIT_UPDATE_TOKENS_SUCCESS,
+})
+
+export const removeUser = () : IRemoveUser => ({
+  type: REMOVE_USER,
+})
 
 export const dispatchUserEmail: AppThunk =
   (email: string) => (dispatch: AppDispatch) => {
@@ -223,5 +257,22 @@ export const dispatchGetUser: AppThunk = () => (dispatch: AppDispatch) => {
           dispatch(submitServerFailed(err));
         });
     }
+  }
+};
+
+export const dispatchLogout: AppThunk = () => (dispatch: AppDispatch) => {
+  dispatch(submitServerRequest());
+  let refreshToken = getCookie("refreshToken");
+  if (refreshToken) {
+    logoutRequest(refreshToken)
+      .then(() => {
+        dispatch(submitLogoutSuccess());
+        dispatch(removeUser())
+        deleteCookie("accessToken")
+        deleteCookie("refreshToken")
+      })
+      .catch((err) => {
+        dispatch(submitServerFailed(err));
+      });
   }
 };

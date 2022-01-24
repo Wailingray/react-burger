@@ -8,6 +8,7 @@ import {
 import { getCookie } from "../../services/utils/utils";
 
 export const apiConfig = {
+  logoutUrl: `https://norma.nomoreparties.space/api/auth/logout`,
   updateTokenUrl: `https://norma.nomoreparties.space/api/auth/token`,
   getUserUrl: `https://norma.nomoreparties.space/api/auth/user`,
   signInUrl: `https://norma.nomoreparties.space/api/auth/login`,
@@ -104,3 +105,13 @@ export const updateTokenRequest = async (refreshToken: string) => {
   });
   return getResponse(res);
 };
+
+
+export const logoutRequest = async (accessToken: string) => {
+  const res = await fetch(apiConfig.logoutUrl, {
+    method: "POST",
+    headers: apiConfig.headers,
+    body: JSON.stringify({ token: accessToken}),
+  });
+  return getResponse(res);
+}

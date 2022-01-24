@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./profile.module.css";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useHistory } from "react-router-dom";
 import {
   Button,
   EmailInput,
@@ -8,25 +8,30 @@ import {
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
-import { dispatchGetUser } from "../services/actions/user";
+import { dispatchGetUser, dispatchLogout } from "../services/actions/user";
 
 export const ProfilePage = () => {
-
-  const dispatch = useAppDispatch()
-
-  const { user, submitServerRequest } = useAppSelector(
+  const dispatch = useAppDispatch();
+  const history = useHistory();
+  const { user, submitServerRequest, submitLogoutSuccess } = useAppSelector(
     (state) => state.user
   );
   useEffect(() => {
-    dispatch(dispatchGetUser())
+    dispatch(dispatchGetUser());
   }, []);
 
   useEffect(() => {
-    setEmailValue(user.email)
-    setNameValue(user.name)
+    setEmailValue(user.email);
+    setNameValue(user.name);
   }, [user]);
 
+  useEffect(() => {
+    if (submitLogoutSuccess) history.push({ pathname: "/login" });
+  }, [submitLogoutSuccess]);
 
+  const handleLogout = () => {
+    dispatch(dispatchLogout());
+  };
 
   const [nameValue, setNameValue] = useState("");
   const [emailValue, setEmailValue] = useState("");
@@ -50,13 +55,12 @@ export const ProfilePage = () => {
           >
             История заказов
           </NavLink>
-          <NavLink
-            className={`${styles.link} text text_type_main-medium`}
-            to={"/profile/login"}
-            activeClassName={`${styles.activeLink}`}
+          <button
+            className={`${styles.logoutButton} text text_type_main-medium`}
+            onClick={() => handleLogout()}
           >
             Выход
-          </NavLink>
+          </button>
           <p
             className={`${styles.comment} text text_type_main-default text_color_inactive mt-20`}
           >
@@ -91,9 +95,14 @@ export const ProfilePage = () => {
               onChange={(e) => setPwdValue(e.target.value)}
             />
           </form>
-          <Button type="primary" size="large">
-            Сохранить
-          </Button>
+          <div className={`${styles.buttonsContainer} mb-6`}>
+            <Button type="primary" size="medium">
+              Отмена
+            </Button>
+            <Button type="primary" size="medium">
+              Сохранить
+            </Button>
+          </div>
         </form>
       </div>
     </div>
