@@ -1,9 +1,9 @@
 import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../services/hooks/hooks';
 import { dispatchGetUser } from '../../services/actions/user';
-import { ProtectedRouteProps } from '../../services/utils/interfaces';
+import { ProtectedRouteProps, TLocationState } from '../../services/utils/interfaces';
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, path , exact}) => {
 
@@ -14,7 +14,6 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, path ,
   const [isUserLoaded, setUserLoaded] = useState(false);
 
   const init = async () => {
-    console.log('disp');
     dispatch(dispatchGetUser());
     setUserLoaded(true);
   };

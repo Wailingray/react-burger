@@ -6,9 +6,10 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link, useHistory } from "react-router-dom";
+import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
 import { dispatchSignIn } from "../services/actions/user";
+import { TLocationState } from "../services/utils/interfaces";
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -21,9 +22,12 @@ export const LoginPage: React.FC = () => {
     submitSignInSuccess,
     submitServerFailed,
     submitServerError,
+    user,
   } = useAppSelector((state) => state.user);
 
   let history = useHistory();
+
+  const location = useLocation<TLocationState>()
 
   useEffect(() => {
     if (submitSignInSuccess && !submitServerRequest)
@@ -39,6 +43,16 @@ export const LoginPage: React.FC = () => {
       })
     );
   };
+
+  if (user) {
+    console.log(location.state.from);
+    return (
+      <Redirect
+        to={ location.state.from || '/' }
+      />
+    );
+  }
+
 
   return (
     <div className={`${styles.formContainer}`}>

@@ -1,3 +1,5 @@
+import { Location } from "history";
+
 export interface IngProps {
   id: string;
   ingType: string;
@@ -7,7 +9,7 @@ export interface IngProps {
 }
 
 export interface ModalProps {
-  onClose: (...args: any[]) => any
+  onClose: (...args: any[]) => any;
 }
 
 export interface ProtectedRouteProps {
@@ -25,5 +27,10 @@ export interface ConstructorEL {
   image: string;
   name: string;
   price: number;
-  index? : number
+  index?: number;
+}
+
+export interface TLocationState extends Location {
+  from: string;
+  pushLocation?: Location;
 }
