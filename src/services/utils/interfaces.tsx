@@ -10,6 +10,11 @@ export interface ModalProps {
   onClose: (...args: any[]) => any
 }
 
+export interface ProtectedRouteProps {
+  path: string;
+  exact: boolean;
+}
+
 export interface ConstructorDraggableEl {
   id: string;
   ingType: string;

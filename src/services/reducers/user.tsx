@@ -20,7 +20,7 @@ export type TUserState = {
   submitSignInSuccess: boolean;
   submitChangeCredentialsSuccess: boolean;
   submitPwdResetSuccess: boolean;
-  user: TUser;
+  user: TUser | null;
 };
 
 const initialState: TUserState = {
@@ -32,10 +32,7 @@ const initialState: TUserState = {
   submitSignInSuccess: false,
   submitChangeCredentialsSuccess: false,
   submitPwdResetSuccess: false,
-  user: {
-    email: "",
-    name: "",
-  },
+  user: null
 };
 
 export const userReducer = (
@@ -93,6 +90,7 @@ export const userReducer = (
         submitServerFailed: false,
         submitServerRequest: false,
         submitLogoutSuccess: true,
+        submitChangeCredentialsSuccess: false,
         user: initialState.user,
       };
     }

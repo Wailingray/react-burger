@@ -29,8 +29,10 @@ export const ProfilePage = () => {
   }, []);
 
   useEffect(() => {
-    setEmailValue(user.email);
-    setNameValue(user.name);
+    if (user) {
+      setEmailValue(user.email);
+      setNameValue(user.name);
+    }
   }, [user]);
 
   useEffect(() => {
@@ -43,8 +45,14 @@ export const ProfilePage = () => {
 
   const resetInput = (e: React.SyntheticEvent<Element, Event>) => {
     e.preventDefault()
-    setEmailValue(user.email);
-    setNameValue(user.name);
+    if (user) {
+      setEmailValue(user.email);
+      setNameValue(user.name);
+    }
+    else {
+      setEmailValue('');
+      setNameValue('');
+    }
   };
 
   const handleSubmit = (e: React.SyntheticEvent<Element, Event>) => {
