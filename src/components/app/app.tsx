@@ -13,6 +13,7 @@ import { ForgotPasswordPage } from "../../pages/forgot-password";
 import { ResetPasswordPage } from "../../pages/reset-password";
 import { ProfilePage } from "../../pages/profile";
 import { ProtectedRoute } from "../HOC/protected-route";
+import { Orders } from "../../pages/orders";
 function App() {
   return (
     <Router>
@@ -35,6 +36,9 @@ function App() {
         </Route>
         <ProtectedRoute path="/profile" exact={true}>
           <ProfilePage />
+        </ProtectedRoute>
+        <ProtectedRoute path="/profile/orders" exact={true}>
+          <Orders />
         </ProtectedRoute>
       </Switch>
     </Router>

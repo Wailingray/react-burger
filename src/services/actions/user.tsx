@@ -16,6 +16,7 @@ import {
   TSuccessfulGetUserReply,
   TSuccessfulRegisterReply,
   TSuccessfulReply,
+  TSuccessfulUpdateTokensReply,
   TUser,
 } from "../utils/types";
 import { deleteCookie, getCookie, setCookie, setTokens } from "../utils/utils";
@@ -234,10 +235,9 @@ export const dispatchSignIn: AppThunk =
       });
   };
 
-export const dispatchGetUser: AppThunk = () => (dispatch: AppDispatch) => {
-  dispatch(submitServerRequest());
-  let accessToken = getCookie("accessToken");
-  if (accessToken) {
+export const dispatchGetUserRequest: AppThunk =
+  (accessToken: string) => (dispatch: AppDispatch) => {
+    dispatch(submitServerRequest());
     getUserRequest(accessToken)
       .then((res: TSuccessfulGetUserReply) => {
         dispatch(submitGetUserSuccess());
@@ -246,28 +246,37 @@ export const dispatchGetUser: AppThunk = () => (dispatch: AppDispatch) => {
       .catch((err) => {
         dispatch(submitServerFailed(err));
       });
+  };
+
+export const dispatchUpdateTokensRequest: AppThunk =
+  (refreshToken: string) => (dispatch: AppDispatch) => {
+    dispatch(submitServerRequest());
+    console.log('Попали в updTokensRequest');
+    updateTokenRequest(refreshToken)
+      .then((res: TSuccessfulUpdateTokensReply) => {
+        dispatch(submitUpdateTokensSuccess());
+        setTokens(res);
+      })
+      .catch((err) => {
+        dispatch(submitServerFailed(err));
+      });
+  };
+
+export const dispatchGetUser: AppThunk = () => (dispatch: AppDispatch) => {
+  dispatch(submitServerRequest());
+  let accessToken = getCookie("accessToken");
+  console.log(`access ${accessToken}`)
+  if (accessToken) {
+    dispatchGetUserRequest(accessToken);
   } else {
     let refreshToken = getCookie("refreshToken");
+    console.log(`refresh ${refreshToken}`);
     if (refreshToken) {
-      dispatch(submitServerRequest());
-      updateTokenRequest(refreshToken)
-        .then((res) => {
-          setTokens(res);
-          accessToken = getCookie("accessToken");
-          if (accessToken) {
-            getUserRequest(accessToken)
-              .then((res: TSuccessfulGetUserReply) => {
-                dispatch(submitGetUserSuccess());
-                dispatch(setUser(res.user));
-              })
-              .catch((err) => {
-                dispatch(submitServerFailed(err));
-              });
-          }
-        })
-        .catch((err) => {
-          dispatch(submitServerFailed(err));
-        });
+      dispatchUpdateTokensRequest(refreshToken);
+      accessToken = getCookie("accessToken");
+      if (accessToken) {
+        dispatchGetUserRequest(accessToken);
+      }
     }
   }
 };

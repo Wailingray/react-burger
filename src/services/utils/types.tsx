@@ -21,6 +21,11 @@ export type TOrder = {
   };
 };
 
+export type TSuccessfulUpdateTokensReply = {
+  success: boolean;
+  accessToken: string;
+  refreshToken: string;
+};
 export type TSuccessfulReply = {
   success: boolean;
   message: string;
@@ -64,8 +69,6 @@ export type TUser = {
   email: string;
   name: string;
 };
-
-
 
 export type TResponseBody<TDataKey extends string = "", TDataType = {}> = {
   [key in TDataKey]: TDataType;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styles from "./login.module.css";
 import {
   EmailInput,
@@ -8,7 +8,7 @@ import { PasswordInput } from "@ya.praktikum/react-developer-burger-ui-component
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
-import { dispatchSignIn } from "../services/actions/user";
+import { dispatchGetUser, dispatchSignIn } from "../services/actions/user";
 import { TLocationState } from "../services/utils/interfaces";
 
 export const LoginPage: React.FC = () => {
@@ -17,22 +17,13 @@ export const LoginPage: React.FC = () => {
 
   const dispatch = useAppDispatch();
 
-  const {
-    submitServerRequest,
-    submitSignInSuccess,
-    submitServerFailed,
-    submitServerError,
-    user,
-  } = useAppSelector((state) => state.user);
-
-  let history = useHistory();
-
-  const location = useLocation<TLocationState>()
-
   useEffect(() => {
-    if (submitSignInSuccess && !submitServerRequest)
-      history.push({ pathname: "/" });
-  }, [submitSignInSuccess, submitServerRequest]);
+    dispatch(dispatchGetUser());
+  }, []);
+
+  const { user } = useAppSelector((state) => state.user);
+
+  const location = useLocation<TLocationState>();
 
   const signIn = (e: React.SyntheticEvent<Element, Event>) => {
     e.preventDefault();
@@ -44,15 +35,12 @@ export const LoginPage: React.FC = () => {
     );
   };
 
-  if (user) {
-    console.log(location.state.from);
-    return (
-      <Redirect
-        to={ location.state.from || '/' }
-      />
-    );
-  }
-
+/*   useCallback(() => { */
+    if (user) {
+      if (location.state) return <Redirect to={location.state.from} />;
+      else return <Redirect to={"/"} />;
+    }
+/*   }, [user]); */
 
   return (
     <div className={`${styles.formContainer}`}>

@@ -6,6 +6,7 @@ import {
   SUBMIT_SERVER_FAILED,
   SUBMIT_SERVER_REQUEST,
   SUBMIT_SIGN_IN_SUCCESS,
+  SUBMIT_UPDATE_TOKENS_SUCCESS,
   SUBMIT_USER_EMAIL_SUCCESS,
   TUserActions,
 } from "../actions/user";
@@ -18,6 +19,7 @@ export type TUserState = {
   submitUserEmailSuccess: boolean;
   submitLogoutSuccess: boolean;
   submitSignInSuccess: boolean;
+  submitUpdateTokensSuccess: boolean;
   submitChangeCredentialsSuccess: boolean;
   submitPwdResetSuccess: boolean;
   user: TUser | null;
@@ -27,12 +29,13 @@ const initialState: TUserState = {
   submitServerRequest: false,
   submitServerFailed: false,
   submitServerError: null,
+  submitUpdateTokensSuccess: false,
   submitLogoutSuccess: false,
   submitUserEmailSuccess: false,
   submitSignInSuccess: false,
   submitChangeCredentialsSuccess: false,
   submitPwdResetSuccess: false,
-  user: null
+  user: null,
 };
 
 export const userReducer = (
@@ -82,6 +85,14 @@ export const userReducer = (
         submitServerRequest: false,
         submitSignInSuccess: true,
         submitLogoutSuccess: false,
+      };
+    }
+    case SUBMIT_UPDATE_TOKENS_SUCCESS: {
+      return {
+        ...state,
+        submitServerFailed: false,
+        submitServerRequest: false,
+        submitUpdateTokensSuccess: true,
       };
     }
     case SUBMIT_LOGOUT_SUCCESS: {
