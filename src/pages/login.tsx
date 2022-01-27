@@ -16,9 +16,9 @@ export const LoginPage: React.FC = () => {
   const [pwd, setPwd] = useState("");
 
   const dispatch = useAppDispatch();
-
+  const history = useHistory();
   useEffect(() => {
-    dispatch(dispatchGetUser());
+    if (!user) dispatch(dispatchGetUser());
   }, []);
 
   const { user } = useAppSelector((state) => state.user);
@@ -35,12 +35,12 @@ export const LoginPage: React.FC = () => {
     );
   };
 
-/*   useCallback(() => { */
+  useEffect(() => {
     if (user) {
-      if (location.state) return <Redirect to={location.state.from} />;
-      else return <Redirect to={"/"} />;
+      if (location.state) history.push({ pathname: `${location.state.from.pathname}`});
+      else return history.push({ pathname: "/" });
     }
-/*   }, [user]); */
+  }, [user]);
 
   return (
     <div className={`${styles.formContainer}`}>

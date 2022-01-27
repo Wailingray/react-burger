@@ -31,6 +31,12 @@ export interface ConstructorEL {
 }
 
 export interface TLocationState extends Location {
-  from: string;
+  from: {
+    hash: string;
+    key: string;
+    pathname: string;
+    search: string;
+    state: object;
+  };
   pushLocation?: Location;
 }
