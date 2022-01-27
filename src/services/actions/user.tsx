@@ -1,4 +1,7 @@
+import { useDispatch } from "react-redux";
 import { AppDispatch, AppThunk } from "../..";
+
+
 import {
   changeCredentialsRequest,
   getUserRequest,
@@ -9,6 +12,7 @@ import {
   submitUserEmail,
   updateTokenRequest,
 } from "../../components/api/api";
+import { useAppDispatch } from "../hooks/hooks";
 import {
   TRegisterBody,
   TResetPwdBody,
@@ -20,6 +24,7 @@ import {
   TUser,
 } from "../utils/types";
 import { deleteCookie, getCookie, setCookie, setTokens } from "../utils/utils";
+
 
 export const SUBMIT_SERVER_REQUEST: "SUBMIT_SERVER_REQUEST" =
   "SUBMIT_SERVER_REQUEST";
@@ -235,8 +240,8 @@ export const dispatchSignIn: AppThunk =
       });
   };
 
-export const dispatchGetUserRequest: AppThunk =
-  (accessToken: string) => (dispatch: AppDispatch) => {
+export const dispatchGetUserRequest =
+  (accessToken: string, dispatch: AppDispatch) => {
     dispatch(submitServerRequest());
     getUserRequest(accessToken)
       .then((res: TSuccessfulGetUserReply) => {
@@ -248,8 +253,8 @@ export const dispatchGetUserRequest: AppThunk =
       });
   };
 
-export const dispatchUpdateTokensRequest: AppThunk =
-  (refreshToken: string) => (dispatch: AppDispatch) => {
+export const dispatchUpdateTokensRequest =
+  (refreshToken: string, dispatch: AppDispatch)  => {
     dispatch(submitServerRequest());
     console.log('Попали в updTokensRequest');
     updateTokenRequest(refreshToken)
@@ -267,15 +272,15 @@ export const dispatchGetUser: AppThunk = () => (dispatch: AppDispatch) => {
   let accessToken = getCookie("accessToken");
   console.log(`access ${accessToken}`)
   if (accessToken) {
-    dispatchGetUserRequest(accessToken);
+    dispatchGetUserRequest(accessToken, dispatch);
   } else {
     let refreshToken = getCookie("refreshToken");
     console.log(`refresh ${refreshToken}`);
     if (refreshToken) {
-      dispatchUpdateTokensRequest(refreshToken);
+      dispatchUpdateTokensRequest(refreshToken, dispatch);
       accessToken = getCookie("accessToken");
       if (accessToken) {
-        dispatchGetUserRequest(accessToken);
+        dispatchGetUserRequest(accessToken, dispatch);
       }
     }
   }
