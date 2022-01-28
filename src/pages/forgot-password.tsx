@@ -25,8 +25,7 @@ export const ForgotPasswordPage: React.FC = () => {
   } = useAppSelector((state) => state.user);
   let history = useHistory();
 
-
-  const [loaded, setIsLoaded] = useState(false)
+  const [value, setValue] = React.useState("");
 
   useEffect(() => {
     if (submitUserEmailSuccess && !submitServerRequest) {
@@ -45,12 +44,10 @@ export const ForgotPasswordPage: React.FC = () => {
       e.preventDefault();
       dispatch(dispatchUserEmail(value));
     },
-    []
+    [value]
   );
 
-  const [value, setValue] = React.useState("");
-
-  return loaded ? (
+  return (
     <div className={`${styles.formContainer}`}>
       <form className={styles.form} action="">
         <p className="text text_type_main-medium mb-6">Восстановление пароля</p>
@@ -60,7 +57,8 @@ export const ForgotPasswordPage: React.FC = () => {
             name={"email"}
             placeholder="Укажите e-mail"
             size="default"
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => {console.log(e.target.value);
+              setValue(e.target.value)}}
           />
         </form>
         {submitServerFailed && (
@@ -84,5 +82,5 @@ export const ForgotPasswordPage: React.FC = () => {
         </div>
       </form>
     </div>
-  ) : (<Loader />)
+  )
 };

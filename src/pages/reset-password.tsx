@@ -8,15 +8,17 @@ import { PasswordInput } from "@ya.praktikum/react-developer-burger-ui-component
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useHistory } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
-import { dispatchGetUser, dispatchPwdReset, submitCannotResetPwd } from "../services/actions/user";
+import {
+  dispatchGetUser,
+  dispatchPwdReset,
+  submitCannotResetPwd,
+} from "../services/actions/user";
 import { Loader } from "../components/loader/loader";
 
 export const ResetPasswordPage: React.FC = () => {
   const [pwdValue, setPwdValue] = useState("");
   const [codeValue, setCodeValue] = useState("");
   const dispatch = useAppDispatch();
-
-  const [loaded, setIsLoaded] = useState(false);
 
   const history = useHistory();
   const {
@@ -28,8 +30,6 @@ export const ResetPasswordPage: React.FC = () => {
     submitLogoutSuccess,
     submitChangeCredentialsSuccess,
   } = useAppSelector((state) => state.user);
-
-
 
   useEffect(() => {
     if (user || !canResetPwd) history.push({ pathname: "/" });
@@ -52,7 +52,7 @@ export const ResetPasswordPage: React.FC = () => {
     );
   };
 
-  return loaded ? (
+  return (
     <div className={`${styles.formContainer}`}>
       <form className={styles.form} action="">
         <p className="text text_type_main-medium mb-6">Восстановление пароля</p>
@@ -95,7 +95,5 @@ export const ResetPasswordPage: React.FC = () => {
         </div>
       </form>
     </div>
-  ) : (
-    <Loader />
   );
 };
