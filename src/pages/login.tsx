@@ -8,22 +8,29 @@ import { PasswordInput } from "@ya.praktikum/react-developer-burger-ui-component
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
-import { dispatchGetUser, dispatchSignIn } from "../services/actions/user";
+import { dispatchGetUser, dispatchSignIn, submitGetUserSuccess } from "../services/actions/user";
 import { TLocationState } from "../services/utils/interfaces";
+import { Loader } from "../components/loader/loader";
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
 
+  const { user, submitGetUserSuccess, foundNoTokens } = useAppSelector((state) => state.user);
+
+  const [loaded, setIsLoaded] = useState(false)
+
+  const location = useLocation<TLocationState>();
   const dispatch = useAppDispatch();
   const history = useHistory();
+
   useEffect(() => {
     if (!user) dispatch(dispatchGetUser());
   }, []);
 
-  const { user } = useAppSelector((state) => state.user);
-
-  const location = useLocation<TLocationState>();
+  useEffect(() => {
+    if (submitGetUserSuccess || foundNoTokens) setIsLoaded(true)
+  }, [submitGetUserSuccess, foundNoTokens]);
 
   const signIn = (e: React.SyntheticEvent<Element, Event>) => {
     e.preventDefault();
@@ -42,7 +49,7 @@ export const LoginPage: React.FC = () => {
     }
   }, [user]);
 
-  return (
+  return loaded ? (
     <div className={`${styles.formContainer}`}>
       <form className={styles.form} action="">
         <p className="text text_type_main-medium mb-6">Вход</p>
@@ -90,5 +97,5 @@ export const LoginPage: React.FC = () => {
         </div>
       </form>
     </div>
-  );
+  ) : (<Loader />)
 };

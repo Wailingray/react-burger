@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 import { AppDispatch, AppThunk } from "../..";
 
-
 import {
   changeCredentialsRequest,
   getUserRequest,
@@ -25,7 +24,6 @@ import {
 } from "../utils/types";
 import { deleteCookie, getCookie, setCookie, setTokens } from "../utils/utils";
 
-
 export const SUBMIT_SERVER_REQUEST: "SUBMIT_SERVER_REQUEST" =
   "SUBMIT_SERVER_REQUEST";
 export const SUBMIT_USER_EMAIL_SUCCESS: "SUBMIT_USER_EMAIL_SUCCESS" =
@@ -47,7 +45,12 @@ export const SUBMIT_LOGOUT_SUCCESS: "SUBMIT_LOGOUT_SUCCESS" =
 export const SUBMIT_CHANGE_CREDENTIALS_SUCCESS: "SUBMIT_CHANGE_CREDENTIALS_SUCCESS" =
   "SUBMIT_CHANGE_CREDENTIALS_SUCCESS";
 export const REMOVE_USER: "REMOVE_USER" = "REMOVE_USER";
+export const NO_TOKENS: "NO_TOKENS" = "NO_TOKENS";
 export const SET_USER: "SET_USER" = "SET_USER";
+export const SUBMIT_CAN_RESET_PWD: "SUBMIT_CAN_RESET_PWD" =
+  "SUBMIT_CAN_RESET_PWD";
+export const SUBMIT_CANNOT_RESET_PWD: "SUBMIT_CANNOT_RESET_PWD" =
+  "SUBMIT_CANNOT_RESET_PWD";
 
 export interface ISubmitServerRequest {
   readonly type: typeof SUBMIT_SERVER_REQUEST;
@@ -98,6 +101,18 @@ export interface IRemoveUser {
   readonly type: typeof REMOVE_USER;
 }
 
+export interface INoTokens {
+  readonly type: typeof NO_TOKENS;
+}
+
+export interface ISubmitCanResetPwd {
+  readonly type: typeof SUBMIT_CAN_RESET_PWD;
+}
+
+export interface ISubmitCannotResetPwd {
+  readonly type: typeof SUBMIT_CANNOT_RESET_PWD;
+}
+
 export interface ISetUser {
   readonly type: typeof SET_USER;
   user: TUser;
@@ -115,6 +130,9 @@ export type TUserActions =
   | ISubmitUpdateTokensSuccess
   | IRemoveUser
   | ISubmitChangeCredentialsSuccess
+  | INoTokens
+  | ISubmitCanResetPwd
+  | ISubmitCannotResetPwd
   | ISetUser;
 
 export const submitRegisterSuccess = (
@@ -159,6 +177,14 @@ export const submitChangeCredentialsSuccess =
     type: SUBMIT_CHANGE_CREDENTIALS_SUCCESS,
   });
 
+export const submitCanResetPwd = (): ISubmitCanResetPwd => ({
+  type: SUBMIT_CAN_RESET_PWD,
+});
+
+export const submitCannotResetPwd = (): ISubmitCannotResetPwd => ({
+  type: SUBMIT_CANNOT_RESET_PWD,
+});
+
 export const submitGetUserSuccess = (): ISubmitGetUserSuccess => ({
   type: SUBMIT_GET_USER_SUCCESS,
 });
@@ -170,6 +196,10 @@ export const submitLogoutSuccess = (): ISubmitLogoutSuccess => ({
 export const setUser = (user: TUser): ISetUser => ({
   type: SET_USER,
   user,
+});
+
+export const setNoTokens = (): INoTokens => ({
+  type: NO_TOKENS,
 });
 
 export const submitUpdateTokensSuccess = (): ISubmitUpdateTokensSuccess => ({
@@ -240,50 +270,48 @@ export const dispatchSignIn: AppThunk =
       });
   };
 
-export const dispatchGetUserRequest =
-  (accessToken: string, dispatch: AppDispatch) => {
-    dispatch(submitServerRequest());
-    getUserRequest(accessToken)
-      .then((res: TSuccessfulGetUserReply) => {
-        dispatch(submitGetUserSuccess());
-        dispatch(setUser(res.user));
-      })
-      .catch((err) => {
-        dispatch(submitServerFailed(err));
-      });
-  };
-
-export const dispatchUpdateTokensRequest =
-  (refreshToken: string, dispatch: AppDispatch)  => {
-    dispatch(submitServerRequest());
-    console.log('Попали в updTokensRequest');
-    updateTokenRequest(refreshToken)
-      .then((res: TSuccessfulUpdateTokensReply) => {
-        dispatch(submitUpdateTokensSuccess());
-        setTokens(res);
-      })
-      .catch((err) => {
-        dispatch(submitServerFailed(err));
-      });
-  };
-
-export const dispatchGetUser: AppThunk = () => (dispatch: AppDispatch) => {
+export const dispatchGetUserRequest = (
+  accessToken: string,
+  dispatch: AppDispatch
+) => {
   dispatch(submitServerRequest());
-  let accessToken = getCookie("accessToken");
-  console.log(`access ${accessToken}`)
-  if (accessToken) {
-    dispatchGetUserRequest(accessToken, dispatch);
-  } else {
-    let refreshToken = getCookie("refreshToken");
-    console.log(`refresh ${refreshToken}`);
-    if (refreshToken) {
-      dispatchUpdateTokensRequest(refreshToken, dispatch);
-      accessToken = getCookie("accessToken");
+  getUserRequest(accessToken)
+    .then((res: TSuccessfulGetUserReply) => {
+      dispatch(submitGetUserSuccess());
+      dispatch(setUser(res.user));
+    })
+    .catch((err) => {
+      dispatch(submitServerFailed(err));
+    });
+};
+
+export const dispatchUpdateTokensRequest = (
+  refreshToken: string,
+  dispatch: AppDispatch
+) => {
+  dispatch(submitServerRequest());
+  updateTokenRequest(refreshToken)
+    .then((res: TSuccessfulUpdateTokensReply) => {
+      dispatch(submitUpdateTokensSuccess());
+      setTokens(res);
+      let accessToken = getCookie("accessToken");
       if (accessToken) {
         dispatchGetUserRequest(accessToken, dispatch);
       }
-    }
-  }
+    })
+    .catch((err) => {
+      dispatch(submitServerFailed(err));
+    });
+};
+
+export const dispatchGetUser: AppThunk = () => (dispatch: AppDispatch) => {
+  dispatch(submitServerRequest());
+  let refreshToken = getCookie("refreshToken");
+  let accessToken = getCookie("accessToken");
+  if (accessToken) {
+    dispatchGetUserRequest(accessToken, dispatch);
+  } else if (refreshToken) dispatchUpdateTokensRequest(refreshToken, dispatch);
+  else dispatch(setNoTokens());
 };
 
 export const dispatchLogout: AppThunk = () => (dispatch: AppDispatch) => {

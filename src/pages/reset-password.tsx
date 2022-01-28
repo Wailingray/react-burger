@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./forgot-password.module.css";
 import {
   EmailInput,
@@ -6,14 +6,37 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link } from "react-router-dom";
-import { useAppDispatch } from "../services/hooks/hooks";
-import { dispatchPwdReset } from "../services/actions/user";
+import { Link, useHistory } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
+import { dispatchGetUser, dispatchPwdReset, submitCannotResetPwd } from "../services/actions/user";
+import { Loader } from "../components/loader/loader";
 
 export const ResetPasswordPage: React.FC = () => {
   const [pwdValue, setPwdValue] = useState("");
   const [codeValue, setCodeValue] = useState("");
   const dispatch = useAppDispatch();
+
+  const [loaded, setIsLoaded] = useState(false);
+
+  const history = useHistory();
+  const {
+    user,
+    submitGetUserSuccess,
+    foundNoTokens,
+    canResetPwd,
+    submitServerRequest,
+    submitLogoutSuccess,
+    submitChangeCredentialsSuccess,
+  } = useAppSelector((state) => state.user);
+
+
+
+  useEffect(() => {
+    if (user || !canResetPwd) history.push({ pathname: "/" });
+    return () => {
+      dispatch(submitCannotResetPwd());
+    };
+  }, [user]);
 
   const handleSubmit = (
     e: React.SyntheticEvent<Element, Event>,
@@ -29,7 +52,7 @@ export const ResetPasswordPage: React.FC = () => {
     );
   };
 
-  return (
+  return loaded ? (
     <div className={`${styles.formContainer}`}>
       <form className={styles.form} action="">
         <p className="text text_type_main-medium mb-6">Восстановление пароля</p>
@@ -72,5 +95,7 @@ export const ResetPasswordPage: React.FC = () => {
         </div>
       </form>
     </div>
+  ) : (
+    <Loader />
   );
 };

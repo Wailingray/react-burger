@@ -14,12 +14,18 @@ import {
   dispatchLogout,
   submitChangeCredentialsSuccess,
 } from "../services/actions/user";
+import { Loader } from "../components/loader/loader";
 
 export const ProfilePage = () => {
+
+  const [loaded, setIsLoaded] = useState(false)
+
   const dispatch = useAppDispatch();
   const history = useHistory();
   const {
     user,
+    submitGetUserSuccess,
+    foundNoTokens,
     submitServerRequest,
     submitLogoutSuccess,
     submitChangeCredentialsSuccess,
@@ -36,8 +42,19 @@ export const ProfilePage = () => {
   }, [user]);
 
   useEffect(() => {
+    if (submitGetUserSuccess || foundNoTokens) setIsLoaded(true)
+  }, [submitGetUserSuccess, foundNoTokens]);
+
+  useEffect(() => {
     if (submitLogoutSuccess) history.push({ pathname: "/login" });
   }, [submitLogoutSuccess]);
+
+  useEffect(() => {
+    return () => {
+      setJustUpdated(false);
+    };
+  }, []);
+
 
   const handleLogout = () => {
     dispatch(dispatchLogout());
@@ -64,13 +81,17 @@ export const ProfilePage = () => {
         name: nameValue,
       })
     );
+    setJustUpdated(true)
   };
 
+
+
+  const [justUpdated, setJustUpdated] = useState(false);
   const [nameValue, setNameValue] = useState("");
   const [emailValue, setEmailValue] = useState("");
   const [pwdValue, setPwdValue] = useState("");
 
-  return (
+  return loaded ? (
     <div className={`${styles.profilePageContainer}`}>
       <div className={`${styles.navContainer}`}>
         <ul className={`${styles.navLinkList}`}>
@@ -128,7 +149,7 @@ export const ProfilePage = () => {
               onChange={(e) => setPwdValue(e.target.value)}
             />
           </form>
-          {submitChangeCredentialsSuccess && !submitServerRequest &&(
+          {submitChangeCredentialsSuccess && justUpdated &&(
             <p className="text text_type_main-default text_color_inactive">
               {" "}
               Данные успешно изменены!
@@ -149,5 +170,5 @@ export const ProfilePage = () => {
         </form>
       </div>
     </div>
-  );
+  ) : (<Loader />)
 };
