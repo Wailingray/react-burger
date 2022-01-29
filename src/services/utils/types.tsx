@@ -70,6 +70,10 @@ export type TUser = {
   name: string;
 };
 
+export type TUseParams = {
+  id: string
+}
+
 export type TResponseBody<TDataKey extends string = "", TDataType = {}> = {
   [key in TDataKey]: TDataType;
 } & {

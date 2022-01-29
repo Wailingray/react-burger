@@ -142,6 +142,7 @@ export const userReducer = (
       return {
         ...state,
         canResetPwd: false,
+        submitPwdResetSuccess: false,
       }
     }
     case NO_TOKENS: {

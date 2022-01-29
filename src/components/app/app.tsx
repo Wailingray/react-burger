@@ -14,6 +14,7 @@ import { ResetPasswordPage } from "../../pages/reset-password";
 import { ProfilePage } from "../../pages/profile";
 import { ProtectedRoute } from "../HOC/protected-route";
 import { Orders } from "../../pages/orders";
+import { IngredientPage } from "../ingredient-page/ingredient-page";
 function App() {
   return (
     <Router>
@@ -40,6 +41,9 @@ function App() {
         <ProtectedRoute path="/profile/orders" exact={true}>
           <Orders />
         </ProtectedRoute>
+        <Route path='/ingredients/:id' exact={true}>
+          <IngredientPage />
+        </Route>
       </Switch>
     </Router>
   );

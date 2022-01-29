@@ -1,11 +1,14 @@
 import React from "react";
 import styles from "./ingredient-details.module.css";
-import { useAppSelector } from "../../services/hooks/hooks";
+import { useAppParams, useAppSelector } from "../../services/hooks/hooks";
 
 const IngredientDetails: React.FC = () => {
   const { currentIngredient } = useAppSelector((state) => state.ingredients);
 
+  const { id } = useAppParams();
+
   if (currentIngredient !== null) {
+
     return (
       <>
         <span className={`${styles.title} text text_type_main-large ml-10`}>

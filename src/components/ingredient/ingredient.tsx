@@ -5,10 +5,11 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import { useDrag } from "react-dnd";
 import { IngProps } from "../../services/utils/interfaces";
 import { useAppSelector } from "../../services/hooks/hooks";
+import { Link, useLocation } from "react-router-dom";
 
 const Ingredient: React.FC<IngProps> = (props) => {
   const [counter, setCounter] = useState(0);
-
+  const location = useLocation()
   const { constructorItems } = useAppSelector((state) => state.ingredients);
 
   useEffect(() => {
@@ -27,6 +28,10 @@ const Ingredient: React.FC<IngProps> = (props) => {
   });
 
   return (
+    <Link className={styles.cardContainer} to={{
+      pathname: `/ingredients/${props.id}`,
+      state: {from: location.pathname, pushLocation: location}
+  }}>
     <div ref={ingRef} className={styles.card} style={{ opacity }}>
       <img
         className={`${styles.image} ml-4 mr-4`}
@@ -44,6 +49,7 @@ const Ingredient: React.FC<IngProps> = (props) => {
         {props.name}
       </p>
     </div>
+    </Link>
   );
 };
 

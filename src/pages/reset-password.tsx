@@ -26,6 +26,7 @@ export const ResetPasswordPage: React.FC = () => {
     submitGetUserSuccess,
     foundNoTokens,
     canResetPwd,
+    submitPwdResetSuccess,
     submitServerRequest,
     submitLogoutSuccess,
     submitChangeCredentialsSuccess,
@@ -75,6 +76,11 @@ export const ResetPasswordPage: React.FC = () => {
             onChange={(e) => setCodeValue(e.target.value)}
           />
         </form>
+        {submitPwdResetSuccess && (
+          <p className="text text_type_main-default text_color_inactive mb-6">
+            Данные успешно изменены!
+          </p>
+        )}
         <Button
           type="primary"
           size="large"
