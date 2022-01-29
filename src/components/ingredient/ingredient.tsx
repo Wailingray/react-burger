@@ -9,7 +9,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const Ingredient: React.FC<IngProps> = (props) => {
   const [counter, setCounter] = useState(0);
-  const location = useLocation()
+  const location = useLocation();
   const { constructorItems } = useAppSelector((state) => state.ingredients);
 
   useEffect(() => {
@@ -28,27 +28,30 @@ const Ingredient: React.FC<IngProps> = (props) => {
   });
 
   return (
-    <Link className={styles.cardContainer} to={{
-      pathname: `/ingredients/${props.id}`,
-      state: {from: location.pathname, pushLocation: location}
-  }}>
-    <div ref={ingRef} className={styles.card} style={{ opacity }}>
-      <img
-        className={`${styles.image} ml-4 mr-4`}
-        src={props.image}
-        alt={props.name}
-      />
-      {counter > 0 && <Counter count={counter} size="default" />}
-      <div className={`${styles.price} mt-1 mb-1`}>
-        <p className={`text text_type_digits-default ${styles.value}`}>
-          {props.price}
+    <Link
+      className={styles.cardContainer}
+      to={{
+        pathname: `/ingredients/${props.id}`,
+        state: { from: location.pathname },
+      }}
+    >
+      <div ref={ingRef} className={styles.card} style={{ opacity }}>
+        <img
+          className={`${styles.image} ml-4 mr-4`}
+          src={props.image}
+          alt={props.name}
+        />
+        {counter > 0 && <Counter count={counter} size="default" />}
+        <div className={`${styles.price} mt-1 mb-1`}>
+          <p className={`text text_type_digits-default ${styles.value}`}>
+            {props.price}
+          </p>
+          <CurrencyIcon type="primary" />
+        </div>
+        <p className={`text text_type_main-default ${styles.description}`}>
+          {props.name}
         </p>
-        <CurrencyIcon type="primary" />
       </div>
-      <p className={`text text_type_main-default ${styles.description}`}>
-        {props.name}
-      </p>
-    </div>
     </Link>
   );
 };

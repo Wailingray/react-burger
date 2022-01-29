@@ -5,7 +5,7 @@ import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import { BrowserRouter as Router, Route, Switch, useHistory, useLocation } from "react-router-dom"
 import { HomePage } from "../../pages/home";
 import { LoginPage } from "../../pages/login";
 import { RegisterPage } from "../../pages/register";
@@ -15,11 +15,15 @@ import { ProfilePage } from "../../pages/profile";
 import { ProtectedRoute } from "../HOC/protected-route";
 import { Orders } from "../../pages/orders";
 import { IngredientPage } from "../ingredient-page/ingredient-page";
+import { TLocationState } from "../../services/utils/interfaces";
 function App() {
+
+
+
   return (
     <Router>
       <AppHeader />
-      <Switch>
+      <Switch >
         <Route path="/" exact={true}>
           <HomePage />
         </Route>
