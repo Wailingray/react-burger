@@ -17,6 +17,7 @@ import { getItems } from "../../services/actions/ingredients";
 import Modal from "../modal/modal";
 import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
 import { TIngredient } from "../../services/utils/types";
+import { useHistory } from "react-router-dom";
 
 const BurgerIngredients: React.FC = () => {
   const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
@@ -27,6 +28,7 @@ const BurgerIngredients: React.FC = () => {
   const mainRef = useRef<HTMLHeadingElement | null>(null);
 
   const dispatch = useAppDispatch();
+  const history = useHistory()
 
   useEffect(() => {
     dispatch(getItems());
@@ -46,6 +48,7 @@ const BurgerIngredients: React.FC = () => {
   const closeModal = () => {
     setIsModalOpened(false);
     dispatch(resetCurrentIngredient());
+    history.goBack()
   };
 
   const showIngredient = (evt: React.MouseEvent<HTMLLIElement, MouseEvent>) => {

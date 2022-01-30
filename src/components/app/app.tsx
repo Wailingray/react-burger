@@ -6,7 +6,6 @@ import BurgerConstructor from "../burger-constructor/burger-constructor";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import {
-  BrowserRouter as Router,
   Route,
   Switch,
   useHistory,
@@ -26,7 +25,10 @@ import { TLocationState } from "../../services/utils/interfaces";
 const App: React.FC = () => {
   const location = useLocation<TLocationState>();
   const history = useHistory();
-  const pushLocation = location.state && location.state.pushLocation;
+  const isPush = history.action === 'PUSH'
+  const pushLocation = isPush && location.state && location.state.pushLocation;
+
+  console.log(location);
 
   return (
     <>
@@ -53,12 +55,10 @@ const App: React.FC = () => {
         <ProtectedRoute path="/profile/orders" exact={true}>
           <Orders />
         </ProtectedRoute>
-      </Switch>
-      {pushLocation && (
         <Route path="/ingredients/:id" exact>
           <IngredientPage />
         </Route>
-      )}
+      </Switch>
     </>
   );
 };

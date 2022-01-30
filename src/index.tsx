@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import { TIngredientActions } from "./services/actions/ingredients";
 import { TOrderActions } from "./services/actions/order";
 import { store } from "./services/store";
+import { BrowserRouter } from "react-router-dom";
 
 export type RootState = ReturnType<typeof store.getState>;
 type TApplicationActions = TIngredientActions | TOrderActions;
@@ -19,7 +20,9 @@ export type AppDispatch = typeof store.dispatch;
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

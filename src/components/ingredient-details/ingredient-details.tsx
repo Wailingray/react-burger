@@ -1,20 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./ingredient-details.module.css";
-import { useAppParams, useAppSelector } from "../../services/hooks/hooks";
+import { useAppDispatch, useAppParams, useAppSelector } from "../../services/hooks/hooks";
+import { TIngredient } from "../../services/utils/types";
+import { getItems } from "../../services/actions/ingredients";
+
 
 const IngredientDetails: React.FC = () => {
-  const { currentIngredient, ingredientItems } = useAppSelector((state) => state.ingredients);
 
+  const { currentIngredient, ingredientItems, ingredientItemsRequest, ingredientItemsFailed } = useAppSelector((state) => state.ingredients);
   const { id } = useAppParams();
+  const dispatch = useAppDispatch()
 
-    let activeIngredient;
+  useEffect(() => {
+    if (ingredientItems.length === 0) dispatch(getItems())
+  }, [ingredientItems]);
+
+  let activeIngredient
     if (id) {
-        activeIngredient = ingredientItems.find(item => item._id === id)
+       activeIngredient = ingredientItems.find(item => item._id === id)
     } else {
-        activeIngredient = currentIngredient
+       activeIngredient = currentIngredient
     }
 
-  if (activeIngredient) {
+  if (ingredientItems.length !== 0 && !ingredientItemsRequest && !ingredientItemsFailed) {
     return (
       <>
         <span className={`${styles.title} text text_type_main-large ml-10`}>
@@ -22,11 +30,11 @@ const IngredientDetails: React.FC = () => {
         </span>
         <img
           className={styles.image}
-          src={activeIngredient.image_large}
-          alt={activeIngredient.name}
+          src={activeIngredient?.image_large}
+          alt={activeIngredient?.name}
         />
         <p className="text text_type_main-medium mt-4 mb-8">
-          {activeIngredient.name}
+          {activeIngredient?.name}
         </p>
         <ul className={styles.nutrition}>
           <li className={`${styles.nutrient} mb-15`}>
@@ -34,7 +42,7 @@ const IngredientDetails: React.FC = () => {
               Калории, ккал{" "}
             </p>
             <p className="text text_color_inactive text_type_digits-default">
-              {activeIngredient.calories}
+              {activeIngredient?.calories}
             </p>
           </li>
           <li className={`${styles.nutrient} text text_color_inactive`}>
@@ -42,7 +50,7 @@ const IngredientDetails: React.FC = () => {
               Белки, г{" "}
             </p>
             <p className="text text_color_inactive text_type_digits-default">
-              {activeIngredient.proteins}
+              {activeIngredient?.proteins}
             </p>
           </li>
           <li className={`${styles.nutrient} text text_color_inactive`}>
@@ -50,7 +58,7 @@ const IngredientDetails: React.FC = () => {
               Жиры, г{" "}
             </p>
             <p className="text text_color_inactive text_type_digits-default">
-              {activeIngredient.fat}
+              {activeIngredient?.fat}
             </p>
           </li>
           <li className={`${styles.nutrient} text text_color_inactive`}>
@@ -58,7 +66,7 @@ const IngredientDetails: React.FC = () => {
               Углеводы, г{" "}
             </p>
             <p className="text text_color_inactive text_type_digits-default">
-              {activeIngredient.carbohydrates}
+              {activeIngredient?.carbohydrates}
             </p>
           </li>
         </ul>
