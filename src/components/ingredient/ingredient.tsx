@@ -3,13 +3,13 @@ import styles from "./ingredient.module.css";
 import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useDrag } from "react-dnd";
-import { IngProps } from "../../services/utils/interfaces";
+import { IngProps, TLocationState } from "../../services/utils/interfaces";
 import { useAppSelector } from "../../services/hooks/hooks";
 import { Link, useLocation } from "react-router-dom";
 
 const Ingredient: React.FC<IngProps> = (props) => {
   const [counter, setCounter] = useState(0);
-  const location = useLocation();
+  const location = useLocation<TLocationState>();
   const { constructorItems } = useAppSelector((state) => state.ingredients);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const Ingredient: React.FC<IngProps> = (props) => {
       className={styles.cardContainer}
       to={{
         pathname: `/ingredients/${props.id}`,
-        state: { from: location.pathname },
+        state: { from: location.pathname, pushLocation: location },
       }}
     >
       <div ref={ingRef} className={styles.card} style={{ opacity }}>

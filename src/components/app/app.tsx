@@ -5,7 +5,13 @@ import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { BrowserRouter as Router, Route, Switch, useHistory, useLocation } from "react-router-dom"
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+} from "react-router-dom";
 import { HomePage } from "../../pages/home";
 import { LoginPage } from "../../pages/login";
 import { RegisterPage } from "../../pages/register";
@@ -16,14 +22,16 @@ import { ProtectedRoute } from "../HOC/protected-route";
 import { Orders } from "../../pages/orders";
 import { IngredientPage } from "../ingredient-page/ingredient-page";
 import { TLocationState } from "../../services/utils/interfaces";
-function App() {
 
-
+const App: React.FC = () => {
+  const location = useLocation<TLocationState>();
+  const history = useHistory();
+  const pushLocation = location.state && location.state.pushLocation;
 
   return (
-    <Router>
+    <>
       <AppHeader />
-      <Switch >
+      <Switch location={pushLocation || location}>
         <Route path="/" exact={true}>
           <HomePage />
         </Route>
@@ -45,12 +53,14 @@ function App() {
         <ProtectedRoute path="/profile/orders" exact={true}>
           <Orders />
         </ProtectedRoute>
-        <Route path='/ingredients/:id' exact={true}>
+      </Switch>
+      {pushLocation && (
+        <Route path="/ingredients/:id" exact>
           <IngredientPage />
         </Route>
-      </Switch>
-    </Router>
+      )}
+    </>
   );
-}
+};
 
 export default App;

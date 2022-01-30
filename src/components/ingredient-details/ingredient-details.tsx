@@ -3,12 +3,18 @@ import styles from "./ingredient-details.module.css";
 import { useAppParams, useAppSelector } from "../../services/hooks/hooks";
 
 const IngredientDetails: React.FC = () => {
-  const { currentIngredient } = useAppSelector((state) => state.ingredients);
+  const { currentIngredient, ingredientItems } = useAppSelector((state) => state.ingredients);
 
   const { id } = useAppParams();
 
-  if (currentIngredient !== null) {
+    let activeIngredient;
+    if (id) {
+        activeIngredient = ingredientItems.find(item => item._id === id)
+    } else {
+        activeIngredient = currentIngredient
+    }
 
+  if (activeIngredient) {
     return (
       <>
         <span className={`${styles.title} text text_type_main-large ml-10`}>
@@ -16,11 +22,11 @@ const IngredientDetails: React.FC = () => {
         </span>
         <img
           className={styles.image}
-          src={currentIngredient.image_large}
-          alt={currentIngredient.name}
+          src={activeIngredient.image_large}
+          alt={activeIngredient.name}
         />
         <p className="text text_type_main-medium mt-4 mb-8">
-          {currentIngredient.name}
+          {activeIngredient.name}
         </p>
         <ul className={styles.nutrition}>
           <li className={`${styles.nutrient} mb-15`}>
@@ -28,7 +34,7 @@ const IngredientDetails: React.FC = () => {
               Калории, ккал{" "}
             </p>
             <p className="text text_color_inactive text_type_digits-default">
-              {currentIngredient.calories}
+              {activeIngredient.calories}
             </p>
           </li>
           <li className={`${styles.nutrient} text text_color_inactive`}>
@@ -36,7 +42,7 @@ const IngredientDetails: React.FC = () => {
               Белки, г{" "}
             </p>
             <p className="text text_color_inactive text_type_digits-default">
-              {currentIngredient.proteins}
+              {activeIngredient.proteins}
             </p>
           </li>
           <li className={`${styles.nutrient} text text_color_inactive`}>
@@ -44,7 +50,7 @@ const IngredientDetails: React.FC = () => {
               Жиры, г{" "}
             </p>
             <p className="text text_color_inactive text_type_digits-default">
-              {currentIngredient.fat}
+              {activeIngredient.fat}
             </p>
           </li>
           <li className={`${styles.nutrient} text text_color_inactive`}>
@@ -52,7 +58,7 @@ const IngredientDetails: React.FC = () => {
               Углеводы, г{" "}
             </p>
             <p className="text text_color_inactive text_type_digits-default">
-              {currentIngredient.carbohydrates}
+              {activeIngredient.carbohydrates}
             </p>
           </li>
         </ul>
