@@ -15,23 +15,23 @@ const AppHeader: FC = () => {
       <nav>
         <ul className={styles.navigation}>
           <li className={styles.item}>
-            <NavLink to={"/"} activeClassName="activeLink" className={`${styles.link} pt-4 pb-4 pl-5 pb-5`}>
+            <NavLink to={"/"} activeClassName={`${styles.activeLink}`} exact={true} className={`${styles.link}  pt-4 pb-4 pl-5 pb-5`}>
               <BurgerIcon type="primary" />
-              <p className="text text_type_main-default text_color_inactive pl-2">Конструктор</p>
+              <p className="text text_type_main-default pl-2">Конструктор</p>
             </NavLink>
           </li>
           <li className={styles.item}>
-            <NavLink to={"/profile/orders"} activeClassName="activeLink" className={`${styles.link}`}>
+            <NavLink to={"/feed"} activeClassName={`${styles.activeLink}`} exact={true} className={`${styles.link}`}>
               <ListIcon type="primary" />
-              <p className="text text_type_main-default text_color_inactive pl-2">
+              <p className="text text_type_main-default pl-2">
                 Лента заказов
               </p>
             </NavLink>
           </li>
           <li className={styles.item}>
-            <NavLink to={"/profile"}  activeClassName="activeLink" className={`${styles.link}`}>
+            <NavLink to={"/profile"}  activeClassName={`${styles.activeLink}`} className={`${styles.link}`}>
               <ProfileIcon type="primary" />
-              <p className="text text_type_main-default text_color_inactive pl-2">
+              <p className="text text_type_main-default pl-2">
                 Личный кабинет
               </p>
             </NavLink>

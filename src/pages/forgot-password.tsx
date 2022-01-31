@@ -8,7 +8,7 @@ import { PasswordInput } from "@ya.praktikum/react-developer-burger-ui-component
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useHistory } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
-import { dispatchGetUser, dispatchUserEmail, submitCanResetPwd } from "../services/actions/user";
+import { dispatchGetUser, dispatchUserEmail, removeServerError, submitCanResetPwd } from "../services/actions/user";
 import { Loader } from "../components/loader/loader";
 
 
@@ -32,6 +32,9 @@ export const ForgotPasswordPage: React.FC = () => {
       dispatch(submitCanResetPwd())
       history.push({ pathname: "/reset-password" });
     }
+    return () => {
+      dispatch(removeServerError());
+    };
   }, [submitUserEmailSuccess, submitServerRequest]);
 
   useEffect(() => {

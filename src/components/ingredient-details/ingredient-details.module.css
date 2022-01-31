@@ -17,3 +17,15 @@
   flex-direction: column;
   align-items: center;
 }
+
+.pageContainer {
+  margin-top: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pageTitle {
+  margin-top: 52px;
+  margin-bottom: 12px;
+}

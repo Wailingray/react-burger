@@ -12,13 +12,13 @@ import {
   dispatchChangeCredentials,
   dispatchGetUser,
   dispatchLogout,
+  removeServerError,
   submitChangeCredentialsSuccess,
 } from "../services/actions/user";
 import { Loader } from "../components/loader/loader";
 
 export const ProfilePage = () => {
-
-  const [loaded, setIsLoaded] = useState(false)
+  const [loaded, setIsLoaded] = useState(false);
 
   const dispatch = useAppDispatch();
   const history = useHistory();
@@ -42,7 +42,7 @@ export const ProfilePage = () => {
   }, [user]);
 
   useEffect(() => {
-    if (submitGetUserSuccess || foundNoTokens) setIsLoaded(true)
+    if (submitGetUserSuccess || foundNoTokens) setIsLoaded(true);
   }, [submitGetUserSuccess, foundNoTokens]);
 
   useEffect(() => {
@@ -52,23 +52,22 @@ export const ProfilePage = () => {
   useEffect(() => {
     return () => {
       setJustUpdated(false);
+      dispatch(removeServerError());
     };
   }, []);
-
 
   const handleLogout = () => {
     dispatch(dispatchLogout());
   };
 
   const resetInput = (e: React.SyntheticEvent<Element, Event>) => {
-    e.preventDefault()
+    e.preventDefault();
     if (user) {
       setEmailValue(user.email);
       setNameValue(user.name);
-    }
-    else {
-      setEmailValue('');
-      setNameValue('');
+    } else {
+      setEmailValue("");
+      setNameValue("");
     }
   };
 
@@ -81,10 +80,8 @@ export const ProfilePage = () => {
         name: nameValue,
       })
     );
-    setJustUpdated(true)
+    setJustUpdated(true);
   };
-
-
 
   const [justUpdated, setJustUpdated] = useState(false);
   const [nameValue, setNameValue] = useState("");
@@ -99,6 +96,7 @@ export const ProfilePage = () => {
             className={`${styles.link} text text_type_main-medium`}
             to={"/profile"}
             activeClassName={`${styles.activeLink}`}
+            exact={true}
           >
             Профиль
           </NavLink>
@@ -106,8 +104,18 @@ export const ProfilePage = () => {
             className={`${styles.link} text text_type_main-medium`}
             to={"/profile/orders"}
             activeClassName={`${styles.activeLink}`}
+            exact={true}
           >
             История заказов
+          </NavLink>
+          <NavLink
+            className={`${styles.link} text text_type_main-medium`}
+            to={"/login"}
+            activeClassName={`${styles.activeLink}`}
+            onClick={() => handleLogout()}
+            exact={true}
+          >
+            Выход
           </NavLink>
           <button
             className={`${styles.logoutButton} text text_type_main-medium`}
@@ -149,7 +157,7 @@ export const ProfilePage = () => {
               onChange={(e) => setPwdValue(e.target.value)}
             />
           </form>
-          {submitChangeCredentialsSuccess && justUpdated &&(
+          {submitChangeCredentialsSuccess && justUpdated && (
             <p className="text text_type_main-default text_color_inactive">
               Данные успешно изменены!
             </p>
@@ -169,5 +177,7 @@ export const ProfilePage = () => {
         </form>
       </div>
     </div>
-  ) : (<Loader />)
+  ) : (
+    <Loader />
+  );
 };

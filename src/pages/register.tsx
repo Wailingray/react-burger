@@ -8,7 +8,7 @@ import { PasswordInput } from "@ya.praktikum/react-developer-burger-ui-component
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
-import { dispatchGetUser, dispatchRegister } from "../services/actions/user";
+import { dispatchGetUser, dispatchRegister, removeServerError } from "../services/actions/user";
 import { TLocationState } from "../services/utils/interfaces";
 import { Loader } from "../components/loader/loader";
 
@@ -29,10 +29,15 @@ export const RegisterPage: React.FC = () => {
     submitServerRequest,
     submitLogoutSuccess,
     submitChangeCredentialsSuccess,
+    submitServerFailed,
+    submitServerError,
   } = useAppSelector((state) => state.user);
 
   useEffect(() => {
     if (!user) dispatch(dispatchGetUser());
+    return () => {
+      dispatch(removeServerError());
+    };
   }, []);
 
   useEffect(() => {
@@ -88,6 +93,11 @@ export const RegisterPage: React.FC = () => {
             onChange={(e) => setPwd(e.target.value)}
           />
         </form>
+        {submitServerFailed && (
+          <p className="text text_type_main-default text_color_inactive mb-6">
+            Произошла ошибка! Код ошибки: {submitServerError}
+          </p>
+        )}
         <Button type="primary" size="large" onClick={(e) => handleSubmit(e)}>
           Зарегистрироваться
         </Button>

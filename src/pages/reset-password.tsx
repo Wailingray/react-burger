@@ -26,6 +26,8 @@ export const ResetPasswordPage: React.FC = () => {
     submitGetUserSuccess,
     foundNoTokens,
     canResetPwd,
+    submitServerFailed,
+    submitServerError,
     submitPwdResetSuccess,
     submitServerRequest,
     submitLogoutSuccess,
@@ -79,6 +81,11 @@ export const ResetPasswordPage: React.FC = () => {
         {submitPwdResetSuccess && (
           <p className="text text_type_main-default text_color_inactive mb-6">
             Данные успешно изменены!
+          </p>
+        )}
+        {submitServerFailed && (
+          <p className="text text_type_main-default text_color_inactive mb-6">
+            Произошла ошибка! Код ошибки: {submitServerError}
           </p>
         )}
         <Button

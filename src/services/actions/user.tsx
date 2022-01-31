@@ -51,6 +51,8 @@ export const SUBMIT_CAN_RESET_PWD: "SUBMIT_CAN_RESET_PWD" =
   "SUBMIT_CAN_RESET_PWD";
 export const SUBMIT_CANNOT_RESET_PWD: "SUBMIT_CANNOT_RESET_PWD" =
   "SUBMIT_CANNOT_RESET_PWD";
+export const REMOVE_SERVER_ERROR : "REMOVE_SERVER_ERROR" =
+"REMOVE_SERVER_ERROR";
 
 export interface ISubmitServerRequest {
   readonly type: typeof SUBMIT_SERVER_REQUEST;
@@ -64,6 +66,10 @@ export interface ISubmitUserEmailSuccess {
 export interface ISubmitServerFailed {
   readonly type: typeof SUBMIT_SERVER_FAILED;
   readonly error: number;
+}
+
+export interface IRemoveServerError {
+  readonly type: typeof REMOVE_SERVER_ERROR;
 }
 
 export interface ISubmitResetPwdSuccess {
@@ -133,6 +139,7 @@ export type TUserActions =
   | INoTokens
   | ISubmitCanResetPwd
   | ISubmitCannotResetPwd
+  | IRemoveServerError
   | ISetUser;
 
 export const submitRegisterSuccess = (
@@ -156,6 +163,10 @@ export const submitUserEmailSuccess = (
 export const submitServerFailed = (error: number): ISubmitServerFailed => ({
   type: SUBMIT_SERVER_FAILED,
   error,
+});
+
+export const removeServerError = (): IRemoveServerError => ({
+  type: REMOVE_SERVER_ERROR,
 });
 
 export const submitResetPwdSuccess = (

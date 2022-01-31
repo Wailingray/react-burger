@@ -13,6 +13,7 @@ import {
   SUBMIT_USER_EMAIL_SUCCESS,
   TUserActions,
   SUBMIT_CANNOT_RESET_PWD,
+  REMOVE_SERVER_ERROR,
 } from "../actions/user";
 import { TUser } from "../utils/types";
 
@@ -150,6 +151,12 @@ export const userReducer = (
         ...state,
         foundNoTokens: true,
       };
+    }
+    case REMOVE_SERVER_ERROR: {
+      return {
+        ...state,
+        submitServerFailed: false,
+      }
     }
     default: {
       return state;

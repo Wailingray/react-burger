@@ -27,6 +27,7 @@
   min-height: 56px;
   min-width: 197px;
   display: flex;
+  color: #8585AD;
 }
 
 .item:last-of-type {
@@ -34,12 +35,18 @@
 }
 
 .link {
+  color: #8585AD;
   text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: linear 0.2s;
 }
 
-.activeLink .p {
+.link:hover {
+  color: #f2f2f3;
+}
+
+.activeLink {
   color: #f2f2f3;
 }
