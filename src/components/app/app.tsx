@@ -11,17 +11,17 @@ import {
   useHistory,
   useLocation,
 } from "react-router-dom";
-import { HomePage } from "../../pages/home";
-import { LoginPage } from "../../pages/login";
-import { RegisterPage } from "../../pages/register";
-import { ForgotPasswordPage } from "../../pages/forgot-password";
-import { ResetPasswordPage } from "../../pages/reset-password";
-import { ProfilePage } from "../../pages/profile";
+import { HomePage } from "../../pages/home/home";
+import { LoginPage } from "../../pages/login/login";
+import { RegisterPage } from "../../pages/register/register";
+import { ForgotPasswordPage } from "../../pages/forgot-password/forgot-password";
+import { ResetPasswordPage } from "../../pages/reset-password/reset-password";
+import { ProfilePage } from "../../pages/profile/profile";
 import { ProtectedRoute } from "../HOC/protected-route";
-import { Orders } from "../../pages/orders";
+import { Orders } from "../../pages/orders/orders";
 import { IngredientPage } from "../ingredient-page/ingredient-page";
 import { TLocationState } from "../../services/utils/interfaces";
-import { FeedPage } from "../../pages/feed";
+import { FeedPage } from "../../pages/feed/feed";
 
 const App: React.FC = () => {
   const location = useLocation<TLocationState>();

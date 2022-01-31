@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useHistory } from "react-router-dom";
-import { Loader } from "../components/loader/loader";
-import { dispatchLogout, removeServerError } from "../services/actions/user";
-import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
+import { Loader } from "../../components/loader/loader";
+import { ProfileNavBar } from "../../components/profile-nav/profile-nav";
+import { dispatchLogout, removeServerError } from "../../services/actions/user";
+import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
 import styles from "./orders.module.css";
 
 export const Orders: React.FC = () => {
@@ -34,28 +35,7 @@ export const Orders: React.FC = () => {
     <div className={`${styles.profilePageContainer}`}>
       <div className={`${styles.navContainer}`}>
         <ul className={`${styles.navLinkList}`}>
-          <NavLink
-            className={`${styles.link} text text_type_main-medium`}
-            to={"/profile"}
-            activeClassName={`${styles.activeLink}`}
-            exact={true}
-          >
-            Профиль
-          </NavLink>
-          <NavLink
-            className={`${styles.link} text text_type_main-medium`}
-            to={"/profile/orders"}
-            activeClassName={`${styles.activeLink}`}
-            exact={true}
-          >
-            История заказов
-          </NavLink>
-          <button
-            className={`${styles.logoutButton} text text_type_main-medium`}
-            onClick={() => handleLogout()}
-          >
-            Выход
-          </button>
+          <ProfileNavBar />
         </ul>
       </div>
       <div className={`${styles.formContainer}`}>

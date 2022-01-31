@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "./forgot-password.module.css";
+import styles from "./reset-password.module.css";
 import {
   EmailInput,
   Input,
@@ -7,13 +7,13 @@ import {
 import { PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useHistory } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
 import {
   dispatchGetUser,
   dispatchPwdReset,
   submitCannotResetPwd,
-} from "../services/actions/user";
-import { Loader } from "../components/loader/loader";
+} from "../../services/actions/user";
+import { Loader } from "../../components/loader/loader";
 
 export const ResetPasswordPage: React.FC = () => {
   const [pwdValue, setPwdValue] = useState("");

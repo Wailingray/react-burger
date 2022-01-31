@@ -7,15 +7,15 @@ import {
 import { PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
 import {
   dispatchGetUser,
   dispatchSignIn,
   removeServerError,
   submitGetUserSuccess,
-} from "../services/actions/user";
-import { TLocationState } from "../services/utils/interfaces";
-import { Loader } from "../components/loader/loader";
+} from "../../services/actions/user";
+import { TLocationState } from "../../services/utils/interfaces";
+import { Loader } from "../../components/loader/loader";
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");

@@ -7,10 +7,10 @@ import {
 import { PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useHistory, useLocation } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
-import { dispatchGetUser, dispatchRegister, removeServerError } from "../services/actions/user";
-import { TLocationState } from "../services/utils/interfaces";
-import { Loader } from "../components/loader/loader";
+import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
+import { dispatchGetUser, dispatchRegister, removeServerError } from "../../services/actions/user";
+import { TLocationState } from "../../services/utils/interfaces";
+import { Loader } from "../../components/loader/loader";
 
 
 export const RegisterPage: React.FC = () => {

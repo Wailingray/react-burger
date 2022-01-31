@@ -7,9 +7,9 @@ import {
 import { PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useHistory } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
-import { dispatchGetUser, dispatchUserEmail, removeServerError, submitCanResetPwd } from "../services/actions/user";
-import { Loader } from "../components/loader/loader";
+import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
+import { dispatchGetUser, dispatchUserEmail, removeServerError, submitCanResetPwd } from "../../services/actions/user";
+import { Loader } from "../../components/loader/loader";
 
 
 export const ForgotPasswordPage: React.FC = () => {

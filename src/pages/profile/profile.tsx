@@ -7,15 +7,16 @@ import {
   Input,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
 import {
   dispatchChangeCredentials,
   dispatchGetUser,
   dispatchLogout,
   removeServerError,
   submitChangeCredentialsSuccess,
-} from "../services/actions/user";
-import { Loader } from "../components/loader/loader";
+} from "../../services/actions/user";
+import { Loader } from "../../components/loader/loader";
+import { ProfileNavBar } from "../../components/profile-nav/profile-nav";
 
 export const ProfilePage = () => {
   const [loaded, setIsLoaded] = useState(false);
@@ -56,10 +57,6 @@ export const ProfilePage = () => {
     };
   }, []);
 
-  const handleLogout = () => {
-    dispatch(dispatchLogout());
-  };
-
   const resetInput = (e: React.SyntheticEvent<Element, Event>) => {
     e.preventDefault();
     if (user) {
@@ -92,37 +89,7 @@ export const ProfilePage = () => {
     <div className={`${styles.profilePageContainer}`}>
       <div className={`${styles.navContainer}`}>
         <ul className={`${styles.navLinkList}`}>
-          <NavLink
-            className={`${styles.link} text text_type_main-medium`}
-            to={"/profile"}
-            activeClassName={`${styles.activeLink}`}
-            exact={true}
-          >
-            Профиль
-          </NavLink>
-          <NavLink
-            className={`${styles.link} text text_type_main-medium`}
-            to={"/profile/orders"}
-            activeClassName={`${styles.activeLink}`}
-            exact={true}
-          >
-            История заказов
-          </NavLink>
-          <NavLink
-            className={`${styles.link} text text_type_main-medium`}
-            to={"/login"}
-            activeClassName={`${styles.activeLink}`}
-            onClick={() => handleLogout()}
-            exact={true}
-          >
-            Выход
-          </NavLink>
-          <button
-            className={`${styles.logoutButton} text text_type_main-medium`}
-            onClick={() => handleLogout()}
-          >
-            Выход
-          </button>
+          <ProfileNavBar />
           <p
             className={`${styles.comment} text text_type_main-default text_color_inactive mt-20`}
           >
@@ -163,11 +130,11 @@ export const ProfilePage = () => {
             </p>
           )}
           <div className={`${styles.buttonsContainer} mt-6`}>
-            <Button type="primary" onClick={(e) => resetInput(e)} size="medium">
+            <Button type="secondary" onClick={(e) => resetInput(e)} size="medium">
               Отмена
             </Button>
             <Button
-              type="primary"
+              type="secondary"
               onClick={(e) => handleSubmit(e)}
               size="medium"
             >
