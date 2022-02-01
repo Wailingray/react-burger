@@ -150,3 +150,4 @@ export const setTokens = (res: TSuccessfulUpdateTokensReply) => {
     setCookie("refreshToken", refreshToken);
   }
 }
+

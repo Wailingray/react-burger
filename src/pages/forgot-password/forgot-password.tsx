@@ -8,9 +8,17 @@ import { PasswordInput } from "@ya.praktikum/react-developer-burger-ui-component
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useHistory } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
-import { dispatchGetUser, dispatchUserEmail, removeServerError, submitCanResetPwd } from "../../services/actions/user";
+import {
+  dispatchGetUser,
+  dispatchUserEmail,
+  removeServerError,
+  submitCanResetPwd,
+} from "../../services/actions/user";
 import { Loader } from "../../components/loader/loader";
-
+import {
+  emailSchema,
+  validateInput,
+} from "../../services/validations/user-validation";
 
 export const ForgotPasswordPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -21,15 +29,16 @@ export const ForgotPasswordPage: React.FC = () => {
     submitServerFailed,
     submitServerError,
     foundNoTokens,
-    user
+    user,
   } = useAppSelector((state) => state.user);
   let history = useHistory();
 
-  const [value, setValue] = React.useState("");
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState(false);
 
   useEffect(() => {
     if (submitUserEmailSuccess && !submitServerRequest) {
-      dispatch(submitCanResetPwd())
+      dispatch(submitCanResetPwd());
       history.push({ pathname: "/reset-password" });
     }
     return () => {
@@ -38,30 +47,38 @@ export const ForgotPasswordPage: React.FC = () => {
   }, [submitUserEmailSuccess, submitServerRequest]);
 
   useEffect(() => {
-    if (user)
-      history.push({ pathname: "/" });
+    if (user) history.push({ pathname: "/" });
   }, [user]);
 
+  const changeEmailField = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    validateInput(emailSchema, setEmailError, email);
+  };
+
+  console.log(emailError);
   const handleSubmit = useCallback(
     (e: React.SyntheticEvent<Element, Event>) => {
       e.preventDefault();
-      dispatch(dispatchUserEmail(value));
+      if (emailError) return null;
+      else dispatch(dispatchUserEmail(email));
     },
-    [value]
+    [email]
   );
 
   return (
     <div className={`${styles.formContainer}`}>
-      <form className={styles.form} action="">
+      <div className={styles.form}>
         <p className="text text_type_main-medium mb-6">Восстановление пароля</p>
         <form className={`${styles.inputContainer} mb-6`}>
           <Input
-            value={value}
+            value={email}
             name={"email"}
-            placeholder="Укажите e-mail"
+            placeholder="E-mail"
+            error={emailError}
+            errorText="Введите валидный e-mail!"
             size="default"
-            onChange={(e) => {console.log(e.target.value);
-              setValue(e.target.value)}}
+            onChange={(e) => changeEmailField(e)}
+            onBlur={() => validateInput(emailSchema, setEmailError, email)}
           />
         </form>
         {submitServerFailed && (
@@ -83,7 +100,7 @@ export const ForgotPasswordPage: React.FC = () => {
             Войти
           </Link>
         </div>
-      </form>
+      </div>
     </div>
-  )
+  );
 };

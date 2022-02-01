@@ -14,10 +14,18 @@ import {
   submitCannotResetPwd,
 } from "../../services/actions/user";
 import { Loader } from "../../components/loader/loader";
+import {
+  codeSchema,
+  passwordSchema,
+  validateInput,
+} from "../../services/validations/user-validation";
 
 export const ResetPasswordPage: React.FC = () => {
-  const [pwdValue, setPwdValue] = useState("");
-  const [codeValue, setCodeValue] = useState("");
+  const [pwd, setPwd] = useState("");
+  const [pwdError, setPwdError] = useState(false);
+  const [code, setCode] = useState("");
+  const [codeError, setCodeError] = useState(false);
+  const [showPwd, setShowPwd] = useState(false);
   const dispatch = useAppDispatch();
 
   const history = useHistory();
@@ -47,35 +55,55 @@ export const ResetPasswordPage: React.FC = () => {
     codeValue: string
   ) => {
     e.preventDefault();
-    dispatch(
-      dispatchPwdReset({
-        password: pwdValue,
-        token: codeValue,
-      })
-    );
+    if (pwdError || codeError) return null;
+    else
+      dispatch(
+        dispatchPwdReset({
+          password: pwd,
+          token: code,
+        })
+      );
+  };
+
+  const changePasswordField = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPwd(e.target.value);
+    validateInput(passwordSchema, setPwdError, pwd);
+  };
+
+  const changeCodeField = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCode(e.target.value);
+    validateInput(codeSchema, setCodeError, code);
   };
 
   return (
     <div className={`${styles.formContainer}`}>
-      <form className={styles.form} action="">
+      <div className={styles.form}>
         <p className="text text_type_main-medium mb-6">Восстановление пароля</p>
         <form className={`${styles.inputContainer} mb-6`}>
           <Input
-            value={pwdValue}
+            type={showPwd ? "text" : "password"}
+            placeholder="Пароль"
+            value={pwd}
+            error={pwdError}
+            errorText="Введите валидный пароль!"
             name={"password"}
-            placeholder="Введите новый пароль"
             size="default"
-            onChange={(e) => setPwdValue(e.target.value)}
-            icon={"ShowIcon"}
+            icon="ShowIcon"
+            onIconClick={() => setShowPwd(!showPwd)}
+            onChange={(e) => changePasswordField(e)}
+            onBlur={() => validateInput(passwordSchema, setPwdError, pwd)}
           />
         </form>
         <form className={`${styles.inputContainer} mb-6`}>
           <Input
-            value={codeValue}
+            value={code}
             name={"code"}
             placeholder="Введите код из письма"
             size="default"
-            onChange={(e) => setCodeValue(e.target.value)}
+            onChange={(e) => changeCodeField(e)}
+            error={codeError}
+            errorText="Неверный формат кода!"
+            onBlur={() => validateInput(codeSchema, setCodeError, code)}
           />
         </form>
         {submitPwdResetSuccess && (
@@ -91,7 +119,7 @@ export const ResetPasswordPage: React.FC = () => {
         <Button
           type="primary"
           size="large"
-          onClick={(e) => handleSubmit(e, pwdValue, codeValue)}
+          onClick={(e) => handleSubmit(e, pwd, code)}
         >
           Сохранить
         </Button>
@@ -106,7 +134,7 @@ export const ResetPasswordPage: React.FC = () => {
             Войти
           </Link>
         </div>
-      </form>
+      </div>
     </div>
   );
 };

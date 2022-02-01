@@ -16,20 +16,37 @@ import {
 } from "../../services/actions/user";
 import { TLocationState } from "../../services/utils/interfaces";
 import { Loader } from "../../components/loader/loader";
+import {
+  emailSchema,
+  nameSchema,
+  passwordSchema,
+  validateInput,
+} from "../../services/validations/user-validation";
+import { RequiredStringSchema } from "yup/lib/string";
+import { AnyObject } from "yup/lib/types";
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState(false);
   const [pwd, setPwd] = useState("");
+  const [pwdError, setPwdError] = useState(false);
+  const [showPwd, setShowPwd] = useState(false);
 
-  const { user, submitGetUserSuccess, foundNoTokens, submitServerFailed, submitServerError } =
-    useAppSelector((state) => state.user);
+  const {
+    user,
+    submitGetUserSuccess,
+    foundNoTokens,
+    submitServerFailed,
+    submitServerError,
+  } = useAppSelector((state) => state.user);
 
-  const [loaded, setIsLoaded] = useState(false);
+  const [loaded, setIsLoaded] = useState(true);
 
   const location = useLocation<TLocationState>();
   const dispatch = useAppDispatch();
   const history = useHistory();
 
+  //Если есть куки, то при заходе на страницу логина фетчится юзер
   useEffect(() => {
     if (!user) dispatch(dispatchGetUser());
     return () => {
@@ -43,12 +60,14 @@ export const LoginPage: React.FC = () => {
 
   const signIn = (e: React.SyntheticEvent<Element, Event>) => {
     e.preventDefault();
-    dispatch(
-      dispatchSignIn({
-        email: email,
-        password: pwd,
-      })
-    );
+    if (pwdError || emailError) return null;
+    else
+      dispatch(
+        dispatchSignIn({
+          email: email,
+          password: pwd,
+        })
+      );
   };
 
   useEffect(() => {
@@ -59,25 +78,45 @@ export const LoginPage: React.FC = () => {
     }
   }, [user]);
 
+  const changeEmailField = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    validateInput(emailSchema, setEmailError, email);
+  };
+
+  const changePasswordField = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPwd(e.target.value);
+    validateInput(passwordSchema, setPwdError, pwd);
+  };
+
   return loaded ? (
     <div className={`${styles.formContainer}`}>
-      <form className={styles.form} action="">
+      <div className={styles.form}>
         <p className="text text_type_main-medium mb-6">Вход</p>
         <form className={`${styles.inputContainer} mb-6`}>
           <Input
             value={email}
             name={"email"}
             placeholder="E-mail"
+            error={emailError}
+            errorText="Введите валидный e-mail!"
             size="default"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => changeEmailField(e)}
+            onBlur={() => validateInput(emailSchema, setEmailError, email)}
           />
         </form>
         <form className={`${styles.inputContainer} mb-6`}>
-          <PasswordInput
+          <Input
+            type={showPwd ? "text" : "password"}
+            placeholder="Пароль"
             value={pwd}
+            error={pwdError}
+            errorText="Введите валидный пароль!"
             name={"password"}
             size="default"
-            onChange={(e) => setPwd(e.target.value)}
+            icon="ShowIcon"
+            onIconClick={() => setShowPwd(!showPwd)}
+            onChange={(e) => changePasswordField(e)}
+            onBlur={() => validateInput(passwordSchema, setPwdError, pwd)}
           />
         </form>
         {submitServerFailed && (
@@ -110,7 +149,7 @@ export const LoginPage: React.FC = () => {
             Восстановить пароль
           </Link>
         </div>
-      </form>
+      </div>
     </div>
   ) : (
     <Loader />

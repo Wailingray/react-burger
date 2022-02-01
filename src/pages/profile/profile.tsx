@@ -17,6 +17,12 @@ import {
 } from "../../services/actions/user";
 import { Loader } from "../../components/loader/loader";
 import { ProfileNavBar } from "../../components/profile-nav/profile-nav";
+import {
+  emailSchema,
+  nameSchema,
+  passwordSchema,
+  validateInput,
+} from "../../services/validations/user-validation";
 
 export const ProfilePage = () => {
   const [loaded, setIsLoaded] = useState(false);
@@ -37,8 +43,8 @@ export const ProfilePage = () => {
 
   useEffect(() => {
     if (user) {
-      setEmailValue(user.email);
-      setNameValue(user.name);
+      setEmail(user.email);
+      setName(user.name);
     }
   }, [user]);
 
@@ -60,30 +66,51 @@ export const ProfilePage = () => {
   const resetInput = (e: React.SyntheticEvent<Element, Event>) => {
     e.preventDefault();
     if (user) {
-      setEmailValue(user.email);
-      setNameValue(user.name);
+      setEmail(user.email);
+      setName(user.name);
     } else {
-      setEmailValue("");
-      setNameValue("");
+      setEmail("");
+      setName("");
     }
   };
 
   const handleSubmit = (e: React.SyntheticEvent<Element, Event>) => {
     e.preventDefault();
-    dispatch(
-      dispatchChangeCredentials({
-        email: emailValue,
-        password: pwdValue,
-        name: nameValue,
-      })
-    );
+    if (pwdError || emailError || nameError) return null;
+    else
+      dispatch(
+        dispatchChangeCredentials({
+          email: email,
+          password: pwd,
+          name: name,
+        })
+      );
     setJustUpdated(true);
   };
 
   const [justUpdated, setJustUpdated] = useState(false);
-  const [nameValue, setNameValue] = useState("");
-  const [emailValue, setEmailValue] = useState("");
-  const [pwdValue, setPwdValue] = useState("");
+  const [name, setName] = useState("");
+  const [nameError, setNameError] = useState(false);
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState(false);
+  const [pwd, setPwd] = useState("");
+  const [pwdError, setPwdError] = useState(false);
+  const [showPwd, setShowPwd] = useState(false);
+
+  const changeEmailField = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    validateInput(emailSchema, setEmailError, email);
+  };
+
+  const changeNameField = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+    validateInput(nameSchema, setNameError, name);
+  };
+
+  const changePasswordField = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPwd(e.target.value);
+    validateInput(passwordSchema, setPwdError, pwd);
+  };
 
   return loaded ? (
     <div className={`${styles.profilePageContainer}`}>
@@ -98,30 +125,44 @@ export const ProfilePage = () => {
         </ul>
       </div>
       <div className={`${styles.formContainer}`}>
-        <form className={styles.form} action="">
+        <div className={styles.form}>
           <form className={`${styles.inputContainer} mb-6`}>
             <Input
-              value={nameValue}
+              value={name}
               name={"name"}
+              error={nameError}
+              errorText="Введите валидное имя!"
               placeholder="Имя"
               size="default"
-              onChange={(e) => setNameValue(e.target.value)}
+              onChange={(e) => changeNameField(e)}
+              onBlur={() => validateInput(nameSchema, setNameError, name)}
             />
           </form>
           <form className={`${styles.inputContainer} mb-6`}>
-            <EmailInput
-              value={emailValue}
+            <Input
+              value={email}
               name={"email"}
+              placeholder="E-mail"
+              error={emailError}
+              errorText="Введите валидный e-mail!"
               size="default"
-              onChange={(e) => setEmailValue(e.target.value)}
+              onChange={(e) => changeEmailField(e)}
+              onBlur={() => validateInput(emailSchema, setEmailError, email)}
             />
           </form>
           <form className={`${styles.inputContainer} mb-6`}>
-            <PasswordInput
-              value={pwdValue}
+            <Input
+              type={showPwd ? "text" : "password"}
+              placeholder="Пароль"
+              value={pwd}
+              error={pwdError}
+              errorText="Введите валидный пароль!"
               name={"password"}
               size="default"
-              onChange={(e) => setPwdValue(e.target.value)}
+              icon="ShowIcon"
+              onIconClick={() => setShowPwd(!showPwd)}
+              onChange={(e) => changePasswordField(e)}
+              onBlur={() => validateInput(passwordSchema, setPwdError, pwd)}
             />
           </form>
           {submitChangeCredentialsSuccess && justUpdated && (
@@ -130,7 +171,11 @@ export const ProfilePage = () => {
             </p>
           )}
           <div className={`${styles.buttonsContainer} mt-6`}>
-            <Button type="secondary" onClick={(e) => resetInput(e)} size="medium">
+            <Button
+              type="secondary"
+              onClick={(e) => resetInput(e)}
+              size="medium"
+            >
               Отмена
             </Button>
             <Button
@@ -141,7 +186,7 @@ export const ProfilePage = () => {
               Сохранить
             </Button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   ) : (
