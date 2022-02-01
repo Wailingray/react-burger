@@ -40,23 +40,9 @@ export const LoginPage: React.FC = () => {
     submitServerError,
   } = useAppSelector((state) => state.user);
 
-  const [loaded, setIsLoaded] = useState(true);
-
   const location = useLocation<TLocationState>();
   const dispatch = useAppDispatch();
   const history = useHistory();
-
-  //Если есть куки, то при заходе на страницу логина фетчится юзер
-  useEffect(() => {
-    if (!user) dispatch(dispatchGetUser());
-    return () => {
-      dispatch(removeServerError());
-    };
-  }, []);
-
-  useEffect(() => {
-    if (submitGetUserSuccess || foundNoTokens) setIsLoaded(true);
-  }, [submitGetUserSuccess, foundNoTokens]);
 
   const signIn = (e: React.SyntheticEvent<Element, Event>) => {
     e.preventDefault();
@@ -88,7 +74,7 @@ export const LoginPage: React.FC = () => {
     validateInput(passwordSchema, setPwdError, pwd);
   };
 
-  return loaded ? (
+  return (
     <div className={`${styles.formContainer}`}>
       <div className={styles.form}>
         <p className="text text_type_main-medium mb-6">Вход</p>
@@ -151,7 +137,5 @@ export const LoginPage: React.FC = () => {
         </div>
       </div>
     </div>
-  ) : (
-    <Loader />
   );
 };
