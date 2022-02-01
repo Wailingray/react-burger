@@ -18,6 +18,7 @@ import Modal from "../modal/modal";
 import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
 import { TIngredient } from "../../services/utils/types";
 import { useHistory } from "react-router-dom";
+import { Loader } from "../loader/loader";
 
 const BurgerIngredients: React.FC = () => {
   const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
@@ -108,11 +109,7 @@ const BurgerIngredients: React.FC = () => {
 
   const content = useMemo(() => {
     if (ingredientItemsRequest)
-      return (
-        <p className={`${styles.message} text text_type_main-large`}>
-          Загрузка...
-        </p>
-      );
+      return <Loader />;
     else if (ingredientItemsFailed)
       return (
         <p className={`${styles.message} mt-20 text text_type_main-large`}>

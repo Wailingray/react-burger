@@ -31,6 +31,7 @@ export const LoginPage: React.FC = () => {
   const [pwd, setPwd] = useState("");
   const [pwdError, setPwdError] = useState(false);
   const [showPwd, setShowPwd] = useState(false);
+  const [loaded, setIsLoaded] = useState(true);
 
   const {
     user,
@@ -47,14 +48,26 @@ export const LoginPage: React.FC = () => {
   const signIn = (e: React.SyntheticEvent<Element, Event>) => {
     e.preventDefault();
     if (pwdError || emailError) return null;
-    else
-      dispatch(
-        dispatchSignIn({
-          email: email,
-          password: pwd,
-        })
-      );
+    else dispatch(removeServerError());
+    dispatch(
+      dispatchSignIn({
+        email: email,
+        password: pwd,
+      })
+    );
   };
+
+  //Если есть нужный токен в куках, то при заходе на страницу фетчится юзер
+  useEffect(() => {
+    if (!user) dispatch(dispatchGetUser());
+    return () => {
+      dispatch(removeServerError());
+    };
+  }, []);
+
+  useEffect(() => {
+    if (submitGetUserSuccess || foundNoTokens) setIsLoaded(true);
+  }, [submitGetUserSuccess, foundNoTokens]);
 
   useEffect(() => {
     if (user) {
@@ -74,7 +87,7 @@ export const LoginPage: React.FC = () => {
     validateInput(passwordSchema, setPwdError, pwd);
   };
 
-  return (
+  return loaded ? (
     <div className={`${styles.formContainer}`}>
       <div className={styles.form}>
         <p className="text text_type_main-medium mb-6">Вход</p>
@@ -137,5 +150,7 @@ export const LoginPage: React.FC = () => {
         </div>
       </div>
     </div>
+  ) : (
+    <Loader />
   );
 };

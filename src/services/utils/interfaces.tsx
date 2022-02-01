@@ -38,5 +38,5 @@ export interface TLocationState extends Location {
     search: string;
     state: object;
   };
-  pushLocation?: Location;
+  background?: Location;
 }

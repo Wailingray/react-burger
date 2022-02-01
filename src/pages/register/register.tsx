@@ -47,6 +47,7 @@ export const RegisterPage: React.FC = () => {
     submitServerError,
   } = useAppSelector((state) => state.user);
 
+  //Если есть нужный токен в куках, то при заходе на страницу фетчится юзер
   useEffect(() => {
     if (!user) dispatch(dispatchGetUser());
     return () => {
@@ -69,7 +70,8 @@ export const RegisterPage: React.FC = () => {
   const handleSubmit = (e: React.SyntheticEvent<Element, Event>) => {
     e.preventDefault();
     if (pwdError || emailError || nameError) return null;
-    else
+    else {
+      dispatch(removeServerError());
       dispatch(
         dispatchRegister({
           email: email,
@@ -77,6 +79,7 @@ export const RegisterPage: React.FC = () => {
           name: name,
         })
       );
+    }
   };
 
   const changeEmailField = (e: React.ChangeEvent<HTMLInputElement>) => {

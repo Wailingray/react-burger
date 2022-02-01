@@ -366,7 +366,6 @@ export const dispatchChangeCredentials: AppThunk =
             if (accessToken) {
               changeCredentialsRequest(accessToken, request)
                 .then((res: TSuccessfulGetUserReply) => {
-                  console.log(res);
                   dispatch(submitChangeCredentialsSuccess());
                   dispatch(setUser(res.user));
                 })

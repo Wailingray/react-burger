@@ -98,7 +98,6 @@ export const getUserRequest = async (accessToken: string) => {
 };
 
 export const updateTokenRequest = async (refreshToken: string) => {
-  console.log(refreshToken);
   const res = await fetch(apiConfig.updateTokenUrl, {
     method: "POST",
     headers: apiConfig.headers,

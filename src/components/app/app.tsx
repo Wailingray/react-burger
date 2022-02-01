@@ -5,12 +5,7 @@ import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import {
-  Route,
-  Switch,
-  useHistory,
-  useLocation,
-} from "react-router-dom";
+import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import { HomePage } from "../../pages/home/home";
 import { LoginPage } from "../../pages/login/login";
 import { RegisterPage } from "../../pages/register/register";
@@ -26,13 +21,13 @@ import { FeedPage } from "../../pages/feed/feed";
 const App: React.FC = () => {
   const location = useLocation<TLocationState>();
   const history = useHistory();
-  const isPush = history.action === 'PUSH'
-  const pushLocation = isPush && location.state && location.state.pushLocation;
+  const isPush = history.action === "PUSH";
+  const background = isPush && location.state && location.state.background;
 
   return (
     <>
       <AppHeader />
-      <Switch location={pushLocation || location}>
+      <Switch location={background || location}>
         <Route path="/" exact={true}>
           <HomePage />
         </Route>

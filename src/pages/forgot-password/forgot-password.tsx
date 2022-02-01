@@ -36,6 +36,14 @@ export const ForgotPasswordPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(false);
 
+  //Если есть нужный токен в куках, то при заходе на страницу фетчится юзер
+  useEffect(() => {
+    if (!user) dispatch(dispatchGetUser());
+    return () => {
+      dispatch(removeServerError());
+    };
+  }, []);
+
   useEffect(() => {
     if (submitUserEmailSuccess && !submitServerRequest) {
       dispatch(submitCanResetPwd());
@@ -55,14 +63,16 @@ export const ForgotPasswordPage: React.FC = () => {
     validateInput(emailSchema, setEmailError, email);
   };
 
-  console.log(emailError);
   const handleSubmit = useCallback(
     (e: React.SyntheticEvent<Element, Event>) => {
       e.preventDefault();
       if (emailError) return null;
-      else dispatch(dispatchUserEmail(email));
+      else {
+        dispatch(removeServerError());
+        dispatch(dispatchUserEmail(email));
+      }
     },
-    [email]
+    [email, emailError]
   );
 
   return (

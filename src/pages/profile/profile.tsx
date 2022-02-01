@@ -37,9 +37,6 @@ export const ProfilePage = () => {
     submitLogoutSuccess,
     submitChangeCredentialsSuccess,
   } = useAppSelector((state) => state.user);
-  useEffect(() => {
-    dispatch(dispatchGetUser());
-  }, []);
 
   useEffect(() => {
     if (user) {

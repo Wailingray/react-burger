@@ -32,7 +32,7 @@ const Ingredient: React.FC<IngProps> = (props) => {
       className={styles.cardContainer}
       to={{
         pathname: `/ingredients/${props.id}`,
-        state: { from: location.pathname, pushLocation: location },
+        state: { from: location.pathname, background: location },
       }}
     >
       <div ref={ingRef} className={styles.card} style={{ opacity }}>

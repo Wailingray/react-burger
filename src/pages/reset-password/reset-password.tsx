@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
 import {
   dispatchGetUser,
   dispatchPwdReset,
+  removeServerError,
   submitCannotResetPwd,
 } from "../../services/actions/user";
 import { Loader } from "../../components/loader/loader";
@@ -42,12 +43,21 @@ export const ResetPasswordPage: React.FC = () => {
     submitChangeCredentialsSuccess,
   } = useAppSelector((state) => state.user);
 
+  //Если есть нужный токен в куках, то при заходе на страницу фетчится юзер
   useEffect(() => {
-    if (user || !canResetPwd) history.push({ pathname: "/" });
+    if (!user) dispatch(dispatchGetUser());
     return () => {
+      dispatch(removeServerError());
+    };
+  }, []);
+
+  useEffect(() => {
+    if (user || !canResetPwd) history.push({ pathname: "/login" });
+    return () => {
+      dispatch(removeServerError());
       dispatch(submitCannotResetPwd());
     };
-  }, [user]);
+  }, [user, canResetPwd, history]);
 
   const handleSubmit = (
     e: React.SyntheticEvent<Element, Event>,
@@ -56,14 +66,24 @@ export const ResetPasswordPage: React.FC = () => {
   ) => {
     e.preventDefault();
     if (pwdError || codeError) return null;
-    else
+    else {
+      dispatch(removeServerError());
       dispatch(
         dispatchPwdReset({
           password: pwd,
           token: code,
         })
       );
+    }
   };
+
+  useEffect(() => {
+    if (submitPwdResetSuccess) {
+      setTimeout(() => {
+        history.push({ pathname: "/" });
+      }, 3000);
+    }
+  }, [submitPwdResetSuccess]);
 
   const changePasswordField = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPwd(e.target.value);
@@ -107,9 +127,14 @@ export const ResetPasswordPage: React.FC = () => {
           />
         </form>
         {submitPwdResetSuccess && (
-          <p className="text text_type_main-default text_color_inactive mb-6">
-            Данные успешно изменены!
-          </p>
+          <>
+            <p className="text text_type_main-default text_color_inactive mb-2">
+              Данные успешно изменены!
+            </p>
+            <p className="text text_type_main-default text_color_inactive mb-2">
+              Вы будете перенаправлены на страницу авторизации...
+            </p>
+          </>
         )}
         {submitServerFailed && (
           <p className="text text_type_main-default text_color_inactive mb-6">

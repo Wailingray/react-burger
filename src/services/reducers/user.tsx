@@ -133,7 +133,6 @@ export const userReducer = (
       };
     }
     case SUBMIT_CAN_RESET_PWD: {
-      console.log(123);
       return {
         ...state,
         canResetPwd: true,
