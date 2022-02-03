@@ -71,7 +71,7 @@ export const ProfilePage = () => {
     }
   };
 
-  const handleSubmit = (e: React.SyntheticEvent<Element, Event>) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (pwdError || emailError || nameError) return null;
     else
@@ -122,8 +122,8 @@ export const ProfilePage = () => {
         </ul>
       </div>
       <div className={`${styles.formContainer}`}>
-        <div className={styles.form}>
-          <form className={`${styles.inputContainer} mb-6`}>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <div className={`${styles.inputContainer} mb-6`}>
             <Input
               value={name}
               name={"name"}
@@ -134,8 +134,8 @@ export const ProfilePage = () => {
               onChange={(e) => changeNameField(e)}
               onBlur={() => validateInput(nameSchema, setNameError, name)}
             />
-          </form>
-          <form className={`${styles.inputContainer} mb-6`}>
+          </div>
+          <div className={`${styles.inputContainer} mb-6`}>
             <Input
               value={email}
               name={"email"}
@@ -146,8 +146,8 @@ export const ProfilePage = () => {
               onChange={(e) => changeEmailField(e)}
               onBlur={() => validateInput(emailSchema, setEmailError, email)}
             />
-          </form>
-          <form className={`${styles.inputContainer} mb-6`}>
+          </div>
+          <div className={`${styles.inputContainer} mb-6`}>
             <Input
               type={showPwd ? "text" : "password"}
               placeholder="Пароль"
@@ -161,29 +161,25 @@ export const ProfilePage = () => {
               onChange={(e) => changePasswordField(e)}
               onBlur={() => validateInput(passwordSchema, setPwdError, pwd)}
             />
-          </form>
+          </div>
           {submitChangeCredentialsSuccess && justUpdated && (
             <p className="text text_type_main-default text_color_inactive">
               Данные успешно изменены!
             </p>
           )}
           <div className={`${styles.buttonsContainer} mt-6`}>
+            <Button type="secondary" size="medium">
+              Сохранить
+            </Button>
             <Button
               type="secondary"
-              onClick={(e) => resetInput(e)}
               size="medium"
+              onClick={(e) => resetInput(e)}
             >
               Отмена
             </Button>
-            <Button
-              type="secondary"
-              onClick={(e) => handleSubmit(e)}
-              size="medium"
-            >
-              Сохранить
-            </Button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   ) : (

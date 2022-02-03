@@ -9,9 +9,9 @@ import { NavLink } from "react-router-dom";
 const AppHeader: FC = () => {
   return (
     <header className={styles.header}>
-      <div className={styles.logo}>
+      <NavLink to={"/"} className={styles.logo} exact={true}>
         <Logo />
-      </div>
+      </NavLink>
       <nav>
         <ul className={styles.navigation}>
           <li className={styles.item}>

@@ -59,11 +59,7 @@ export const ResetPasswordPage: React.FC = () => {
     };
   }, [user, canResetPwd, history]);
 
-  const handleSubmit = (
-    e: React.SyntheticEvent<Element, Event>,
-    pwdValue: string,
-    codeValue: string
-  ) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (pwdError || codeError) return null;
     else {
@@ -97,9 +93,9 @@ export const ResetPasswordPage: React.FC = () => {
 
   return (
     <div className={`${styles.formContainer}`}>
-      <div className={styles.form}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <p className="text text_type_main-medium mb-6">Восстановление пароля</p>
-        <form className={`${styles.inputContainer} mb-6`}>
+        <div className={`${styles.inputContainer} mb-6`}>
           <Input
             type={showPwd ? "text" : "password"}
             placeholder="Пароль"
@@ -113,8 +109,8 @@ export const ResetPasswordPage: React.FC = () => {
             onChange={(e) => changePasswordField(e)}
             onBlur={() => validateInput(passwordSchema, setPwdError, pwd)}
           />
-        </form>
-        <form className={`${styles.inputContainer} mb-6`}>
+        </div>
+        <div className={`${styles.inputContainer} mb-6`}>
           <Input
             value={code}
             name={"code"}
@@ -125,7 +121,7 @@ export const ResetPasswordPage: React.FC = () => {
             errorText="Неверный формат кода!"
             onBlur={() => validateInput(codeSchema, setCodeError, code)}
           />
-        </form>
+        </div>
         {submitPwdResetSuccess && (
           <>
             <p className="text text_type_main-default text_color_inactive mb-2">
@@ -141,11 +137,7 @@ export const ResetPasswordPage: React.FC = () => {
             Произошла ошибка! Код ошибки: {submitServerError}
           </p>
         )}
-        <Button
-          type="primary"
-          size="large"
-          onClick={(e) => handleSubmit(e, pwd, code)}
-        >
+        <Button type="primary" size="large">
           Сохранить
         </Button>
         <div className={`${styles.linkContainer} mt-20 mb-4`}>
@@ -159,7 +151,7 @@ export const ResetPasswordPage: React.FC = () => {
             Войти
           </Link>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

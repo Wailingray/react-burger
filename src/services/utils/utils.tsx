@@ -146,7 +146,7 @@ export const setTokens = (res: TSuccessfulUpdateTokensReply) => {
   }
   refreshToken = res.refreshToken;
   if (accessToken && refreshToken) {
-    setCookie("accessToken", accessToken, { expires: 100 });
+    setCookie("accessToken", accessToken, { expires: 1200 });
     setCookie("refreshToken", refreshToken);
   }
 }

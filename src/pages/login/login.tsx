@@ -45,7 +45,7 @@ export const LoginPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
 
-  const signIn = (e: React.SyntheticEvent<Element, Event>) => {
+  const signIn = (e: React.FormEvent) => {
     e.preventDefault();
     if (pwdError || emailError) return null;
     else dispatch(removeServerError());
@@ -89,9 +89,9 @@ export const LoginPage: React.FC = () => {
 
   return loaded ? (
     <div className={`${styles.formContainer}`}>
-      <div className={styles.form}>
+      <form className={styles.form} onSubmit={signIn}>
         <p className="text text_type_main-medium mb-6">Вход</p>
-        <form className={`${styles.inputContainer} mb-6`}>
+        <div className={`${styles.inputContainer} mb-6`}>
           <Input
             value={email}
             name={"email"}
@@ -102,8 +102,8 @@ export const LoginPage: React.FC = () => {
             onChange={(e) => changeEmailField(e)}
             onBlur={() => validateInput(emailSchema, setEmailError, email)}
           />
-        </form>
-        <form className={`${styles.inputContainer} mb-6`}>
+        </div>
+        <div className={`${styles.inputContainer} mb-6`}>
           <Input
             type={showPwd ? "text" : "password"}
             placeholder="Пароль"
@@ -117,13 +117,13 @@ export const LoginPage: React.FC = () => {
             onChange={(e) => changePasswordField(e)}
             onBlur={() => validateInput(passwordSchema, setPwdError, pwd)}
           />
-        </form>
+        </div>
         {submitServerFailed && (
           <p className="text text_type_main-default text_color_inactive mb-6">
             Произошла ошибка! Код ошибки: {submitServerError}
           </p>
         )}
-        <Button onClick={(e) => signIn(e)} type="primary" size="large">
+        <Button type="primary" size="large">
           Войти
         </Button>
         <div className={`${styles.linkContainer} mt-20 mb-4`}>
@@ -148,7 +148,7 @@ export const LoginPage: React.FC = () => {
             Восстановить пароль
           </Link>
         </div>
-      </div>
+      </form>
     </div>
   ) : (
     <Loader />

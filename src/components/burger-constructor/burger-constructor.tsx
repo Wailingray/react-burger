@@ -22,7 +22,7 @@ import { useHistory } from "react-router-dom";
 
 const BurgerConstructor: React.FC = () => {
   const dispatch = useAppDispatch();
-  const history = useHistory()
+  const history = useHistory();
   useEffect(() => {
     dispatch(recalculatePrice());
   }, [dispatch]);
@@ -41,8 +41,7 @@ const BurgerConstructor: React.FC = () => {
     if (user) {
       setIsModalOpened(true);
       dispatch(dispatchOrder(constructorItems.map((item) => item._id)));
-    }
-    else {
+    } else {
       history.push({ pathname: "/login" });
     }
   }, [dispatch, constructorItems, user]);
@@ -130,7 +129,7 @@ const BurgerConstructor: React.FC = () => {
           )}
           {constructorItems.length === 0 && (
             <p className="mt-15 text text_type_main-medium">
-              Пожалуйста, перенесите сюда булку и ингредиенты для создания
+              Пожалуйста, перенесите сюда булку и хотя бы один ингредиент для создания
               заказа
             </p>
           )}
@@ -139,9 +138,11 @@ const BurgerConstructor: React.FC = () => {
           <p className="text text_type_digits-medium">
             {totalPrice} <CurrencyIcon type="primary" />
           </p>
-          <Button onClick={submitOrder} type="primary" size="large">
-            {buttonText}
-          </Button>
+          {bun && constructorItems.length > 1 && (
+            <Button onClick={submitOrder} type="primary" size="large">
+              {buttonText}
+            </Button>
+          )}
         </div>
       </section>
       {isModalOpened && (submitOrderSuccess || submitOrderFailed) && (

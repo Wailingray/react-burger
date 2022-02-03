@@ -7,16 +7,18 @@ import {
 } from "../../services/utils/types";
 import { getCookie } from "../../services/utils/utils";
 
+const baseUrl = `https://norma.nomoreparties.space/api`
+
 export const apiConfig = {
-  logoutUrl: `https://norma.nomoreparties.space/api/auth/logout`,
-  updateTokenUrl: `https://norma.nomoreparties.space/api/auth/token`,
-  getUserUrl: `https://norma.nomoreparties.space/api/auth/user`,
-  signInUrl: `https://norma.nomoreparties.space/api/auth/login`,
-  registerUrl: `https://norma.nomoreparties.space/api/auth/register`,
-  passwordResetUrlStep2: `https://norma.nomoreparties.space/api/password-reset/reset`,
-  passwordResetUrlStep1: `https://norma.nomoreparties.space/api/password-reset`,
-  ingredientsUrl: `https://norma.nomoreparties.space/api/ingredients`,
-  ordersUrl: `https://norma.nomoreparties.space/api/orders`,
+  logoutUrl: `${baseUrl}/auth/logout`,
+  updateTokenUrl: `${baseUrl}/auth/token`,
+  getUserUrl: `${baseUrl}/auth/user`,
+  signInUrl: `${baseUrl}/auth/login`,
+  registerUrl: `${baseUrl}/auth/register`,
+  passwordResetUrlStep2: `${baseUrl}/password-reset/reset`,
+  passwordResetUrlStep1: `${baseUrl}/password-reset`,
+  ingredientsUrl: `${baseUrl}/ingredients`,
+  ordersUrl: `${baseUrl}/orders`,
   headers: {
     "Content-Type": "application/json",
   },

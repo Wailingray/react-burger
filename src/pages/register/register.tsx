@@ -67,7 +67,7 @@ export const RegisterPage: React.FC = () => {
     }
   }, [user]);
 
-  const handleSubmit = (e: React.SyntheticEvent<Element, Event>) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (pwdError || emailError || nameError) return null;
     else {
@@ -99,9 +99,9 @@ export const RegisterPage: React.FC = () => {
 
   return loaded ? (
     <div className={`${styles.formContainer}`}>
-      <div className={styles.form}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <p className="text text_type_main-medium mb-6">Регистрация</p>
-        <form className={`${styles.inputContainer} mb-6`}>
+        <div className={`${styles.inputContainer} mb-6`}>
           <Input
             value={name}
             name={"name"}
@@ -112,8 +112,8 @@ export const RegisterPage: React.FC = () => {
             onChange={(e) => changeNameField(e)}
             onBlur={() => validateInput(nameSchema, setNameError, name)}
           />
-        </form>
-        <form className={`${styles.inputContainer} mb-6`}>
+        </div>
+        <div className={`${styles.inputContainer} mb-6`}>
           <Input
             value={email}
             name={"email"}
@@ -124,8 +124,8 @@ export const RegisterPage: React.FC = () => {
             onChange={(e) => changeEmailField(e)}
             onBlur={() => validateInput(emailSchema, setEmailError, email)}
           />
-        </form>
-        <form className={`${styles.inputContainer} mb-6`}>
+        </div>
+        <div className={`${styles.inputContainer} mb-6`}>
           <Input
             type={showPwd ? "text" : "password"}
             placeholder="Пароль"
@@ -138,13 +138,13 @@ export const RegisterPage: React.FC = () => {
             onIconClick={() => setShowPwd(!showPwd)}
             onChange={(e) => changePasswordField(e)}
           />
-        </form>
+        </div>
         {submitServerFailed && (
           <p className="text text_type_main-default text_color_inactive mb-6">
             Произошла ошибка! Код ошибки: {submitServerError}
           </p>
         )}
-        <Button type="primary" size="large" onClick={(e) => handleSubmit(e)}>
+        <Button type="primary" size="large">
           Зарегистрироваться
         </Button>
         <div className={`${styles.linkContainer} mt-20 mb-4`}>
@@ -158,7 +158,7 @@ export const RegisterPage: React.FC = () => {
             Войти
           </Link>
         </div>
-      </div>
+      </form>
     </div>
   ) : (
     <Loader />

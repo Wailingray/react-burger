@@ -37,7 +37,7 @@ const initialState: TIngredientsState = {
   ingredientItemsFailed: false,
   ingredientItemsError: null,
 
-  constructorItems: [...burgerExample],
+  constructorItems: [],
 
   totalPrice: 0,
 

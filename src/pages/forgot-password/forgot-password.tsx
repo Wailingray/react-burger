@@ -64,7 +64,7 @@ export const ForgotPasswordPage: React.FC = () => {
   };
 
   const handleSubmit = useCallback(
-    (e: React.SyntheticEvent<Element, Event>) => {
+    (e: React.FormEvent) => {
       e.preventDefault();
       if (emailError) return null;
       else {
@@ -77,9 +77,9 @@ export const ForgotPasswordPage: React.FC = () => {
 
   return (
     <div className={`${styles.formContainer}`}>
-      <div className={styles.form}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <p className="text text_type_main-medium mb-6">Восстановление пароля</p>
-        <form className={`${styles.inputContainer} mb-6`}>
+        <div className={`${styles.inputContainer} mb-6`}>
           <Input
             value={email}
             name={"email"}
@@ -90,13 +90,13 @@ export const ForgotPasswordPage: React.FC = () => {
             onChange={(e) => changeEmailField(e)}
             onBlur={() => validateInput(emailSchema, setEmailError, email)}
           />
-        </form>
+        </div>
         {submitServerFailed && (
           <p className="text text_type_main-default text_color_inactive mb-4">
             Произошла ошибка! Код ошибки: {submitServerError}
           </p>
         )}
-        <Button type="primary" size="large" onClick={(e) => handleSubmit(e)}>
+        <Button type="primary" size="large">
           Восстановить
         </Button>
         <div className={`${styles.linkContainer} mt-20 mb-4`}>
@@ -110,7 +110,7 @@ export const ForgotPasswordPage: React.FC = () => {
             Войти
           </Link>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
