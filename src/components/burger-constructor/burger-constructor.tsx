@@ -138,11 +138,9 @@ const BurgerConstructor: React.FC = () => {
           <p className="text text_type_digits-medium">
             {totalPrice} <CurrencyIcon type="primary" />
           </p>
-          {bun && constructorItems.length > 1 && (
-            <Button onClick={submitOrder} type="primary" size="large">
+            <Button disabled={!bun || constructorItems.length < 2} onClick={submitOrder} type="primary" size="large">
               {buttonText}
             </Button>
-          )}
         </div>
       </section>
       {isModalOpened && (submitOrderSuccess || submitOrderFailed) && (
