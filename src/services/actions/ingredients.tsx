@@ -1,6 +1,6 @@
 import { AppDispatch, AppThunk } from "../..";
 import { getIngredients } from "../../components/api/api";
-import { TIngredient } from "../../utils/types";
+import { TIngredient } from "../utils/types";
 
 export const GET_ITEMS_REQUEST: "GET_ITEMS_REQUEST" = "GET_ITEMS_REQUEST";
 export const GET_ITEMS_SUCCESS: "GET_ITEMS_SUCCESS" = "GET_ITEMS_SUCCESS";

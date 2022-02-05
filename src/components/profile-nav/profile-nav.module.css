@@ -1,0 +1,14 @@
+.link {
+  text-decoration: none;
+  color: #8585ad;
+  line-height: 64px;
+  transition: linear 0.2s;
+}
+
+.link:hover {
+  color: #f2f2f3;
+}
+
+.activeLink {
+  color: #f2f2f3;
+}

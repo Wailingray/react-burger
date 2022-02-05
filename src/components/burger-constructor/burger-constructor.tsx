@@ -6,22 +6,23 @@ import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { useDrop } from "react-dnd";
-import {
-  dispatchOrder,
-  resetOrder,
-} from "../../services/actions/order";
+import { dispatchOrder, resetOrder } from "../../services/actions/order";
 import {
   recalculatePrice,
   replaceBun,
   addToConstructor,
 } from "../../services/actions/ingredients";
 import { ConstructorIngredient } from "../constructor-ingredient/constructor-ingredient";
-import { ConstructorDraggableEl, ConstructorEL } from "../../utils/interfaces";
+import {
+  ConstructorDraggableEl,
+  ConstructorEL,
+} from "../../services/utils/interfaces";
 import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
+import { useHistory } from "react-router-dom";
 
 const BurgerConstructor: React.FC = () => {
   const dispatch = useAppDispatch();
-
+  const history = useHistory();
   useEffect(() => {
     dispatch(recalculatePrice());
   }, [dispatch]);
@@ -32,12 +33,18 @@ const BurgerConstructor: React.FC = () => {
   const { submitOrderSuccess, submitOrderFailed, submitOrderRequest } =
     useAppSelector((state) => state.order);
 
+  const { user } = useAppSelector((state) => state.user);
+
   const [isModalOpened, setIsModalOpened] = useState(false);
 
   const submitOrder = useCallback(() => {
-    setIsModalOpened(true);
-    dispatch(dispatchOrder(constructorItems.map((item) => item._id)));
-  }, [dispatch, constructorItems]);
+    if (user) {
+      setIsModalOpened(true);
+      dispatch(dispatchOrder(constructorItems.map((item) => item._id)));
+    } else {
+      history.push({ pathname: "/login" });
+    }
+  }, [dispatch, constructorItems, user]);
 
   const closeModal = () => {
     setIsModalOpened(false);
@@ -122,7 +129,7 @@ const BurgerConstructor: React.FC = () => {
           )}
           {constructorItems.length === 0 && (
             <p className="mt-15 text text_type_main-medium">
-              Пожалуйста, перенесите сюда булку и ингредиенты для создания
+              Пожалуйста, перенесите сюда булку и хотя бы один ингредиент для создания
               заказа
             </p>
           )}
@@ -131,9 +138,9 @@ const BurgerConstructor: React.FC = () => {
           <p className="text text_type_digits-medium">
             {totalPrice} <CurrencyIcon type="primary" />
           </p>
-          <Button onClick={submitOrder} type="primary" size="large">
-            {buttonText}
-          </Button>
+            <Button disabled={!bun || constructorItems.length < 2} onClick={submitOrder} type="primary" size="large">
+              {buttonText}
+            </Button>
         </div>
       </section>
       {isModalOpened && (submitOrderSuccess || submitOrderFailed) && (

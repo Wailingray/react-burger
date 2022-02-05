@@ -1,7 +1,7 @@
 .header {
   margin: 0 auto;
   max-width: 1920px;
-  background: #1C1C21;
+  background: #1c1c21;
 }
 
 .logo {
@@ -27,6 +27,7 @@
   min-height: 56px;
   min-width: 197px;
   display: flex;
+  color: #8585AD;
 }
 
 .item:last-of-type {
@@ -34,9 +35,18 @@
 }
 
 .link {
-  color: white;
+  color: #8585AD;
   text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: linear 0.2s;
+}
+
+.link:hover {
+  color: #f2f2f3;
+}
+
+.activeLink {
+  color: #f2f2f3;
 }

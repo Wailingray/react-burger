@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 import styles from "./modal.module.css";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { ModalProps } from "../../utils/interfaces";
+import { ModalProps } from "../../services/utils/interfaces";
 
 const Modal: React.FC<ModalProps> = ({ children, onClose }) => {
   useEffect(() => {
