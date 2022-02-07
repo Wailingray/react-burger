@@ -1,0 +1,27 @@
+.orderTape {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 609px;
+}
+
+.title {
+
+}
+
+.page {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.sections {
+  display: flex;
+  gap: 60px;
+}
+
+.orderTable {
+  max-width: 580px;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}

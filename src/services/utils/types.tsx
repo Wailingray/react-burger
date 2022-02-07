@@ -21,6 +21,15 @@ export type TOrder = {
   };
 };
 
+export type TServerOrder = {
+  ingredients: string[];
+  _id: string;
+  status: "done" | "created" | "pending";
+  number: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type TSuccessfulUpdateTokensReply = {
   success: boolean;
   accessToken: string;
@@ -71,8 +80,8 @@ export type TUser = {
 };
 
 export type TUseParams = {
-  id: string
-}
+  id: string;
+};
 
 export type TResponseBody<TDataKey extends string = "", TDataType = {}> = {
   [key in TDataKey]: TDataType;

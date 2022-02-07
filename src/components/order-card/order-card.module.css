@@ -1,0 +1,17 @@
+.container {
+  min-width: 584px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.metadata {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ingredients {
+
+}

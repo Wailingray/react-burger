@@ -8,6 +8,13 @@ export interface IngProps {
   price: number;
 }
 
+export interface OrderCardProps {
+  number: number,
+  time: string,
+  name: string,
+  ingredients: string[]
+}
+
 export interface ModalProps {
   onClose: (...args: any[]) => any;
 }
