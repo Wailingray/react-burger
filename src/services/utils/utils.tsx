@@ -113,14 +113,17 @@ export const burgerExample: TIngredient[] = [
 
 export const orderExample: TServerOrder = {
   ingredients: [
-    "60d3463f7034a000269f45e7",
-    "60d3463f7034a000269f45e9",
-    "60d3463f7034a000269f45e8",
-    "60d3463f7034a000269f45ea",
+    "60d3b41abdacab0026a733c6",
+    "60d3b41abdacab0026a733cc",
+    "60d3b41abdacab0026a733d0",
+    "60d3b41abdacab0026a733d0",
+    "60d3b41abdacab0026a733d0",
+    "60d3b41abdacab0026a733d0",
+    "60d3b41abdacab0026a733c9",
   ],
   _id: "",
   status: "done",
-  number: 0,
+  number: 342352,
   createdAt: "2021-06-23T14:43:22.587Z",
   updatedAt: "2021-06-23T14:43:22.603Z",
 };

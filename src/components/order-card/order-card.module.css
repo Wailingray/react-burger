@@ -13,5 +13,36 @@
 }
 
 .ingredients {
+  display: flex;
+}
 
+.listItem {
+  padding: 0;
+  margin: -16px;
+  list-style-type: none;
+  position: relative;
+  display: flex;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(to right, #801AB2, #4C4CFF);
+}
+
+.listItem::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  right: 2px;
+  left: 2px;
+  border-radius: 50%;
+  background-color: #131316;
+}
+
+.picture {
+  max-height: 56px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
