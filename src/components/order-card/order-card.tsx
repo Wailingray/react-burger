@@ -11,6 +11,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
   time,
   name,
   ingredients,
+  status,
 }) => {
   const { ingredientItems } = useAppSelector((state) => state.ingredients);
 
@@ -25,6 +26,39 @@ export const OrderCard: React.FC<OrderCardProps> = ({
   const counter = objectsArray.length - 6;
   const date = parseTime(time);
   const totalPrice = objectsArray.reduce((sum, el) => sum + el.price, 0);
+
+  let statusMessage;
+  switch (status) {
+    case "pending": {
+      statusMessage = <p className={`text text_type_main-small`}>Готовится</p>;
+      break;
+    }
+    case "done": {
+      statusMessage = (
+        <p style={{ color: "#00CCCC" }} className={`text text_type_main-small`}>
+          Выполнен
+        </p>
+      );
+      break;
+    }
+    case "created": {
+      statusMessage = <p className={`text text_type_main-small`}>Создан</p>;
+      break;
+    }
+    case "cancelled": {
+      statusMessage = (
+        <p
+          style={{ color: "red" }}
+          className={`text text_type_main-small`}
+        >
+          Отменён
+        </p>
+      );
+      break;
+    }
+    default:
+      break;
+  }
 
   const renderPictures = (item: TIngredient, idx: number) => {
     if (idx <= 5)
@@ -46,7 +80,11 @@ export const OrderCard: React.FC<OrderCardProps> = ({
           {date}
         </p>
       </div>
-      <p className={`text text_type_main-medium`}>{name}</p>
+      <div>
+        <p className={`text text_type_main-medium mb-2`}>{name}</p>
+        {statusMessage}
+      </div>
+
       <div className={`${styles.orderData}`}>
         <ul className={`${styles.ingredients}`}>
           {objectsArray.map(renderPictures)}

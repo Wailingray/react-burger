@@ -13,6 +13,7 @@ export interface OrderCardProps {
   time: Date,
   name: string,
   ingredients: string[]
+  status?: "created" | "pending" | "done" | "cancelled"
 }
 
 export interface ModalProps {

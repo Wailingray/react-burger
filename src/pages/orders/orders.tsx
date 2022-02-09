@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useHistory } from "react-router-dom";
 import { Loader } from "../../components/loader/loader";
+import { OrderCard } from "../../components/order-card/order-card";
 import { ProfileNavBar } from "../../components/profile-nav/profile-nav";
+import { getItems } from "../../services/actions/ingredients";
 import { dispatchLogout, removeServerError } from "../../services/actions/user";
 import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
+import { orderExample } from "../../services/utils/utils";
 import styles from "./orders.module.css";
 
 export const Orders: React.FC = () => {
@@ -19,6 +22,10 @@ export const Orders: React.FC = () => {
   } = useAppSelector((state) => state.user);
 
   const [loaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    dispatch(getItems());
+  }, [dispatch]);
 
   useEffect(() => {
     if (submitGetUserSuccess || foundNoTokens) setIsLoaded(true);
@@ -39,9 +46,59 @@ export const Orders: React.FC = () => {
         </ul>
       </div>
       <div className={`${styles.formContainer}`}>
-        <form className={styles.form} action="">
-          Страница находится в разработке!
-        </form>
+        <section className={styles.orderTape}>
+          <OrderCard
+            number={orderExample.number}
+            time={orderExample.createdAt}
+            name={orderExample.name}
+            ingredients={orderExample.ingredients}
+            status='pending'
+          />
+          <OrderCard
+            number={orderExample.number}
+            time={orderExample.createdAt}
+            name={orderExample.name}
+            ingredients={orderExample.ingredients}
+            status='done'
+          />
+          <OrderCard
+            number={orderExample.number}
+            time={orderExample.createdAt}
+            name={orderExample.name}
+            ingredients={orderExample.ingredients}
+            status='cancelled'
+          />
+          <OrderCard
+            number={orderExample.number}
+            time={orderExample.createdAt}
+            name={orderExample.name}
+            ingredients={orderExample.ingredients}
+          />
+          <OrderCard
+            number={orderExample.number}
+            time={orderExample.createdAt}
+            name={orderExample.name}
+            ingredients={orderExample.ingredients}
+          />
+          <OrderCard
+            number={orderExample.number}
+            time={orderExample.createdAt}
+            name={orderExample.name}
+            ingredients={orderExample.ingredients}
+          />
+          <OrderCard
+            number={orderExample.number}
+            time={orderExample.createdAt}
+            name={orderExample.name}
+            ingredients={orderExample.ingredients}
+          />
+          <OrderCard
+            number={orderExample.number}
+            time={orderExample.createdAt}
+            name={orderExample.name}
+            ingredients={orderExample.ingredients}
+          />
+        </section>
       </div>
     </div>
   ) : (

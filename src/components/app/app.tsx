@@ -46,9 +46,9 @@ const App: React.FC = () => {
         <ProtectedRoute path="/profile" exact={true}>
           <ProfilePage />
         </ProtectedRoute>
-        <ProtectedRoute path="/feed" exact={true}>
+        <Route path="/feed" exact={true}>
           <FeedPage />
-        </ProtectedRoute>
+        </Route>
         <ProtectedRoute path="/profile/orders" exact={true}>
           <Orders />
         </ProtectedRoute>

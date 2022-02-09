@@ -21,8 +21,7 @@
   background-color: #8585ad;
 }
 
-.title {
-}
+
 
 .page {
   max-width: 1240px;
@@ -54,11 +53,7 @@
   gap: 24px;
 }
 
-.orderTitle {
-}
 
-.listItem {
-}
 
 .orderList {
   margin: 0;
