@@ -26,8 +26,9 @@ export type TServerOrder = {
   _id: string;
   status: "done" | "created" | "pending";
   number: number;
-  createdAt: string;
-  updatedAt: string;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type TSuccessfulUpdateTokensReply = {

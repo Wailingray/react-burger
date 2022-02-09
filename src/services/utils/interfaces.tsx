@@ -10,7 +10,7 @@ export interface IngProps {
 
 export interface OrderCardProps {
   number: number,
-  time: string,
+  time: Date,
   name: string,
   ingredients: string[]
 }
