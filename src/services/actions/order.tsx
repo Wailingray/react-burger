@@ -1,8 +1,14 @@
 import { AppDispatch, AppThunk } from "../..";
-import { submitOrder } from "../../components/api/api";
-import { TOrder } from "../utils/types";
-import { getCookie } from "../utils/utils";
+import { submitOrder, updateTokenRequest } from "../../components/api/api";
+import { TOrder, TSuccessfulUpdateTokensReply } from "../utils/types";
+import { getCookie, setTokens } from "../utils/utils";
 import { resetConstructor } from "./ingredients";
+import {
+  setNoTokens,
+  submitServerFailed,
+  submitServerRequest,
+  submitUpdateTokensSuccess,
+} from "./user";
 
 export const SUBMIT_ORDER_REQUEST: "SUBMIT_ORDER_REQUEST" =
   "SUBMIT_ORDER_REQUEST";
@@ -53,18 +59,50 @@ export const resetOrder = (): IOrderReset => ({
   type: ORDER_RESET,
 });
 
+export const dispatchOrderUsual = (
+  userOrder: string[],
+  accessToken: string,
+  dispatch: AppDispatch
+) => {
+  dispatch(submitOrderRequest());
+  submitOrder(userOrder, accessToken)
+    .then((res) => {
+      dispatch(submitOrderSuccess(res));
+      dispatch(resetConstructor());
+    })
+    .catch((err) => {
+      dispatch(submitOrderFailed(err));
+    });
+};
+
+export const dispatchOrderWithUpdate = (
+  userOrder: string[],
+  refreshToken: string,
+  dispatch: AppDispatch
+) => {
+  dispatch(submitServerRequest());
+  updateTokenRequest(refreshToken)
+    .then((res: TSuccessfulUpdateTokensReply) => {
+      dispatch(submitUpdateTokensSuccess());
+      setTokens(res);
+      let accessToken = getCookie("accessToken");
+      if (accessToken) {
+        dispatchOrderUsual(userOrder, accessToken, dispatch);
+      }
+    })
+    .catch((err) => {
+      dispatch(submitServerFailed(err));
+    });
+};
+
 export const dispatchOrder: AppThunk =
   (userOrder: string[]) => (dispatch: AppDispatch) => {
-    dispatch(submitOrderRequest());
+    dispatch(submitServerRequest());
+    let refreshToken = getCookie("refreshToken");
     let accessToken = getCookie("accessToken");
-    submitOrder(userOrder, accessToken)
-      .then((res) => {
-        dispatch(submitOrderSuccess(res));
-      })
-      .then(() => {
-        dispatch(resetConstructor());
-      })
-      .catch((err) => {
-        dispatch(submitOrderFailed(err));
-      });
+    if (accessToken) {
+      dispatchOrderUsual(userOrder, accessToken, dispatch);
+    } else if (refreshToken)
+      dispatchOrderWithUpdate(userOrder, refreshToken, dispatch);
+    else dispatch(setNoTokens());
   };

@@ -17,15 +17,11 @@ export const OrderCard: React.FC<OrderCardProps> = ({
 
   const objectsArray: TIngredient[] = [];
 
-
-
   ingredients.map((ingID) => {
     ingredientItems.forEach((item) => {
       if (ingID === item._id) objectsArray.push(item);
     });
   });
-
-  console.log(objectsArray)
 
   const counter = objectsArray.length - 6;
   const date = parseTime(time);
@@ -93,7 +89,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
         <ul className={`${styles.ingredients}`}>
           {objectsArray.map(renderPictures)}
           {counter > 0 && (
-            <div className={`${styles.counter} text text_type_main-small`}>
+            <div style={{zIndex: ingredients.length-5 }}className={`${styles.counter} text text_type_main-small`}>
               +{counter}
             </div>
           )}

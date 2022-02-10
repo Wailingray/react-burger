@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { getUserOrders } from "../../components/api/api";
 import { Loader } from "../../components/loader/loader";
 import { OrderCard } from "../../components/order-card/order-card";
 import { getItems } from "../../services/actions/ingredients";
@@ -17,9 +18,12 @@ export const FeedPage: React.FC = () => {
     (state) => state.feed
   );
 
+  console.log(orders);
+
   useEffect(() => {
     dispatch(wsConnectionStart());
-    dispatch(getItems())
+    dispatch(getItems());
+    getUserOrders()
     return () => {
       dispatch(wsConnectionClosed);
     };

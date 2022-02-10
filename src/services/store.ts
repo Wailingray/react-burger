@@ -9,6 +9,6 @@ const composeEnhancers =
   compose;
 
 const enhancer = composeEnhancers(applyMiddleware(thunk));
-const wsSocket = compose(applyMiddleware(thunk, socketMiddleware(WS_URL, false)));
+const wsSocket = composeEnhancers(applyMiddleware(thunk, socketMiddleware(WS_URL, false)));
 
 export const store = createStore(rootReducer, wsSocket);
