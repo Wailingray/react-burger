@@ -1,4 +1,7 @@
 .orderTape {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -20,7 +23,6 @@
 .orderTape::-webkit-scrollbar-thumb {
   background-color: #8585ad;
 }
-
 
 
 .page {

@@ -226,3 +226,7 @@ export function parseTime(date: Date): string {
 
   return `${diff}, ${time}`;
 }
+
+
+export const WS_URL = 'wss://norma.nomoreparties.space/orders/all';
+export const WS_URL_PRIVATE = 'wss://norma.nomoreparties.space/orders';

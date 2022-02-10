@@ -17,11 +17,15 @@ export const OrderCard: React.FC<OrderCardProps> = ({
 
   const objectsArray: TIngredient[] = [];
 
+
+
   ingredients.map((ingID) => {
     ingredientItems.forEach((item) => {
       if (ingID === item._id) objectsArray.push(item);
     });
   });
+
+  console.log(objectsArray)
 
   const counter = objectsArray.length - 6;
   const date = parseTime(time);
@@ -60,10 +64,10 @@ export const OrderCard: React.FC<OrderCardProps> = ({
       break;
   }
 
-  const renderPictures = (item: TIngredient, idx: number) => {
+  const renderPictures = (item: TIngredient, idx: number, arr: TIngredient[]) => {
     if (idx <= 5)
       return (
-        <li key={idx} className={styles.listItem} style={{ zIndex: -idx }}>
+        <li key={idx} className={styles.listItem} style={{ zIndex: arr.length-idx }}>
           <img className={styles.picture} src={item.image_mobile}></img>
         </li>
       );

@@ -1,6 +1,7 @@
 import { AppDispatch, AppThunk } from "../..";
 import { submitOrder } from "../../components/api/api";
 import { TOrder } from "../utils/types";
+import { getCookie } from "../utils/utils";
 import { resetConstructor } from "./ingredients";
 
 export const SUBMIT_ORDER_REQUEST: "SUBMIT_ORDER_REQUEST" =
@@ -55,7 +56,8 @@ export const resetOrder = (): IOrderReset => ({
 export const dispatchOrder: AppThunk =
   (userOrder: string[]) => (dispatch: AppDispatch) => {
     dispatch(submitOrderRequest());
-    submitOrder(userOrder)
+    let accessToken = getCookie("accessToken");
+    submitOrder(userOrder, accessToken)
       .then((res) => {
         dispatch(submitOrderSuccess(res));
       })

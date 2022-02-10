@@ -39,10 +39,13 @@ export const getIngredients = async (): Promise<
   return getResponse(res);
 };
 
-export const submitOrder = async (userOrder: string[]) => {
+export const submitOrder = async (userOrder: string[], accessToken: string) => {
   const res = await fetch(apiConfig.ordersUrl, {
     method: "POST",
-    headers: apiConfig.headers,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: accessToken,
+    },
     body: JSON.stringify({
       ingredients: userOrder,
     }),

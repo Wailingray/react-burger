@@ -91,3 +91,10 @@ export type TResponseBody<TDataKey extends string = "", TDataType = {}> = {
   message?: string;
   headers?: Headers;
 };
+
+export type wsServerRespond = {
+  success: boolean,
+  orders: TServerOrder[],
+  total: number,
+  totalToday: number
+}
