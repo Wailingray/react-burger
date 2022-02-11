@@ -3,10 +3,12 @@ import { ingredientsReducer } from "./ingredients";
 import { orderReducer } from "./order";
 import { userReducer } from "./user";
 import { wsReducer } from "./wsReducer";
+import { wsUserReducer } from "./wsUserReducer";
 
 export const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
   order: orderReducer,
   user: userReducer,
-  feed: wsReducer
+  feed: wsReducer,
+  userFeed: wsUserReducer
 });

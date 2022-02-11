@@ -1,17 +1,17 @@
 import {
-  TSocketActions,
-  WS_CONNECTION_START,
-  wsConnectionSuccess,
-  wsConnectionError,
-  wsGetMessage,
-  wsConnectionClosed,
-  wsConnectionStart,
-  WS_SEND_MESSAGE,
-} from "../actions/wsActions";
+  WS_PRIVATE_CONNECTION_START,
+  WS_SEND_PRIVATE_MESSAGE,
+  wsPrivateConnectionSuccess,
+  wsPrivateConnectionError,
+  wsGetPrivateMessage,
+  wsPrivateConnectionClosed,
+  wsPrivateConnectionStart,
+} from "./../actions/wsUserActions";
+
 import { AnyAction, MiddlewareAPI } from "redux";
 import { getCookie } from "../utils/utils";
 
-export const socketMiddleware = (wsUrl: string) => {
+export const userSocketMiddleware = (wsUrl: string) => {
   return (store: MiddlewareAPI) => {
     let socket: WebSocket | null = null;
     let connected = false;
@@ -19,37 +19,37 @@ export const socketMiddleware = (wsUrl: string) => {
     return (next: (i: AnyAction) => void) => (action: AnyAction) => {
       const { dispatch } = store;
       const { type, payload } = action;
-
-      if (type === WS_CONNECTION_START.toString()) {
-        socket = new WebSocket(`${wsUrl}`);
+      const token = getCookie("accessToken");
+      if (type === WS_PRIVATE_CONNECTION_START.toString()) {
+        socket = new WebSocket(`${wsUrl}?token=${token}`);
       }
       if (socket) {
         connected = true;
         socket.onopen = () => {
-          dispatch(wsConnectionSuccess());
+          dispatch(wsPrivateConnectionSuccess());
         };
         socket.onerror = () => {
-          dispatch(wsConnectionError());
+          dispatch(wsPrivateConnectionError());
         };
         socket.onmessage = (event) => {
           const { data } = event;
           const parsedData = JSON.parse(data);
           const { success, ...restParsedData } = parsedData;
-          dispatch(wsGetMessage(restParsedData));
+          dispatch(wsGetPrivateMessage(restParsedData));
         };
 
         socket.onclose = (event) => {
-          dispatch(wsConnectionClosed());
+          dispatch(wsPrivateConnectionClosed());
           console.log("socket closed with code: ", event.code);
           if (!connected) {
             setTimeout(() => {
-              dispatch(wsConnectionStart());
+              dispatch(wsPrivateConnectionStart());
             }, 1000);
           }
         };
 
-        if (type === WS_SEND_MESSAGE.toString()) {
-          const message = { ...payload };
+        if (type === WS_SEND_PRIVATE_MESSAGE.toString()) {
+          const message = { ...payload, token };
           socket.send(JSON.stringify(message));
         }
       }

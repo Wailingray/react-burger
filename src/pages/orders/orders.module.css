@@ -72,10 +72,17 @@
   width: 170px;
 }
 
+.cardContainer {
+  width: 100%;
+}
+
 .orderTape {
+  padding: 0;
+  margin: 0;
+  list-style: none;
   overflow-y: auto;
   overflow-x: hidden;
-  min-width: 844px;
+  max-width: 860px;
   max-height: 976px;
   padding-right: 8px;
   display: flex;
@@ -84,7 +91,6 @@
   align-items: center;
   justify-content: flex-start;
 }
-
 
 .orderTape::-webkit-scrollbar {
   width: 8px;

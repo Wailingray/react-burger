@@ -8,7 +8,6 @@ export const WS_CONNECTION_CLOSED: "WS_CONNECTION_CLOSED" =
   "WS_CONNECTION_CLOSED";
 export const WS_GET_MESSAGE: "WS_GET_MESSAGE" = "WS_GET_MESSAGE";
 export const WS_SEND_MESSAGE: "WS_SEND_MESSAGE" = "WS_SEND_MESSAGE";
-export const WS_USER_NAME_UPDATE: "WS_USER_NAME_UPDATE" = "WS_USER_NAME_UPDATE";
 
 export interface IwsConnectionStart {
   readonly type: typeof WS_CONNECTION_START;
@@ -69,6 +68,8 @@ export const wsSendMessage = (message: any): IwsSendMessage => ({
   type: WS_SEND_MESSAGE,
   payload: message,
 });
+
+
 
 const wsActions = {
   wsInit: WS_CONNECTION_START,

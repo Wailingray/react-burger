@@ -18,21 +18,20 @@ export const FeedPage: React.FC = () => {
     (state) => state.feed
   );
 
-  console.log(orders);
 
   useEffect(() => {
     dispatch(wsConnectionStart());
     dispatch(getItems());
-    getUserOrders()
     return () => {
       dispatch(wsConnectionClosed);
     };
   }, [dispatch]);
 
+
   const renderOrderCards = (item: TServerOrder, idx: number) => {
     if (idx < 10)
       return (
-        <li key={idx} className={styles.li}>
+        <li key={idx}>
           <OrderCard
             number={item.number}
             time={item.createdAt}

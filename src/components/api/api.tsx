@@ -24,7 +24,6 @@ export const apiConfig = {
   },
 };
 const getResponse = (res: Response) => {
-  console.log(res);
   if (res.ok) {
     return res.json();
   }
