@@ -1,6 +1,11 @@
 import { AppDispatch, AppThunk } from "../..";
 import { submitOrder, updateTokenRequest } from "../../components/api/api";
-import { TOrder, TSuccessfulUpdateTokensReply } from "../utils/types";
+import {
+  TOrder,
+  TOrderModalProps,
+  TServerOrder,
+  TSuccessfulUpdateTokensReply,
+} from "../utils/types";
 import { getCookie, setTokens } from "../utils/utils";
 import { resetConstructor } from "./ingredients";
 import {
@@ -16,6 +21,17 @@ export const SUBMIT_ORDER_SUCCESS: "SUBMIT_ORDER_SUCCESS" =
   "SUBMIT_ORDER_SUCCESS";
 export const SUBMIT_ORDER_FAILED: "SUBMIT_ORDER_FAILED" = "SUBMIT_ORDER_FAILED";
 export const ORDER_RESET: "ORDER_RESET" = "ORDER_RESET";
+export const SEND_ORDER_TO_MODAL: "SEND_ORDER_TO_MODAL" = "SEND_ORDER_TO_MODAL";
+export const RESET_ORDER_POPUP: "RESET_ORDER_POPUP" = "RESET_ORDER_POPUP";
+
+export interface IOrderPopupReset {
+  readonly type: typeof RESET_ORDER_POPUP;
+}
+
+export interface ISendOrderToModal {
+  readonly type: typeof SEND_ORDER_TO_MODAL;
+  readonly order: TServerOrder;
+}
 
 export interface ISubmitOrderRequest {
   readonly type: typeof SUBMIT_ORDER_REQUEST;
@@ -39,7 +55,16 @@ export type TOrderActions =
   | ISubmitOrderRequest
   | ISubmitOrderSuccess
   | ISubmitOrderFailed
+  | ISendOrderToModal
+  | IOrderPopupReset
   | IOrderReset;
+
+export const sendOrderToModal = (
+  order: TServerOrder
+): ISendOrderToModal => ({
+  type: SEND_ORDER_TO_MODAL,
+  order,
+});
 
 export const submitOrderRequest = (): ISubmitOrderRequest => ({
   type: SUBMIT_ORDER_REQUEST,
@@ -57,6 +82,10 @@ export const submitOrderFailed = (error: number): ISubmitOrderFailed => ({
 
 export const resetOrder = (): IOrderReset => ({
   type: ORDER_RESET,
+});
+
+export const orderPopupReset = (): IOrderPopupReset => ({
+  type: RESET_ORDER_POPUP,
 });
 
 export const dispatchOrderUsual = (

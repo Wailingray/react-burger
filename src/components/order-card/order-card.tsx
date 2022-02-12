@@ -45,25 +45,22 @@ export const OrderCard: React.FC<OrderCardProps> = ({
       statusMessage = <p className={`text text_type_main-small`}>Создан</p>;
       break;
     }
-    case "cancelled": {
-      statusMessage = (
-        <p
-          style={{ color: "red" }}
-          className={`text text_type_main-small`}
-        >
-          Отменён
-        </p>
-      );
-      break;
-    }
     default:
       break;
   }
 
-  const renderPictures = (item: TIngredient, idx: number, arr: TIngredient[]) => {
+  const renderPictures = (
+    item: TIngredient,
+    idx: number,
+    arr: TIngredient[]
+  ) => {
     if (idx <= 5)
       return (
-        <li key={idx} className={styles.listItem} style={{ zIndex: arr.length-idx }}>
+        <li
+          key={idx}
+          className={styles.listItem}
+          style={{ zIndex: arr.length - idx }}
+        >
           <img className={styles.picture} src={item.image_mobile}></img>
         </li>
       );
@@ -89,7 +86,10 @@ export const OrderCard: React.FC<OrderCardProps> = ({
         <ul className={`${styles.ingredients}`}>
           {objectsArray.map(renderPictures)}
           {counter > 0 && (
-            <div style={{zIndex: ingredients.length-5 }}className={`${styles.counter} text text_type_main-small`}>
+            <div
+              style={{ zIndex: ingredients.length - 5 }}
+              className={`${styles.counter} text text_type_main-small`}
+            >
               +{counter}
             </div>
           )}

@@ -31,6 +31,16 @@ export type TServerOrder = {
   updatedAt: Date;
 };
 
+export type TOrderModalProps = {
+  ingredients: TIngredient[];
+  _id: string;
+  status: "done" | "created" | "pending";
+  number: number;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export type TSuccessfulUpdateTokensReply = {
   success: boolean;
   accessToken: string;
