@@ -14,9 +14,10 @@ import { ResetPasswordPage } from "../../pages/reset-password/reset-password";
 import { ProfilePage } from "../../pages/profile/profile";
 import { ProtectedRoute } from "../HOC/protected-route";
 import { Orders } from "../../pages/orders/orders";
-import { IngredientPage } from "../ingredient-page/ingredient-page";
+import { IngredientPage } from "../../pages/ingredient-page/ingredient-page";
 import { TLocationState } from "../../services/utils/interfaces";
 import { FeedPage } from "../../pages/feed/feed";
+import { OrderPage } from "../../pages/order-page/order-page";
 
 const App: React.FC = () => {
   const location = useLocation<TLocationState>();
@@ -56,7 +57,7 @@ const App: React.FC = () => {
           <IngredientPage />
         </Route>
         <Route path='/feed/:id' exact>
-          <OrderInfo  />
+          <OrderPage  />
         </Route>
       </Switch>
     </>

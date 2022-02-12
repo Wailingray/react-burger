@@ -27,7 +27,7 @@ export const FeedPage: React.FC = () => {
     dispatch(wsConnectionStart());
     dispatch(getItems());
     return () => {
-      dispatch(wsConnectionClosed);
+      dispatch(wsConnectionClosed());
     };
   }, [dispatch]);
 
@@ -40,7 +40,7 @@ export const FeedPage: React.FC = () => {
   const closeModal = () => {
     setIsModalOpened(false);
     dispatch(orderPopupReset());
-    //history.goBack()
+    history.goBack()
   };
 
 
