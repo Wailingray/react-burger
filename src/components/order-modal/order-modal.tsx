@@ -1,3 +1,4 @@
+import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import React, { useState } from "react";
 import {
   useAppDispatch,
@@ -5,6 +6,7 @@ import {
   useAppSelector,
 } from "../../services/hooks/hooks";
 import { TIngredient } from "../../services/utils/types";
+import { parseTime } from "../../services/utils/utils";
 import { Loader } from "../loader/loader";
 import styles from "./order-modal.module.css";
 
@@ -22,7 +24,21 @@ export const OrderModal: React.FC = () => {
     });
   }
 
-  const renderIngredient = (el: TIngredient, idx: string, arr: TIngredient[]) => {
+  const totalPrice = objectsArray.reduce((sum, el) => sum + el.price, 0);
+  const date = parseTime(modalOrder!.createdAt);
+
+  const renderIngredient = (
+    el: TIngredient,
+    idx: number,
+    arr: TIngredient[]
+  ) => {
+    let counter = arr.reduce((sum, item) => {
+      if (item._id === el._id) {
+        return sum + 1;
+      }
+      return sum;
+    }, 0);
+
     return (
       <li key={idx}>
         <div className={`${styles.ingredientContainer}`}>
@@ -34,7 +50,10 @@ export const OrderModal: React.FC = () => {
             />
           </div>
           <p className={`text text_type_main-default ml-4 mr-4`}>{el.name}</p>
-          <div className={`${styles.priceContainer}`}></div>
+          <div className={`${styles.priceContainer}`}>
+            <p className="text text_type_digits-default">{`${counter} x ${el.price}`}</p>
+            <CurrencyIcon type="primary" />
+          </div>
         </div>
       </li>
     );
@@ -80,7 +99,18 @@ export const OrderModal: React.FC = () => {
         </h1>
         {statusMessage}
         <p className="text text_type_main-default mt-15 mb-6">Состав</p>
-        <ul className={`${styles.ingredientsList}`}>{}</ul>
+        <ul className={`${styles.ingredientsList}`}>
+          {objectsArray.map(renderIngredient)}
+        </ul>
+        <div className={`${styles.footer} mb-10`}>
+          <p className={`text text_type_main-default text_color_inactive`}>
+            {date}
+          </p>
+          <div className={`${styles.priceContainer}`}>
+            <p className="text text_type_digits-default">{totalPrice}</p>
+            <CurrencyIcon type="primary" />
+          </div>
+        </div>
       </div>
     );
   else return <Loader />;
