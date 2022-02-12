@@ -13,45 +13,42 @@ import styles from "./order-modal.module.css";
 export const OrderModal: React.FC = () => {
   const { modalOrder } = useAppSelector((state) => state.order);
   const { ingredientItems } = useAppSelector((state) => state.ingredients);
+  const { orders } = useAppSelector((state) => state.feed);
 
   const objectsArray: TIngredient[] = [];
 
   if (modalOrder) {
-    modalOrder.ingredients.map((ingID) => {
-      ingredientItems.forEach((item) => {
-        if (ingID === item._id) objectsArray.push(item);
-      });
-    });
   }
-
-  const totalPrice = objectsArray.reduce((sum, el) => sum + el.price, 0);
-  const date = parseTime(modalOrder!.createdAt);
 
   const renderIngredient = (
     el: TIngredient,
     idx: number,
     arr: TIngredient[]
   ) => {
-    let counter = arr.reduce((sum, item) => {
+    /* let counter = arr.reduce((count, item) => {
       if (item._id === el._id) {
-        return sum + 1;
+        return count + 1;
       }
-      return sum;
-    }, 0);
+      return count;
+    }, 0); */
 
     return (
-      <li key={idx}>
+      <li key={el._id}>
         <div className={`${styles.ingredientContainer}`}>
-          <div className={`${styles.pictureContainer}`}>
-            <img
-              className={`${styles.picture}`}
-              src={el.image_mobile}
-              alt="pic"
-            />
+          <div className={`${styles.tagContainer}`}>
+            <div className={`${styles.pictureContainer}`}>
+              <img
+                className={`${styles.picture}`}
+                src={el.image_mobile}
+                alt="pic"
+              />
+            </div>
+            <p className={`text text_type_main-default ml-4 mr-4`}>{el.name}</p>
           </div>
-          <p className={`text text_type_main-default ml-4 mr-4`}>{el.name}</p>
           <div className={`${styles.priceContainer}`}>
-            <p className="text text_type_digits-default">{`${counter} x ${el.price}`}</p>
+            <p className="text text_type_digits-default">{`${1} x ${
+              el.price
+            }`}</p>
             <CurrencyIcon type="primary" />
           </div>
         </div>
@@ -59,10 +56,19 @@ export const OrderModal: React.FC = () => {
     );
   };
 
+  /* const makeUnique = (array: TIngredient[]) => {
+    return array.filter(
+      (e, i) => array.findIndex((a) => a._id === e._id) === i
+    );
+  }; */
+
   const { id } = useAppParams();
   const dispatch = useAppDispatch();
 
-  const [loaded, setIsLoaded] = useState(false);
+  let orderFromModal, orderFromStore;
+  id
+    ? (orderFromStore = orders.find((item) => item._id === id))
+    : (orderFromModal = modalOrder);
 
   let statusMessage;
   switch (modalOrder?.status) {
@@ -86,23 +92,32 @@ export const OrderModal: React.FC = () => {
       break;
   }
 
-  if (modalOrder)
+  if (orderFromModal) {
+    orderFromModal.ingredients.map((ingID) => {
+      ingredientItems.forEach((item) => {
+        if (ingID === item._id) objectsArray.push(item);
+      });
+    });
+
+    const totalPrice = objectsArray.reduce((sum, el) => sum + el.price, 0);
+    const date = parseTime(orderFromModal.createdAt);
+
     return (
       <div className={`${styles.container}`}>
         <span
           className={`${styles.number} text text_type_digits-default mb-10`}
         >
-          {modalOrder.number}
+          {`#${orderFromModal.number}`}
         </span>
         <h1 className={`${styles.name} text text_type_main-medium mb-3`}>
-          {modalOrder.name}
+          {orderFromModal.name}
         </h1>
         {statusMessage}
-        <p className="text text_type_main-default mt-15 mb-6">Состав</p>
+        <p className="text text_type_main-medium mt-15 mb-6">Состав</p>
         <ul className={`${styles.ingredientsList}`}>
           {objectsArray.map(renderIngredient)}
         </ul>
-        <div className={`${styles.footer} mb-10`}>
+        <div className={`${styles.footer} mt-10`}>
           <p className={`text text_type_main-default text_color_inactive`}>
             {date}
           </p>
@@ -113,5 +128,43 @@ export const OrderModal: React.FC = () => {
         </div>
       </div>
     );
+  }
+  else if (orderFromStore) {
+    orderFromStore.ingredients.map((ingID) => {
+      ingredientItems.forEach((item) => {
+        if (ingID === item._id) objectsArray.push(item);
+      });
+    });
+
+    const totalPrice = objectsArray.reduce((sum, el) => sum + el.price, 0);
+    const date = parseTime(orderFromStore.createdAt);
+
+    return (
+      <div className={`${styles.container}`}>
+        <span
+          className={`${styles.number} text text_type_digits-default mb-10`}
+        >
+          {`#${orderFromStore.number}`}
+        </span>
+        <h1 className={`${styles.name} text text_type_main-medium mb-3`}>
+          {orderFromStore.name}
+        </h1>
+        {statusMessage}
+        <p className="text text_type_main-medium mt-15 mb-6">Состав</p>
+        <ul className={`${styles.ingredientsList}`}>
+          {objectsArray.map(renderIngredient)}
+        </ul>
+        <div className={`${styles.footer} mt-10`}>
+          <p className={`text text_type_main-default text_color_inactive`}>
+            {date}
+          </p>
+          <div className={`${styles.priceContainer}`}>
+            <p className="text text_type_digits-default">{totalPrice}</p>
+            <CurrencyIcon type="primary" />
+          </div>
+        </div>
+      </div>
+    )
+  }
   else return <Loader />;
 };

@@ -1,7 +1,11 @@
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import React from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useAppSelector } from "../../services/hooks/hooks";
-import { OrderCardProps } from "../../services/utils/interfaces";
+import {
+  OrderCardProps,
+  TLocationState,
+} from "../../services/utils/interfaces";
 import { TIngredient } from "../../services/utils/types";
 import { parseTime } from "../../services/utils/utils";
 import styles from "./order-card.module.css";
@@ -12,8 +16,11 @@ export const OrderCard: React.FC<OrderCardProps> = ({
   name,
   ingredients,
   status,
+  id,
 }) => {
   const { ingredientItems } = useAppSelector((state) => state.ingredients);
+
+  const location = useLocation<TLocationState>();
 
   const objectsArray: TIngredient[] = [];
 
@@ -70,37 +77,45 @@ export const OrderCard: React.FC<OrderCardProps> = ({
   };
 
   return (
-    <div className={`${styles.container}`}>
-      <div className={`${styles.metadata}`}>
-        <p className={`text text_type_digits-default`}>{`#${number}`}</p>
-        <p className={`text text_type_main-default text_color_inactive`}>
-          {date}
-        </p>
-      </div>
-      <div>
-        <p className={`text text_type_main-medium mb-2`}>{name}</p>
-        {statusMessage}
-      </div>
-
-      <div className={`${styles.orderData}`}>
-        <ul className={`${styles.ingredients}`}>
-          {objectsArray.map(renderPictures)}
-          {counter > 0 && (
-            <div
-              style={{ zIndex: ingredients.length - 5 }}
-              className={`${styles.counter} text text_type_main-small`}
-            >
-              +{counter}
-            </div>
-          )}
-        </ul>
-        <div className={`${styles.priceContainer}`}>
-          <p className={`${styles.price}text text_type_digits-default`}>
-            {totalPrice}
+    <Link
+      className={styles.linkContainer}
+      to={{
+        pathname: `/feed/${id}`,
+        state: { from: location.pathname, background: location },
+      }}
+    >
+      <div className={`${styles.container}`}>
+        <div className={`${styles.metadata}`}>
+          <p className={`text text_type_digits-default`}>{`#${number}`}</p>
+          <p className={`text text_type_main-default text_color_inactive`}>
+            {date}
           </p>
-          <CurrencyIcon type="primary" />
+        </div>
+        <div>
+          <p className={`text text_type_main-medium mb-2`}>{name}</p>
+          {statusMessage}
+        </div>
+
+        <div className={`${styles.orderData}`}>
+          <ul className={`${styles.ingredients}`}>
+            {objectsArray.map(renderPictures)}
+            {counter > 0 && (
+              <div
+                style={{ zIndex: ingredients.length - 5 }}
+                className={`${styles.counter} text text_type_main-small`}
+              >
+                +{counter}
+              </div>
+            )}
+          </ul>
+          <div className={`${styles.priceContainer}`}>
+            <p className={`${styles.price}text text_type_digits-default`}>
+              {totalPrice}
+            </p>
+            <CurrencyIcon type="primary" />
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };

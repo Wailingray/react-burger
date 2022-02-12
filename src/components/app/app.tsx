@@ -55,6 +55,9 @@ const App: React.FC = () => {
         <Route path="/ingredients/:id" exact={true}>
           <IngredientPage />
         </Route>
+        <Route path='/feed/:id' exact>
+          <OrderInfo  />
+        </Route>
       </Switch>
     </>
   );

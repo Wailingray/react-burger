@@ -57,6 +57,7 @@ export const FeedPage: React.FC = () => {
             time={item.createdAt}
             name={item.name}
             ingredients={item.ingredients}
+            id={item._id}
           />
         </li>
       );

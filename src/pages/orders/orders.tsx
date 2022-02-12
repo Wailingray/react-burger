@@ -56,6 +56,7 @@ export const Orders: React.FC = () => {
             name={item.name}
             status={item.status}
             ingredients={item.ingredients}
+            id={item._id}
           />
         </li>
       );
