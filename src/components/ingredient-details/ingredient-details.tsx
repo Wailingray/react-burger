@@ -29,10 +29,8 @@ const IngredientDetails: React.FC = () => {
     if (ingredientItems.length === 0) dispatch(getItems());
   }, [ingredientItems]);
 
-  let modalIngredient, storeIngredient;
-  id
-    ? (storeIngredient = ingredientItems.find((item) => item._id === id))
-    : (modalIngredient = currentIngredient);
+  const storeIngredient = ingredientItems.find((item) => item._id === id);
+  const modalIngredient = currentIngredient;
 
   if (
     ingredientItems.length !== 0 &&
@@ -47,11 +45,11 @@ const IngredientDetails: React.FC = () => {
           </span>
           <img
             className={styles.image}
-            src={modalIngredient?.image_large}
-            alt={modalIngredient?.name}
+            src={modalIngredient.image_large}
+            alt={modalIngredient.name}
           />
           <p className="text text_type_main-medium mt-4 mb-8">
-            {modalIngredient?.name}
+            {modalIngredient.name}
           </p>
           <ul className={styles.nutrition}>
             <li className={`${styles.nutrient} mb-15`}>
@@ -59,7 +57,7 @@ const IngredientDetails: React.FC = () => {
                 Калории, ккал{" "}
               </p>
               <p className="text text_color_inactive text_type_digits-default">
-                {modalIngredient?.calories}
+                {modalIngredient.calories}
               </p>
             </li>
             <li className={`${styles.nutrient} text text_color_inactive`}>
@@ -67,7 +65,7 @@ const IngredientDetails: React.FC = () => {
                 Белки, г{" "}
               </p>
               <p className="text text_color_inactive text_type_digits-default">
-                {modalIngredient?.proteins}
+                {modalIngredient.proteins}
               </p>
             </li>
             <li className={`${styles.nutrient} text text_color_inactive`}>
@@ -75,7 +73,7 @@ const IngredientDetails: React.FC = () => {
                 Жиры, г{" "}
               </p>
               <p className="text text_color_inactive text_type_digits-default">
-                {modalIngredient?.fat}
+                {modalIngredient.fat}
               </p>
             </li>
             <li className={`${styles.nutrient} text text_color_inactive`}>
@@ -83,7 +81,7 @@ const IngredientDetails: React.FC = () => {
                 Углеводы, г{" "}
               </p>
               <p className="text text_color_inactive text_type_digits-default">
-                {modalIngredient?.carbohydrates}
+                {modalIngredient.carbohydrates}
               </p>
             </li>
           </ul>

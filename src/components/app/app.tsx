@@ -18,12 +18,24 @@ import { IngredientPage } from "../../pages/ingredient-page/ingredient-page";
 import { TLocationState } from "../../services/utils/interfaces";
 import { FeedPage } from "../../pages/feed/feed";
 import { OrderPage } from "../../pages/order-page/order-page";
+import Modal from "../modal/modal";
+import IngredientDetails from "../ingredient-details/ingredient-details";
+import { useAppDispatch } from "../../services/hooks/hooks";
+import { resetCurrentIngredient } from "../../services/actions/ingredients";
+import { OrderModal } from "../order-modal/order-modal";
+import { UserOrderPage } from "../../pages/user-order-page/user-order-page";
 
 const App: React.FC = () => {
+  const dispatch = useAppDispatch();
   const location = useLocation<TLocationState>();
   const history = useHistory();
   const isPush = history.action === "PUSH";
   const background = isPush && location.state && location.state.background;
+
+  const closeModal = () => {
+    dispatch(resetCurrentIngredient());
+    history.goBack();
+  };
 
   return (
     <>
@@ -54,7 +66,7 @@ const App: React.FC = () => {
           <Orders />
         </ProtectedRoute>
         <ProtectedRoute path="/profile/orders/:id" exact={true}>
-          <OrderPage />
+          <UserOrderPage />
         </ProtectedRoute>
         <Route path="/ingredients/:id" exact={true}>
           <IngredientPage />
@@ -63,12 +75,30 @@ const App: React.FC = () => {
           <OrderPage />
         </Route>
       </Switch>
-{/*
+
       {background && (
-        <Route path="/profile/orders/:id">
-          <OrderPage />
+        <Route path="/ingredients/:id">
+          <Modal onClose={closeModal}>
+            <IngredientDetails />
+          </Modal>
         </Route>
-      )} */}
+      )}
+
+      {background && (
+        <Route path="/feed/:id">
+          <Modal onClose={closeModal}>
+            <OrderModal />
+          </Modal>
+        </Route>
+      )}
+
+      {background && (
+        <ProtectedRoute path="/profile/orders/:id" exact={true}>
+          <Modal onClose={closeModal}>
+            <OrderModal />
+          </Modal>
+        </ProtectedRoute>
+      )}
     </>
   );
 };

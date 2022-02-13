@@ -6,7 +6,10 @@ import Modal from "../../components/modal/modal";
 import { OrderCard } from "../../components/order-card/order-card";
 import { OrderModal } from "../../components/order-modal/order-modal";
 import { getItems } from "../../services/actions/ingredients";
-import { orderPopupReset, sendOrderToModal } from "../../services/actions/order";
+import {
+  orderPopupReset,
+  sendOrderToModal,
+} from "../../services/actions/order";
 import {
   wsConnectionClosed,
   wsConnectionStart,
@@ -17,7 +20,7 @@ import { orderExample } from "../../services/utils/utils";
 import styles from "./feed.module.css";
 
 export const FeedPage: React.FC = () => {
-  const history = useHistory()
+  const history = useHistory();
   const dispatch = useAppDispatch();
   const { orders, total, totalToday, wsConnected, hasError } = useAppSelector(
     (state) => state.feed
@@ -31,27 +34,10 @@ export const FeedPage: React.FC = () => {
     };
   }, [dispatch]);
 
-  const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
-
-  const openModal = () => {
-    setIsModalOpened(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpened(false);
-    dispatch(orderPopupReset());
-    history.goBack()
-  };
-
-
   const renderOrderCards = (item: TServerOrder, idx: number) => {
-    const showOrder = (evt: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-      dispatch(sendOrderToModal(item));
-      openModal();
-    };
     if (idx < 10)
       return (
-        <li key={idx} onClick={showOrder}>
+        <li key={idx} onClick={() => dispatch(sendOrderToModal(item))}>
           <OrderCard
             number={item.number}
             time={item.createdAt}
@@ -147,14 +133,8 @@ export const FeedPage: React.FC = () => {
             </section>
           </div>
         </div>
-        {isModalOpened && (
-          <Modal onClose={closeModal}>
-            <OrderModal />
-          </Modal>
-        )}
         );
       </>
     );
-  }
-  else return <Loader />
+  } else return <Loader />;
 };

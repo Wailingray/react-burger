@@ -36,7 +36,6 @@ export const Orders: React.FC = () => {
     useAppSelector((state) => state.userFeed);
 
   const [loaded, setIsLoaded] = useState(false);
-  const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 
   useEffect(() => {
     dispatch(wsPrivateConnectionStart());
@@ -53,25 +52,14 @@ export const Orders: React.FC = () => {
     };
   }, [submitGetUserSuccess, foundNoTokens]);
 
-  const openModal = () => {
-    setIsModalOpened(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpened(false);
-    dispatch(orderPopupReset());
-    history.goBack();
-  };
-
   const renderOrderCards = (item: TServerOrder, idx: number) => {
-    const showOrder = (evt: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-      dispatch(sendOrderToModal(item));
-      openModal();
-    };
-
     if (idx < 15)
       return (
-        <li key={idx} onClick={showOrder} className={styles.cardContainer}>
+        <li
+          key={idx}
+          onClick={() => dispatch(sendOrderToModal(item))}
+          className={styles.cardContainer}
+        >
           <OrderCard
             number={item.number}
             time={item.createdAt}
@@ -103,11 +91,6 @@ export const Orders: React.FC = () => {
             .map(renderOrderCards)}
         </ul>
       </div>
-      {isModalOpened && (
-          <Modal onClose={closeModal}>
-            <OrderModal />
-          </Modal>
-        )}
     </div>
   ) : (
     <Loader />

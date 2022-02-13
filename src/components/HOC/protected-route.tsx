@@ -4,8 +4,10 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../services/hooks/hooks';
 import { dispatchGetUser } from '../../services/actions/user';
 import { ProtectedRouteProps, TLocationState } from '../../services/utils/interfaces';
+import { wsConnectionClosed, wsConnectionStart } from '../../services/actions/wsActions';
+import { getItems } from '../../services/actions/ingredients';
 
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, path , exact}) => {
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, path, exact}) => {
 
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(

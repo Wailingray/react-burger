@@ -1,5 +1,10 @@
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { getItems } from "../../services/actions/ingredients";
+import {
+  wsConnectionClosed,
+  wsConnectionStart,
+} from "../../services/actions/wsActions";
 import {
   useAppDispatch,
   useAppParams,
@@ -18,7 +23,7 @@ export const OrderModal: React.FC = () => {
   const { modalOrder } = useAppSelector((state) => state.order);
   const { ingredientItems } = useAppSelector((state) => state.ingredients);
   const { orders } = useAppSelector((state) => state.feed);
-  console.log(modalOrder)
+  const { userOrders } = useAppSelector((state) => state.userFeed);
 
   const objectsArray: TIngWithCount[] = [];
 
@@ -69,12 +74,6 @@ export const OrderModal: React.FC = () => {
   };
 
   const { id } = useAppParams();
-  const dispatch = useAppDispatch();
-
-  let orderFromModal, orderFromStore;
-  id
-    ? (orderFromStore = orders.find((item) => item._id === id))
-    : (orderFromModal = modalOrder);
 
   let statusMessage;
   switch (modalOrder?.status) {
@@ -98,9 +97,13 @@ export const OrderModal: React.FC = () => {
       break;
   }
 
+  const orderFromModal = modalOrder;
+  const orderFromStore =
+    orders.find((item) => item._id === id) ||
+    userOrders.find((item) => item._id === id);
+
   if (orderFromModal) {
     makeObjectArray(orderFromModal);
-
 
     const totalPrice = objectsArray.reduce((sum, el) => sum + el.price, 0);
     const date = parseTime(orderFromModal.createdAt);

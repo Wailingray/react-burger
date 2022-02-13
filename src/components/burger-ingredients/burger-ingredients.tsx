@@ -29,7 +29,7 @@ const BurgerIngredients: React.FC = () => {
   const mainRef = useRef<HTMLHeadingElement | null>(null);
 
   const dispatch = useAppDispatch();
-  const history = useHistory()
+  const history = useHistory();
 
   useEffect(() => {
     dispatch(getItems());
@@ -49,12 +49,7 @@ const BurgerIngredients: React.FC = () => {
   const closeModal = () => {
     setIsModalOpened(false);
     dispatch(resetCurrentIngredient());
-    history.goBack()
-  };
-
-  const showIngredient = (evt: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-    dispatch(sendToModal(evt.currentTarget.id));
-    openModal();
+    history.goBack();
   };
 
   const handleScroll = useCallback((e) => {
@@ -92,9 +87,8 @@ const BurgerIngredients: React.FC = () => {
     return (
       <li
         key={el._id}
-        id={el._id}
         className={styles.item}
-        onClick={showIngredient}
+        onClick={() => dispatch(sendToModal(el._id))}
       >
         <Ingredient
           ingType={el.type}
@@ -108,8 +102,7 @@ const BurgerIngredients: React.FC = () => {
   };
 
   const content = useMemo(() => {
-    if (ingredientItemsRequest)
-      return <Loader />;
+    if (ingredientItemsRequest) return <Loader />;
     else if (ingredientItemsFailed)
       return (
         <p className={`${styles.message} mt-20 text text_type_main-large`}>
@@ -208,11 +201,6 @@ const BurgerIngredients: React.FC = () => {
         </div>
         {content}
       </section>
-      {isModalOpened && (
-        <Modal onClose={closeModal}>
-          <IngredientDetails />
-        </Modal>
-      )}
     </>
   );
 };
