@@ -53,13 +53,22 @@ const App: React.FC = () => {
         <ProtectedRoute path="/profile/orders" exact={true}>
           <Orders />
         </ProtectedRoute>
+        <ProtectedRoute path="/profile/orders/:id" exact={true}>
+          <OrderPage />
+        </ProtectedRoute>
         <Route path="/ingredients/:id" exact={true}>
           <IngredientPage />
         </Route>
-        <Route path='/feed/:id' exact>
-          <OrderPage  />
+        <Route path="/feed/:id" exact={true}>
+          <OrderPage />
         </Route>
       </Switch>
+{/*
+      {background && (
+        <Route path="/profile/orders/:id">
+          <OrderPage />
+        </Route>
+      )} */}
     </>
   );
 };

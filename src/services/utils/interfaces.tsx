@@ -9,12 +9,13 @@ export interface IngProps {
 }
 
 export interface OrderCardProps {
-  number: number,
-  time: Date,
-  name: string,
-  ingredients: string[]
-  status?: "created" | "pending" | "done" | "cancelled"
-  id: string
+  number: number;
+  time: Date;
+  name: string;
+  ingredients: string[];
+  status?: "created" | "pending" | "done" | "cancelled";
+  id: string;
+  inFeedPage: boolean;
 }
 
 export interface ModalProps {
@@ -49,4 +50,3 @@ export interface TLocationState extends Location {
   };
   background?: Location;
 }
-

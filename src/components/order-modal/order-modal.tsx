@@ -5,7 +5,11 @@ import {
   useAppParams,
   useAppSelector,
 } from "../../services/hooks/hooks";
-import { TIngredient } from "../../services/utils/types";
+import {
+  TIngredient,
+  TIngWithCount,
+  TServerOrder,
+} from "../../services/utils/types";
 import { parseTime } from "../../services/utils/utils";
 import { Loader } from "../loader/loader";
 import styles from "./order-modal.module.css";
@@ -14,26 +18,36 @@ export const OrderModal: React.FC = () => {
   const { modalOrder } = useAppSelector((state) => state.order);
   const { ingredientItems } = useAppSelector((state) => state.ingredients);
   const { orders } = useAppSelector((state) => state.feed);
+  console.log(modalOrder)
 
-  const objectsArray: TIngredient[] = [];
+  const objectsArray: TIngWithCount[] = [];
 
-  if (modalOrder) {
-  }
+  const makeObjectArray = (serverOrder: TServerOrder) => {
+    serverOrder.ingredients.map((ingID, idx, arr) => {
+      ingredientItems.forEach((el) => {
+        if (ingID === el._id)
+          objectsArray.push({
+            ...el,
+            count: arr.reduce((count, item) => {
+              if (item === el._id) {
+                return count + 1;
+              }
+              return count;
+            }, 0),
+          });
+      });
+    });
+  };
 
-  const renderIngredient = (
-    el: TIngredient,
-    idx: number,
-    arr: TIngredient[]
-  ) => {
-    /* let counter = arr.reduce((count, item) => {
-      if (item._id === el._id) {
-        return count + 1;
-      }
-      return count;
-    }, 0); */
+  const makeUnique = (array: any[]) => {
+    return array.filter(
+      (e, i) => array.findIndex((a) => a._id === e._id) === i
+    );
+  };
 
+  const renderIngredient = (el: TIngWithCount, idx: number) => {
     return (
-      <li key={el._id}>
+      <li key={idx}>
         <div className={`${styles.ingredientContainer}`}>
           <div className={`${styles.tagContainer}`}>
             <div className={`${styles.pictureContainer}`}>
@@ -46,21 +60,13 @@ export const OrderModal: React.FC = () => {
             <p className={`text text_type_main-default ml-4 mr-4`}>{el.name}</p>
           </div>
           <div className={`${styles.priceContainer}`}>
-            <p className="text text_type_digits-default">{`${1} x ${
-              el.price
-            }`}</p>
+            <p className="text text_type_digits-default">{`${el.count} x ${el.price}`}</p>
             <CurrencyIcon type="primary" />
           </div>
         </div>
       </li>
     );
   };
-
-  /* const makeUnique = (array: TIngredient[]) => {
-    return array.filter(
-      (e, i) => array.findIndex((a) => a._id === e._id) === i
-    );
-  }; */
 
   const { id } = useAppParams();
   const dispatch = useAppDispatch();
@@ -93,11 +99,8 @@ export const OrderModal: React.FC = () => {
   }
 
   if (orderFromModal) {
-    orderFromModal.ingredients.map((ingID) => {
-      ingredientItems.forEach((item) => {
-        if (ingID === item._id) objectsArray.push(item);
-      });
-    });
+    makeObjectArray(orderFromModal);
+
 
     const totalPrice = objectsArray.reduce((sum, el) => sum + el.price, 0);
     const date = parseTime(orderFromModal.createdAt);
@@ -115,7 +118,7 @@ export const OrderModal: React.FC = () => {
         {statusMessage}
         <p className="text text_type_main-medium mt-15 mb-6">Состав</p>
         <ul className={`${styles.ingredientsList}`}>
-          {objectsArray.map(renderIngredient)}
+          {makeUnique(objectsArray).map(renderIngredient)}
         </ul>
         <div className={`${styles.footer} mt-10`}>
           <p className={`text text_type_main-default text_color_inactive`}>
@@ -128,13 +131,8 @@ export const OrderModal: React.FC = () => {
         </div>
       </div>
     );
-  }
-  else if (orderFromStore) {
-    orderFromStore.ingredients.map((ingID) => {
-      ingredientItems.forEach((item) => {
-        if (ingID === item._id) objectsArray.push(item);
-      });
-    });
+  } else if (orderFromStore) {
+    makeObjectArray(orderFromStore);
 
     const totalPrice = objectsArray.reduce((sum, el) => sum + el.price, 0);
     const date = parseTime(orderFromStore.createdAt);
@@ -152,7 +150,7 @@ export const OrderModal: React.FC = () => {
         {statusMessage}
         <p className="text text_type_main-medium mt-15 mb-6">Состав</p>
         <ul className={`${styles.ingredientsList}`}>
-          {objectsArray.map(renderIngredient)}
+          {makeUnique(objectsArray).map(renderIngredient)}
         </ul>
         <div className={`${styles.footer} mt-10`}>
           <p className={`text text_type_main-default text_color_inactive`}>
@@ -164,7 +162,6 @@ export const OrderModal: React.FC = () => {
           </div>
         </div>
       </div>
-    )
-  }
-  else return <Loader />;
+    );
+  } else return <Loader />;
 };

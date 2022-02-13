@@ -58,6 +58,7 @@ export const FeedPage: React.FC = () => {
             name={item.name}
             ingredients={item.ingredients}
             id={item._id}
+            inFeedPage={true}
           />
         </li>
       );

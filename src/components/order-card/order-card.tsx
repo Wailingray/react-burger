@@ -17,6 +17,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
   ingredients,
   status,
   id,
+  inFeedPage,
 }) => {
   const { ingredientItems } = useAppSelector((state) => state.ingredients);
 
@@ -80,7 +81,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({
     <Link
       className={styles.linkContainer}
       to={{
-        pathname: `/feed/${id}`,
+        pathname: inFeedPage ? `/feed/${id}` : `/profile/orders/${id}`,
         state: { from: location.pathname, background: location },
       }}
     >

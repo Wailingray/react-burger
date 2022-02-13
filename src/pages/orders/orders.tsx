@@ -1,9 +1,15 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { NavLink, useHistory } from "react-router-dom";
 import { Loader } from "../../components/loader/loader";
+import Modal from "../../components/modal/modal";
 import { OrderCard } from "../../components/order-card/order-card";
+import { OrderModal } from "../../components/order-modal/order-modal";
 import { ProfileNavBar } from "../../components/profile-nav/profile-nav";
 import { getItems } from "../../services/actions/ingredients";
+import {
+  orderPopupReset,
+  sendOrderToModal,
+} from "../../services/actions/order";
 import { dispatchLogout, removeServerError } from "../../services/actions/user";
 import {
   wsPrivateConnectionClosed,
@@ -30,6 +36,7 @@ export const Orders: React.FC = () => {
     useAppSelector((state) => state.userFeed);
 
   const [loaded, setIsLoaded] = useState(false);
+  const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 
   useEffect(() => {
     dispatch(wsPrivateConnectionStart());
@@ -46,10 +53,25 @@ export const Orders: React.FC = () => {
     };
   }, [submitGetUserSuccess, foundNoTokens]);
 
+  const openModal = () => {
+    setIsModalOpened(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpened(false);
+    dispatch(orderPopupReset());
+    history.goBack();
+  };
+
   const renderOrderCards = (item: TServerOrder, idx: number) => {
+    const showOrder = (evt: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+      dispatch(sendOrderToModal(item));
+      openModal();
+    };
+
     if (idx < 15)
       return (
-        <li key={idx} className={styles.cardContainer}>
+        <li key={idx} onClick={showOrder} className={styles.cardContainer}>
           <OrderCard
             number={item.number}
             time={item.createdAt}
@@ -57,6 +79,7 @@ export const Orders: React.FC = () => {
             status={item.status}
             ingredients={item.ingredients}
             id={item._id}
+            inFeedPage={false}
           />
         </li>
       );
@@ -80,6 +103,11 @@ export const Orders: React.FC = () => {
             .map(renderOrderCards)}
         </ul>
       </div>
+      {isModalOpened && (
+          <Modal onClose={closeModal}>
+            <OrderModal />
+          </Modal>
+        )}
     </div>
   ) : (
     <Loader />
