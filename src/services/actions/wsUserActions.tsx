@@ -68,8 +68,18 @@ export const wsGetPrivateMessage = (message: any): IwsGetPrivateMessage => ({
   payload: message,
 });
 
-export const wsSendMessage = (message: any): IwsSendPrivateMessage => ({
+export const wsSendPrivateMessage = (message: any): IwsSendPrivateMessage => ({
   type: WS_SEND_PRIVATE_MESSAGE,
   payload: message,
 });
 
+export const userActionsBook = {
+  startConnectionConst: WS_PRIVATE_CONNECTION_START,
+  sendMessageConst: WS_SEND_PRIVATE_MESSAGE,
+  wsStartConnection: wsPrivateConnectionStart,
+  wsSendMessage: wsSendPrivateMessage,
+  wsOnOpen: wsPrivateConnectionSuccess,
+  wsOnClose: wsPrivateConnectionClosed,
+  wsOnError: wsPrivateConnectionError,
+  wsGetMessage: wsGetPrivateMessage
+};

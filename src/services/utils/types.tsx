@@ -1,3 +1,20 @@
+import {
+  IwsConnectionClosed,
+  IwsConnectionError,
+  IwsConnectionStart,
+  IwsConnectionSuccess,
+  IwsGetMessage,
+  IwsSendMessage,
+} from "../actions/wsActions";
+import {
+  IwsGetPrivateMessage,
+  IwsPrivateConnectionClosed,
+  IwsPrivateConnectionError,
+  IwsPrivateConnectionStart,
+  IwsPrivateConnectionSuccess,
+  IwsSendPrivateMessage,
+} from "../actions/wsUserActions";
+
 export type TIngredient = {
   _id: string;
   name: string;
@@ -55,7 +72,7 @@ export type TOrderModalProps = {
   name: string;
   createdAt: Date;
   updatedAt: Date;
-}
+};
 
 export type TSuccessfulUpdateTokensReply = {
   success: boolean;
@@ -119,8 +136,19 @@ export type TResponseBody<TDataKey extends string = "", TDataType = {}> = {
 };
 
 export type wsServerRespond = {
-  success: boolean,
-  orders: TServerOrder[],
-  total: number,
-  totalToday: number
-}
+  success: boolean;
+  orders: TServerOrder[];
+  total: number;
+  totalToday: number;
+};
+
+export type TActionsBook = {
+  startConnectionConst: string;
+  sendMessageConst: string;
+  wsStartConnection: () => IwsConnectionStart | IwsPrivateConnectionStart;
+  wsSendMessage: (message: any) => IwsSendMessage | IwsSendPrivateMessage;
+  wsOnOpen: () => IwsConnectionSuccess | IwsPrivateConnectionSuccess;
+  wsOnClose: () => IwsConnectionClosed | IwsPrivateConnectionClosed;
+  wsOnError: () => IwsConnectionError | IwsPrivateConnectionError;
+  wsGetMessage: (message: any) => IwsGetMessage | IwsGetPrivateMessage;
+};

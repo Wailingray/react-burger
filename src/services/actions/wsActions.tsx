@@ -69,13 +69,13 @@ export const wsSendMessage = (message: any): IwsSendMessage => ({
   payload: message,
 });
 
-
-
-const wsActions = {
-  wsInit: WS_CONNECTION_START,
-  wsSendMessage: WS_SEND_MESSAGE,
-  onOpen: WS_CONNECTION_SUCCESS,
-  onClose: WS_CONNECTION_CLOSED,
-  onError: WS_CONNECTION_ERROR,
-  onMessage: WS_GET_MESSAGE,
+export const vanillaActionsBook = {
+  startConnectionConst: WS_CONNECTION_START,
+  sendMessageConst: WS_SEND_MESSAGE,
+  wsStartConnection: wsConnectionStart,
+  wsSendMessage: wsSendMessage,
+  wsOnOpen: wsConnectionSuccess,
+  wsOnClose: wsConnectionClosed,
+  wsOnError: wsConnectionError,
+  wsGetMessage: wsGetMessage
 };
