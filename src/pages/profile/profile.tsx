@@ -50,10 +50,6 @@ export const ProfilePage = () => {
   }, [submitGetUserSuccess, foundNoTokens]);
 
   useEffect(() => {
-    if (submitLogoutSuccess) history.push({ pathname: "/login" });
-  }, [submitLogoutSuccess]);
-
-  useEffect(() => {
     return () => {
       setJustUpdated(false);
       dispatch(removeServerError());
@@ -168,7 +164,13 @@ export const ProfilePage = () => {
             </p>
           )}
           <div className={`${styles.buttonsContainer} mt-6`}>
-            <Button type="secondary" size="medium">
+            <Button
+              type="secondary"
+              size="medium"
+              disabled={
+                pwdError || emailError || nameError || !email || !pwd || !name
+              }
+            >
               Сохранить
             </Button>
             <Button

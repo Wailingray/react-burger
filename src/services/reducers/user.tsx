@@ -108,12 +108,7 @@ export const userReducer = (
     }
     case SUBMIT_LOGOUT_SUCCESS: {
       return {
-        ...state,
-        submitServerFailed: false,
-        submitServerRequest: false,
-        submitLogoutSuccess: true,
-        submitChangeCredentialsSuccess: false,
-        user: initialState.user,
+        ...initialState
       };
     }
     case SUBMIT_CHANGE_CREDENTIALS_SUCCESS: {

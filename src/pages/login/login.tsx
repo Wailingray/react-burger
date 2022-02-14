@@ -47,7 +47,7 @@ export const LoginPage: React.FC = () => {
 
   const signIn = (e: React.FormEvent) => {
     e.preventDefault();
-    if (pwdError || emailError) return null;
+    if (emailError || pwdError) return null;
     else dispatch(removeServerError());
     dispatch(
       dispatchSignIn({
@@ -58,12 +58,12 @@ export const LoginPage: React.FC = () => {
   };
 
   //Если есть нужный токен в куках, то при заходе на страницу фетчится юзер
-  useEffect(() => {
+  /* useEffect(() => {
     if (!user) dispatch(dispatchGetUser());
     return () => {
       dispatch(removeServerError());
     };
-  }, []);
+  }, []); */
 
   useEffect(() => {
     if (submitGetUserSuccess || foundNoTokens) setIsLoaded(true);
@@ -80,11 +80,13 @@ export const LoginPage: React.FC = () => {
   const changeEmailField = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     validateInput(emailSchema, setEmailError, email);
+
   };
 
   const changePasswordField = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPwd(e.target.value);
     validateInput(passwordSchema, setPwdError, pwd);
+
   };
 
   return loaded ? (
@@ -123,7 +125,11 @@ export const LoginPage: React.FC = () => {
             Произошла ошибка! Код ошибки: {submitServerError}
           </p>
         )}
-        <Button type="primary" size="large">
+        <Button
+          type="primary"
+          size="large"
+          disabled={pwdError || emailError || !email || !pwd}
+        >
           Войти
         </Button>
         <div className={`${styles.linkContainer} mt-20 mb-4`}>

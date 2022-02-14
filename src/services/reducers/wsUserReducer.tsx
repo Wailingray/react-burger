@@ -1,5 +1,10 @@
-
-import { TSocketPrivateActions, WS_GET_PRIVATE_MESSAGE, WS_PRIVATE_CONNECTION_CLOSED, WS_PRIVATE_CONNECTION_ERROR, WS_PRIVATE_CONNECTION_SUCCESS } from "../actions/wsUserActions";
+import {
+  TSocketPrivateActions,
+  WS_GET_PRIVATE_MESSAGE,
+  WS_PRIVATE_CONNECTION_CLOSED,
+  WS_PRIVATE_CONNECTION_ERROR,
+  WS_PRIVATE_CONNECTION_SUCCESS,
+} from "../actions/wsUserActions";
 import { TOrder, TServerOrder } from "../utils/types";
 
 interface IZeroState {
@@ -18,7 +23,10 @@ export const initialState: IZeroState = {
   hasError: false,
 };
 
-export const wsUserReducer = (state = initialState, action: TSocketPrivateActions) => {
+export const wsUserReducer = (
+  state = initialState,
+  action: TSocketPrivateActions
+) => {
   switch (action.type) {
     case WS_PRIVATE_CONNECTION_SUCCESS:
       return {
@@ -36,14 +44,13 @@ export const wsUserReducer = (state = initialState, action: TSocketPrivateAction
 
     case WS_PRIVATE_CONNECTION_CLOSED:
       return {
-        ...state,
-        wsConnected: false,
+        ...initialState,
       };
 
     case WS_GET_PRIVATE_MESSAGE:
       return {
         ...state,
-        userOrders: action.payload.orders ,
+        userOrders: action.payload.orders,
         total: action.payload.total,
         totalToday: action.payload.totalToday,
       };

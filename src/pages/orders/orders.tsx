@@ -76,7 +76,7 @@ export const Orders: React.FC = () => {
     }
   };
 
-  return loaded ? (
+  return loaded && total ? (
     <div className={`${styles.profilePageContainer}`}>
       <div className={`${styles.navContainer}`}>
         <ul className={`${styles.navLinkList}`}>
@@ -85,10 +85,16 @@ export const Orders: React.FC = () => {
       </div>
       <div className={`${styles.formContainer}`}>
         <ul className={styles.orderTape}>
-          {userOrders
-            .map((el) => el)
-            .reverse()
-            .map(renderOrderCards)}
+          {userOrders.length ? (
+            userOrders
+              .map((el) => el)
+              .reverse()
+              .map(renderOrderCards)
+          ) : (
+            <p className="ml-30 mt-20 text text_type_main-medium">
+              Не найдено ни одного заказа!
+            </p>
+          )}
         </ul>
       </div>
     </div>

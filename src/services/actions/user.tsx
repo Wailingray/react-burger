@@ -44,7 +44,6 @@ export const SUBMIT_LOGOUT_SUCCESS: "SUBMIT_LOGOUT_SUCCESS" =
   "SUBMIT_LOGOUT_SUCCESS";
 export const SUBMIT_CHANGE_CREDENTIALS_SUCCESS: "SUBMIT_CHANGE_CREDENTIALS_SUCCESS" =
   "SUBMIT_CHANGE_CREDENTIALS_SUCCESS";
-export const REMOVE_USER: "REMOVE_USER" = "REMOVE_USER";
 export const NO_TOKENS: "NO_TOKENS" = "NO_TOKENS";
 export const SET_USER: "SET_USER" = "SET_USER";
 export const SUBMIT_CAN_RESET_PWD: "SUBMIT_CAN_RESET_PWD" =
@@ -102,10 +101,6 @@ export interface ISubmitChangeCredentialsSuccess {
   readonly type: typeof SUBMIT_CHANGE_CREDENTIALS_SUCCESS;
 }
 
-export interface IRemoveUser {
-  readonly type: typeof REMOVE_USER;
-}
-
 export interface INoTokens {
   readonly type: typeof NO_TOKENS;
 }
@@ -133,7 +128,6 @@ export type TUserActions =
   | ISubmitGetUserSuccess
   | ISubmitLogoutSuccess
   | ISubmitUpdateTokensSuccess
-  | IRemoveUser
   | ISubmitChangeCredentialsSuccess
   | INoTokens
   | ISubmitCanResetPwd
@@ -214,10 +208,6 @@ export const setNoTokens = (): INoTokens => ({
 
 export const submitUpdateTokensSuccess = (): ISubmitUpdateTokensSuccess => ({
   type: SUBMIT_UPDATE_TOKENS_SUCCESS,
-});
-
-export const removeUser = (): IRemoveUser => ({
-  type: REMOVE_USER,
 });
 
 export const dispatchUserEmail: AppThunk =
@@ -321,7 +311,7 @@ export const dispatchGetUser: AppThunk = () => (dispatch: AppDispatch) => {
   if (accessToken) {
     dispatchGetUserRequest(accessToken, dispatch);
   } else if (refreshToken)
-  dispatchUserRequestWithUpdate(refreshToken, dispatch);
+    dispatchUserRequestWithUpdate(refreshToken, dispatch);
   else dispatch(setNoTokens());
 };
 
@@ -332,7 +322,6 @@ export const dispatchLogout: AppThunk = () => (dispatch: AppDispatch) => {
     logoutRequest(refreshToken)
       .then(() => {
         dispatch(submitLogoutSuccess());
-        dispatch(removeUser());
         deleteCookie("accessToken");
         deleteCookie("refreshToken");
       })
@@ -380,15 +369,18 @@ export const dispatchChangeCredentialsRequestWithUpdate = (
     });
 };
 
-
-export const dispatchChangeCredentials: AppThunk = (request: TRegisterBody) => (dispatch: AppDispatch) => {
-  dispatch(submitServerRequest());
-  let refreshToken = getCookie("refreshToken");
-  let accessToken = getCookie("accessToken");
-  if (accessToken) {
-    dispatchChangeCredentialsRequest(accessToken, request, dispatch);
-  } else if (refreshToken)
-  dispatchChangeCredentialsRequestWithUpdate(refreshToken, request, dispatch);
-  else dispatch(setNoTokens());
-};
-
+export const dispatchChangeCredentials: AppThunk =
+  (request: TRegisterBody) => (dispatch: AppDispatch) => {
+    dispatch(submitServerRequest());
+    let refreshToken = getCookie("refreshToken");
+    let accessToken = getCookie("accessToken");
+    if (accessToken) {
+      dispatchChangeCredentialsRequest(accessToken, request, dispatch);
+    } else if (refreshToken)
+      dispatchChangeCredentialsRequestWithUpdate(
+        refreshToken,
+        request,
+        dispatch
+      );
+    else dispatch(setNoTokens());
+  };

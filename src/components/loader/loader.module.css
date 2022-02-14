@@ -8,5 +8,17 @@
 }
 
 .loader {
-  width: 150px
+  width: 150px;
+  animation-name: loader;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes loader {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

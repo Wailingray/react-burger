@@ -41,14 +41,13 @@ export const wsReducer = (state = initialState, action: TSocketActions) => {
 
     case WS_CONNECTION_CLOSED:
       return {
-        ...state,
-        wsConnected: false,
+        ...initialState,
       };
 
     case WS_GET_MESSAGE:
       return {
         ...state,
-        orders: action.payload.orders ,
+        orders: action.payload.orders,
         total: action.payload.total,
         totalToday: action.payload.totalToday,
       };
