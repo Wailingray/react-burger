@@ -10,4 +10,4 @@
 React + Redux / React Router / TypeScript /
 React DnD / Cookie и Web-Socket авторизация.
 
-### `Ссылка на проект`(https://wailingray.github.io/)
+### [`Ссылка на проект`](https://wailingray.github.io/)
