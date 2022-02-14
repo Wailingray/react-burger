@@ -14,18 +14,19 @@ export const socketMiddleware = (
     return (next: (i: AnyAction) => void) => (action: AnyAction) => {
       const { dispatch } = store;
       const { type, payload } = action;
-      const token = connectionType === "private" ? getCookie("accessToken") : null;
+      const token =
+        connectionType === "private" ? getCookie("accessToken") : null;
 
       if (type === actionBook.startConnectionConst) {
         if (connectionType === "vanilla") socket = new WebSocket(`${wsUrl}`);
-        else if(connectionType === "private") socket = new WebSocket(`${wsUrl}?token=${token}`);
+        else if (connectionType === "private")
+          socket = new WebSocket(`${wsUrl}?token=${token}`);
       }
       if (socket) {
         connected = true;
 
         socket.onopen = () => {
           dispatch(actionBook.wsOnOpen());
-
         };
         socket.onerror = () => {
           dispatch(actionBook.wsOnError());
@@ -52,7 +53,6 @@ export const socketMiddleware = (
           socket.send(JSON.stringify(message));
         }
       }
-
       next(action);
     };
   };

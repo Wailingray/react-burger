@@ -4,7 +4,7 @@ import { socketMiddleware } from "./socketMiddleware/socket-middleware";
 import { compose, createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { rootReducer } from "./reducers";
-import { vanillaActionsBook } from "./actions/wsActions";
+import { vanillaActionsBook } from "./actions/wsVanillaActions";
 
 const composeEnhancers =
   ((window as any)["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] as typeof compose) ||

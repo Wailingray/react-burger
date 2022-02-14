@@ -2,7 +2,7 @@ import { combineReducers } from "redux";
 import { ingredientsReducer } from "./ingredients";
 import { orderReducer } from "./order";
 import { userReducer } from "./user";
-import { wsReducer } from "./wsReducer";
+import { wsReducer } from "./wsVanillaReducer";
 import { wsUserReducer } from "./wsUserReducer";
 
 export const rootReducer = combineReducers({

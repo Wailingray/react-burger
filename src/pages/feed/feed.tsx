@@ -13,7 +13,7 @@ import {
 import {
   wsConnectionClosed,
   wsConnectionStart,
-} from "../../services/actions/wsActions";
+} from "../../services/actions/wsVanillaActions";
 import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
 import { TServerOrder } from "../../services/utils/types";
 import { orderExample } from "../../services/utils/utils";

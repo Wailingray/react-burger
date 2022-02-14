@@ -5,7 +5,7 @@ import {
   IwsConnectionSuccess,
   IwsGetMessage,
   IwsSendMessage,
-} from "../actions/wsActions";
+} from "../actions/wsVanillaActions";
 import {
   IwsGetPrivateMessage,
   IwsPrivateConnectionClosed,

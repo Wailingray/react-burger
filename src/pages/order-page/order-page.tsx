@@ -5,7 +5,7 @@ import { useAppDispatch } from "../../services/hooks/hooks";
 import {
   wsConnectionClosed,
   wsConnectionStart,
-} from "../../services/actions/wsActions";
+} from "../../services/actions/wsVanillaActions";
 import { getItems } from "../../services/actions/ingredients";
 
 export const OrderPage = () => {

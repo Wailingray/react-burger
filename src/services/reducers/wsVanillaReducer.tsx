@@ -4,7 +4,7 @@ import {
   WS_CONNECTION_ERROR,
   WS_CONNECTION_SUCCESS,
   WS_GET_MESSAGE,
-} from "../actions/wsActions";
+} from "../actions/wsVanillaActions";
 import { TOrder, TServerOrder } from "../utils/types";
 
 interface IZeroState {
