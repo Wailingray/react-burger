@@ -8,6 +8,16 @@ export interface IngProps {
   price: number;
 }
 
+export interface OrderCardProps {
+  number: number;
+  time: Date;
+  name: string;
+  ingredients: string[];
+  status?: "created" | "pending" | "done" | "cancelled";
+  id: string;
+  inFeedPage: boolean;
+}
+
 export interface ModalProps {
   onClose: (...args: any[]) => any;
 }

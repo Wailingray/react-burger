@@ -6,3 +6,4 @@ import type { RootState, AppDispatch, AppThunk } from '../../index';
 export const useAppDispatch = () => useDispatch<AppDispatch & AppThunk>()
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 export const useAppParams = () => useParams<TUseParams>()
+

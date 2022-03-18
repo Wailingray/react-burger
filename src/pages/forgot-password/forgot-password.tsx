@@ -96,7 +96,7 @@ export const ForgotPasswordPage: React.FC = () => {
             Произошла ошибка! Код ошибки: {submitServerError}
           </p>
         )}
-        <Button type="primary" size="large">
+        <Button type="primary" size="large" disabled={emailError || !email}>
           Восстановить
         </Button>
         <div className={`${styles.linkContainer} mt-20 mb-4`}>

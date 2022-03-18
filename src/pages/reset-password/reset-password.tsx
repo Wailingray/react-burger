@@ -76,7 +76,7 @@ export const ResetPasswordPage: React.FC = () => {
   useEffect(() => {
     if (submitPwdResetSuccess) {
       setTimeout(() => {
-        history.push({ pathname: "/" });
+        history.push({ pathname: "/login" });
       }, 3000);
     }
   }, [submitPwdResetSuccess]);
@@ -128,7 +128,7 @@ export const ResetPasswordPage: React.FC = () => {
               Данные успешно изменены!
             </p>
             <p className="text text_type_main-default text_color_inactive mb-2">
-              Вы будете перенаправлены на страницу авторизации...
+              Вы будете перенаправлены на страницу авотризации...
             </p>
           </>
         )}
@@ -137,7 +137,11 @@ export const ResetPasswordPage: React.FC = () => {
             Произошла ошибка! Код ошибки: {submitServerError}
           </p>
         )}
-        <Button type="primary" size="large">
+        <Button
+          type="primary"
+          size="large"
+          disabled={pwdError || codeError || !code || !pwd}
+        >
           Сохранить
         </Button>
         <div className={`${styles.linkContainer} mt-20 mb-4`}>

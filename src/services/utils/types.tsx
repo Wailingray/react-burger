@@ -1,3 +1,20 @@
+import {
+  IwsConnectionClosed,
+  IwsConnectionError,
+  IwsConnectionStart,
+  IwsConnectionSuccess,
+  IwsGetMessage,
+  IwsSendMessage,
+} from "../actions/wsVanillaActions";
+import {
+  IwsGetPrivateMessage,
+  IwsPrivateConnectionClosed,
+  IwsPrivateConnectionError,
+  IwsPrivateConnectionStart,
+  IwsPrivateConnectionSuccess,
+  IwsSendPrivateMessage,
+} from "../actions/wsUserActions";
+
 export type TIngredient = {
   _id: string;
   name: string;
@@ -13,12 +30,48 @@ export type TIngredient = {
   __v: 0;
 };
 
+export type TIngWithCount = {
+  _id: string;
+  name: string;
+  type: "bun" | "sauce" | "main";
+  proteins: number;
+  fat: number;
+  carbohydrates: number;
+  calories: number;
+  price: number;
+  image: string;
+  image_mobile: string;
+  image_large: string;
+  __v: 0;
+  count: number;
+};
+
 export type TOrder = {
   success: boolean;
   name: string;
   order: {
     number: number;
   };
+};
+
+export type TServerOrder = {
+  ingredients: string[];
+  _id: string;
+  status: "done" | "created" | "pending";
+  number: number;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type TOrderModalProps = {
+  ingredients: TIngredient[];
+  _id: string;
+  status: "done" | "created" | "pending";
+  number: number;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type TSuccessfulUpdateTokensReply = {
@@ -71,8 +124,8 @@ export type TUser = {
 };
 
 export type TUseParams = {
-  id: string
-}
+  id: string;
+};
 
 export type TResponseBody<TDataKey extends string = "", TDataType = {}> = {
   [key in TDataKey]: TDataType;
@@ -80,4 +133,22 @@ export type TResponseBody<TDataKey extends string = "", TDataType = {}> = {
   success: boolean;
   message?: string;
   headers?: Headers;
+};
+
+export type wsServerRespond = {
+  success: boolean;
+  orders: TServerOrder[];
+  total: number;
+  totalToday: number;
+};
+
+export type TActionsBook = {
+  startConnectionConst: string;
+  sendMessageConst: string;
+  wsStartConnection: () => IwsConnectionStart | IwsPrivateConnectionStart;
+  wsSendMessage: (message: any) => IwsSendMessage | IwsSendPrivateMessage;
+  wsOnOpen: () => IwsConnectionSuccess | IwsPrivateConnectionSuccess;
+  wsOnClose: () => IwsConnectionClosed | IwsPrivateConnectionClosed;
+  wsOnError: () => IwsConnectionError | IwsPrivateConnectionError;
+  wsGetMessage: (message: any) => IwsGetMessage | IwsGetPrivateMessage;
 };

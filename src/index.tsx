@@ -20,7 +20,7 @@ export type AppDispatch = typeof store.dispatch;
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
+      <BrowserRouter basename="react-burger">
         <App />
       </BrowserRouter>
     </Provider>

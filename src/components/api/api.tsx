@@ -7,7 +7,7 @@ import {
 } from "../../services/utils/types";
 import { getCookie } from "../../services/utils/utils";
 
-const baseUrl = `https://norma.nomoreparties.space/api`
+const baseUrl = `https://norma.nomoreparties.space/api`;
 
 export const apiConfig = {
   logoutUrl: `${baseUrl}/auth/logout`,
@@ -39,10 +39,13 @@ export const getIngredients = async (): Promise<
   return getResponse(res);
 };
 
-export const submitOrder = async (userOrder: string[]) => {
+export const submitOrder = async (userOrder: string[], accessToken: string) => {
   const res = await fetch(apiConfig.ordersUrl, {
     method: "POST",
-    headers: apiConfig.headers,
+    headers: {
+      "Content-Type": "application/json",
+      authorization: "Bearer " + accessToken,
+    },
     body: JSON.stringify({
       ingredients: userOrder,
     }),
@@ -94,6 +97,18 @@ export const getUserRequest = async (accessToken: string) => {
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + accessToken,
+    },
+  });
+  return getResponse(res);
+};
+
+export const getUserOrders = async () => {
+  let accessToken = getCookie("accessToken");
+  const res = await fetch(apiConfig.ordersUrl, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: "Bearer " + accessToken,
     },
   });
   return getResponse(res);

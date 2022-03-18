@@ -48,15 +48,15 @@ export const RegisterPage: React.FC = () => {
   } = useAppSelector((state) => state.user);
 
   //Если есть нужный токен в куках, то при заходе на страницу фетчится юзер
-  useEffect(() => {
+  /* useEffect(() => {
     if (!user) dispatch(dispatchGetUser());
     return () => {
       dispatch(removeServerError());
     };
   }, []);
-
+ */
   useEffect(() => {
-    if (submitGetUserSuccess || foundNoTokens) setIsLoaded(true);
+    if (submitGetUserSuccess || foundNoTokens ||!user ) setIsLoaded(true);
   }, [submitGetUserSuccess, foundNoTokens]);
 
   useEffect(() => {
@@ -144,7 +144,13 @@ export const RegisterPage: React.FC = () => {
             Произошла ошибка! Код ошибки: {submitServerError}
           </p>
         )}
-        <Button type="primary" size="large">
+        <Button
+          type="primary"
+          size="large"
+          disabled={
+            pwdError || emailError || nameError || !email || !name || !pwd
+          }
+        >
           Зарегистрироваться
         </Button>
         <div className={`${styles.linkContainer} mt-20 mb-4`}>

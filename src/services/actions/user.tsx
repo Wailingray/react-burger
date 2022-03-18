@@ -44,15 +44,13 @@ export const SUBMIT_LOGOUT_SUCCESS: "SUBMIT_LOGOUT_SUCCESS" =
   "SUBMIT_LOGOUT_SUCCESS";
 export const SUBMIT_CHANGE_CREDENTIALS_SUCCESS: "SUBMIT_CHANGE_CREDENTIALS_SUCCESS" =
   "SUBMIT_CHANGE_CREDENTIALS_SUCCESS";
-export const REMOVE_USER: "REMOVE_USER" = "REMOVE_USER";
 export const NO_TOKENS: "NO_TOKENS" = "NO_TOKENS";
 export const SET_USER: "SET_USER" = "SET_USER";
 export const SUBMIT_CAN_RESET_PWD: "SUBMIT_CAN_RESET_PWD" =
   "SUBMIT_CAN_RESET_PWD";
 export const SUBMIT_CANNOT_RESET_PWD: "SUBMIT_CANNOT_RESET_PWD" =
   "SUBMIT_CANNOT_RESET_PWD";
-export const REMOVE_SERVER_ERROR : "REMOVE_SERVER_ERROR" =
-"REMOVE_SERVER_ERROR";
+export const REMOVE_SERVER_ERROR: "REMOVE_SERVER_ERROR" = "REMOVE_SERVER_ERROR";
 
 export interface ISubmitServerRequest {
   readonly type: typeof SUBMIT_SERVER_REQUEST;
@@ -103,10 +101,6 @@ export interface ISubmitChangeCredentialsSuccess {
   readonly type: typeof SUBMIT_CHANGE_CREDENTIALS_SUCCESS;
 }
 
-export interface IRemoveUser {
-  readonly type: typeof REMOVE_USER;
-}
-
 export interface INoTokens {
   readonly type: typeof NO_TOKENS;
 }
@@ -134,7 +128,6 @@ export type TUserActions =
   | ISubmitGetUserSuccess
   | ISubmitLogoutSuccess
   | ISubmitUpdateTokensSuccess
-  | IRemoveUser
   | ISubmitChangeCredentialsSuccess
   | INoTokens
   | ISubmitCanResetPwd
@@ -217,10 +210,6 @@ export const submitUpdateTokensSuccess = (): ISubmitUpdateTokensSuccess => ({
   type: SUBMIT_UPDATE_TOKENS_SUCCESS,
 });
 
-export const removeUser = (): IRemoveUser => ({
-  type: REMOVE_USER,
-});
-
 export const dispatchUserEmail: AppThunk =
   (email: string) => (dispatch: AppDispatch) => {
     dispatch(submitServerRequest());
@@ -296,7 +285,7 @@ export const dispatchGetUserRequest = (
     });
 };
 
-export const dispatchUpdateTokensRequest = (
+export const dispatchUserRequestWithUpdate = (
   refreshToken: string,
   dispatch: AppDispatch
 ) => {
@@ -321,7 +310,8 @@ export const dispatchGetUser: AppThunk = () => (dispatch: AppDispatch) => {
   let accessToken = getCookie("accessToken");
   if (accessToken) {
     dispatchGetUserRequest(accessToken, dispatch);
-  } else if (refreshToken) dispatchUpdateTokensRequest(refreshToken, dispatch);
+  } else if (refreshToken)
+    dispatchUserRequestWithUpdate(refreshToken, dispatch);
   else dispatch(setNoTokens());
 };
 
@@ -332,7 +322,6 @@ export const dispatchLogout: AppThunk = () => (dispatch: AppDispatch) => {
     logoutRequest(refreshToken)
       .then(() => {
         dispatch(submitLogoutSuccess());
-        dispatch(removeUser());
         deleteCookie("accessToken");
         deleteCookie("refreshToken");
       })
@@ -342,41 +331,56 @@ export const dispatchLogout: AppThunk = () => (dispatch: AppDispatch) => {
   }
 };
 
+export const dispatchChangeCredentialsRequest = (
+  accessToken: string,
+  request: TRegisterBody,
+  dispatch: AppDispatch
+) => {
+  dispatch(submitServerRequest());
+  if (accessToken) {
+    changeCredentialsRequest(accessToken, request)
+      .then((res: TSuccessfulGetUserReply) => {
+        dispatch(submitChangeCredentialsSuccess());
+        dispatch(setUser(res.user));
+      })
+      .catch((err) => {
+        dispatch(submitServerFailed(err));
+      });
+  }
+};
+
+export const dispatchChangeCredentialsRequestWithUpdate = (
+  refreshToken: string,
+  request: TRegisterBody,
+  dispatch: AppDispatch
+) => {
+  dispatch(submitServerRequest());
+  updateTokenRequest(refreshToken)
+    .then((res: TSuccessfulUpdateTokensReply) => {
+      dispatch(submitUpdateTokensSuccess());
+      setTokens(res);
+      let accessToken = getCookie("accessToken");
+      if (accessToken) {
+        dispatchChangeCredentialsRequest(accessToken, request, dispatch);
+      }
+    })
+    .catch((err) => {
+      dispatch(submitServerFailed(err));
+    });
+};
+
 export const dispatchChangeCredentials: AppThunk =
   (request: TRegisterBody) => (dispatch: AppDispatch) => {
     dispatch(submitServerRequest());
+    let refreshToken = getCookie("refreshToken");
     let accessToken = getCookie("accessToken");
     if (accessToken) {
-      changeCredentialsRequest(accessToken, request)
-        .then((res: TSuccessfulGetUserReply) => {
-          dispatch(submitChangeCredentialsSuccess());
-          dispatch(setUser(res.user));
-        })
-        .catch((err) => {
-          dispatch(submitServerFailed(err));
-        });
-    } else {
-      let refreshToken = getCookie("refreshToken");
-      if (refreshToken) {
-        dispatch(submitServerRequest());
-        updateTokenRequest(refreshToken)
-          .then((res) => {
-            setTokens(res);
-            accessToken = getCookie("accessToken");
-            if (accessToken) {
-              changeCredentialsRequest(accessToken, request)
-                .then((res: TSuccessfulGetUserReply) => {
-                  dispatch(submitChangeCredentialsSuccess());
-                  dispatch(setUser(res.user));
-                })
-                .catch((err) => {
-                  dispatch(submitServerFailed(err));
-                });
-            }
-          })
-          .catch((err) => {
-            dispatch(submitServerFailed(err));
-          });
-      }
-    }
+      dispatchChangeCredentialsRequest(accessToken, request, dispatch);
+    } else if (refreshToken)
+      dispatchChangeCredentialsRequestWithUpdate(
+        refreshToken,
+        request,
+        dispatch
+      );
+    else dispatch(setNoTokens());
   };

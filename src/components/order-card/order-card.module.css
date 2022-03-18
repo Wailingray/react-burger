@@ -1,0 +1,82 @@
+.linkContainer {
+  text-decoration: none;
+  color: white;
+}
+
+.container {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  background-color: #1c1c21;
+  border-radius: 40px;
+  cursor: pointer;
+}
+
+.metadata {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ingredients {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  margin-left: 16px;
+}
+
+.orderData {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.listItem {
+  padding: 0;
+  margin-left: -16px;
+  list-style-type: none;
+  position: relative;
+  display: flex;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(to right, #801ab2, #4c4cff);
+}
+
+.listItem::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  right: 2px;
+  left: 2px;
+  border-radius: 50%;
+  background-color: #131316;
+}
+
+.picture {
+  max-height: 56px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.counter {
+  margin-left: -64px;
+  height: 64px;
+  width: 64px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.3);
+  text-align: center;
+  line-height: 64px;
+}
+
+.priceContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
